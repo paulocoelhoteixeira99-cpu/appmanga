@@ -1,16 +1,18 @@
 # Dependencies
 node_modules/
-package-lock.json
 
 # Environment
 .env
 .env.local
 .env.*.local
 
+# Next.js
+.next/
+out/
+
 # Build
 dist/
 build/
-out/
 
 # IDE
 .vscode/
@@ -34,3 +36,8 @@ coverage/
 # Temp
 tmp/
 temp/
+
+# PWA
+public/sw.js
+public/workbox-*.js
+public/swe-worker-*.js

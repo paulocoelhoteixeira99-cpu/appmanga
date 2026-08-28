@@ -1,59 +1,62 @@
-# Semana 1 - Checklist de Lancamento (26/05 - 01/06)
+# Fase 1 - Checklist de Fundacao
 
-> App Financeiro - Fase 1: Fundacao
-> Compartilhar com o time para dividir tarefas.
+> Manga — Fase 1: Fundacao
+> Baseado no PRD definitivo e stack de ferramentas confirmada.
 
 ---
+
+## Empresa/Admin
+
+- [ ] Abrir CNPJ (pre-requisito para gateway de pagamento, conta PJ e verificacao Meta)
+- [ ] Comprar dominio
+- [ ] Criar conta bancaria PJ (Nubank PJ, Inter PJ ou C6 PJ — sem mensalidade)
+- [ ] Assinatura eletronica do contrato de sociedade (Gov.br — gratis)
 
 ## Tech
 
-- [x] Gerar lista de afazeres e contas iniciais com Claude Code (@Paulo - 26/05)
-- [x] GitHub - Criar repositorio do projeto com Claude Code (@Paulo - 26/05)
-- [ ] Definir nome da marca/produto (decidir juntos)
-- [ ] Gmail da empresa (ex: nomedomarca@gmail.com)
-- [ ] Supabase - Criar projeto (com o Gmail da empresa)
-- [ ] Vercel - Criar conta (conectar ao GitHub)
-- [ ] Comprar dominio .com.br (~R$40/ano no Registro.br)
-- [ ] Google Analytics - Criar conta
-- [ ] Mercado Pago - Criar conta (para pagamentos futuros)
+- [x] GitHub — repositorio criado
+- [x] Plano de execucao e PRD documentados
+- [ ] Supabase — criar projeto (com email da empresa)
+- [ ] Vercel — criar conta (conectar ao GitHub)
+- [ ] PostHog — criar conta e definir eventos iniciais (ativacao, retencao, engajamento)
+- [ ] Linear — criar workspace e importar issues do PRD
+
+## WhatsApp Cloud API (iniciar cedo — tem lead time)
+
+- [ ] Criar conta Meta Business Suite
+- [ ] Criar Facebook App no Meta for Developers
+- [ ] Adicionar produto WhatsApp ao app
+- [ ] Configurar numero de teste (Meta fornece temporario gratis)
+- [ ] Gerar token de acesso permanente
+- [ ] Iniciar verificacao do negocio (exige CNPJ)
 
 ## Marca
 
-- [ ] Identidade visual (logo, cores, tipografia) - pode usar Canva/Figma
-- [ ] Instagram - Criar perfil
-- [ ] Facebook - Criar pagina
-- [ ] Bio e descricao padronizadas para as redes
-- [ ] Foto de perfil e capa (consistente entre plataformas)
+- [x] Identidade visual definida (docs/BRAND-IDENTITY.md)
+- [ ] Instagram — criar perfil
+- [ ] Facebook — criar pagina
 
-## Decisoes importantes (definir juntos)
-
-- [ ] Nome da marca (3 opcoes, votar)
-- [ ] Publico-alvo primario: jovens endividados? familias? MEIs?
-- [ ] Modelo de preco: Unico R$19,90/mes ou Basico R$9,90 + Premium R$19,90?
-- [ ] Vai ter planner fisico/digital como porta de entrada? (R$49,90 sugerido)
-
-## Stack tecnica aprovada (custo R$0)
+## Stack confirmada (custo R$0 em dev)
 
 | Ferramenta | Para que |
 |-----------|----------|
-| Next.js 15 | Frontend (site + app) |
-| Supabase | Banco de dados + autenticacao |
-| Vercel | Hospedagem gratuita |
-| Tailwind CSS | Estilizacao |
+| Next.js 15 + TypeScript + Tailwind CSS 4 | Frontend |
 | shadcn/ui | Componentes visuais |
-| Gmail | Email da empresa |
-| Resend | Emails automaticos (3k/mes gratis) |
-| Mercado Pago | Cobranca de assinatura (PIX sem taxa) |
-| GitHub | Codigo + gerenciamento de tarefas |
+| Supabase | Banco de dados + auth + storage + edge functions |
+| Vercel | Hospedagem |
+| WhatsApp Cloud API | Canal principal de entrada de dados |
+| PostHog | Analytics, feature flags, error tracking |
+| Linear | Gestao de tarefas/sprints |
+| Notion | Documentacao e PRD |
+| GitHub | Codigo e CI |
 
-## Proxima semana (Semana 2)
+## Decisoes adiadas (nao bloqueiam MVP)
 
-- [ ] Iniciar setup do projeto Next.js + Supabase
-- [ ] Modelar banco de dados (tabelas: users, transactions, categories, goals)
-- [ ] Primeira tela: login + cadastro
-- [ ] Primeira tela: dashboard basico
+- Email corporativo (Zoho free ou Google Workspace pago)
+- Registro de marca INPI (backlog)
+- Gateway de pagamento (definir antes da Fase 5)
 
 ---
 
-> Plano completo: ver `docs/PLANO-DE-EXECUCAO.md`
-> Repo: https://github.com/paulocoelhoteixeira99-cpu/app-financeiro
+> PRD completo: `docs/PRD.md`
+> Plano de execucao: `docs/PLANO-DE-EXECUCAO.md`

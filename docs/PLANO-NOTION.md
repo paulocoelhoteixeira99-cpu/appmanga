@@ -1,144 +1,53 @@
-# Plano de Execução — App Financeiro
+# Estrutura do Workspace Notion — Manga
 
-Baseado no Resumo Executivo + Pesquisa de Mercado (Mai/2026). Adaptado para stack gratuita, prioridade em desenvolvimento do produto.
-
----
-
-# FASE 1 — Fundação (Semana 1-2)
-
-> Objetivo: contas criadas e marca definida para trabalhar.
-
-## Decisões
-
-- [ ] Nome da marca (3 opções, votar)
-- [ ] Público-alvo primário
-- [ ] Modelo de preço (único ou básico/premium)
-- [ ] Planner digital como porta de entrada?
-
-## Tech
-
-- [x] Repositório GitHub criado
-- [x] Plano de execução escrito
-- [ ] Gmail da empresa
-- [ ] Supabase — criar projeto
-- [ ] Vercel — criar conta (conectar ao GitHub)
-- [ ] Mercado Pago — criar conta
-- [ ] Resend — criar conta
-- [ ] Comprar domínio .com.br (~R$40/ano)
-
-## Marca
-
-- [ ] Identidade visual (logo, cores, tipografia)
-- [ ] Instagram — criar perfil
-- [ ] Facebook — criar página
-- [ ] Bio e foto padronizadas entre plataformas
+> Notion e a ferramenta de documentacao do time.
+> Linear e a ferramenta de gestao de tarefas/sprints.
 
 ---
 
-# FASE 2 — Produto MVP (Semana 3-6)
+## Workspace Notion
 
-> Objetivo: app funcionando que você e seu amigo usam no dia a dia.
+### Paginas principais
 
-## Semana 3-4: Core
+```
+Manga/
+  PRD do MVP              -- PRD definitivo (espelho do docs/PRD.md)
+  Pesquisa de Usuario     -- Sintese das 7 entrevistas + arquetipos
+  Benchmark Competitivo   -- Analise dos 7 apps concorrentes
+  Brand Identity          -- Identidade visual, tom de voz, manifesto
+  Stack de Ferramentas    -- Decisoes de stack com justificativas
+  Decisoes de Produto     -- Log de decisoes tomadas e por que
+  Reunioes/               -- Notas de reuniao do time
+```
 
-- [ ] Setup Next.js 15 + Supabase + Tailwind + shadcn/ui
-- [ ] Auth (login/cadastro com email + Google)
-- [ ] Dashboard principal (resumo financeiro do mês)
-- [ ] CRUD de transações (receitas e despesas)
-- [ ] Categorias de gastos (alimentação, transporte, moradia, lazer, etc)
-- [ ] Configuração PWA (instalável no celular)
+### Principios
 
-## Semana 5-6: Valor
-
-- [ ] Gráficos de evolução (gastos por categoria, mensal)
-- [ ] Metas de economia (definir meta, acompanhar progresso)
-- [ ] Alertas de limite por categoria
-- [ ] Relatórios mensais
-- [ ] Responsividade mobile perfeita
-- [ ] Testes diários — você e amigo usando de verdade
-
-> Entregável: PWA instalável no celular, funcionando offline.
+- Notion para **documentos vivos** (PRD, pesquisa, decisoes, marca)
+- Linear para **execucao** (issues, sprints, progresso)
+- GitHub para **codigo** (commits linkados a issues do Linear)
+- Nao duplicar informacao entre ferramentas — cada uma tem seu papel
 
 ---
 
-# FASE 3 — Conteúdo (Semana 7-8)
+## Workspace Linear
 
-> Objetivo: landing page + planner para captar leads.
+### Estrutura sugerida
 
-- [ ] Planner financeiro digital (PDF interativo ou template Notion)
-- [ ] Landing page no Next.js (/)
-    - [ ] Hero com proposta de valor
-    - [ ] Benefícios
-    - [ ] Preço do planner
-    - [ ] CTA para teste grátis do PWA
-- [ ] Página de vendas do planner (/planner)
-- [ ] E-book gratuito "Guia Rápido de Orçamento" (lead magnet)
-- [ ] Blog básico com 3-5 artigos SEO
+```
+Manga (Team)
+  Backlog          -- Issues priorizadas aguardando sprint
+  Sprint atual     -- Issues em andamento
+  Triage           -- Issues novas, nao priorizadas ainda
+```
 
----
+### Labels sugeridas
+- `core` — funcionalidades do app (auth, transacoes, dashboard)
+- `whatsapp` — agente WhatsApp
+- `orientacao` — motor consultivo, alertas, sugestoes
+- `infra` — setup, deploy, CI, config
+- `design` — UI, UX, identidade visual
+- `admin` — CNPJ, dominio, contas, juridico
 
-# FASE 4 — Funil (Semana 9-10)
-
-> Objetivo: automações de email e fluxo de conversão.
-
-- [ ] Resend — emails transacionais (boas-vindas, reset senha)
-- [ ] Mailchimp Free — sequência de nurturing
-- [ ] Fluxo: download e-book → 3 emails de valor → oferta planner → oferta PWA
-- [ ] Integrar Mercado Pago para assinatura
-- [ ] Página de checkout
-- [ ] Trial 7 dias → conversão para pago
-
----
-
-# FASE 5 — Lançamento (Semana 11-12)
-
-> Objetivo: atrair usuários de verdade.
-
-- [ ] Google Ads (keywords: "controle financeiro", "app de gastos")
-- [ ] Instagram/Facebook Ads (público 25-45, interesse em finanças)
-- [ ] Conteúdo orgânico (posts, reels, stories)
-- [ ] Parcerias com micro-influenciadores de finanças
-- [ ] Orçamento sugerido: R$500-1.000/mês
-
----
-
-# FASE 6 — Escala (Semana 13+)
-
-> Objetivo: otimizar e crescer.
-
-- [ ] Analisar métricas (CAC, LTV, churn, conversão)
-- [ ] A/B testing na landing page
-- [ ] Novas features baseadas em feedback
-- [ ] Considerar integração WhatsApp
-- [ ] Upgrade Supabase Pro quando necessário (~R$25/mês)
-- [ ] SEO contínuo + blog
-- [ ] Programa de indicação (indica amigo, ganha desconto)
-
----
-
-# Métricas-Alvo
-
-| Métrica | Meta |
-| --- | --- |
-| CAC | ~R$30 |
-| LTV | ~R$119 (6 meses) |
-| Churn mensal | < 15% |
-| Landing → Lead | 20% |
-| Lead → Compra planner | 3-5% |
-| Trial → Assinante pago | 20% |
-| Meta 6 meses | 300 assinantes = ~R$6.000/mês |
-
----
-
-# Custos Estimados (Ano 1)
-
-| Item | Mês | Ano |
-| --- | --- | --- |
-| Domínio | — | R$40 |
-| Hospedagem (Vercel) | R$0 | R$0 |
-| Supabase (free → pro) | R$0 → R$125 | ~R$750 |
-| Email (Resend/Mailchimp) | R$0 | R$0 |
-| Ads (a partir mês 3) | R$500 → R$2.000 | ~R$15.000 |
-| Total ano 1 | | ~R$16.000 |
-
-> Break-even estimado: mês 6-7
+### Integracao Linear <-> GitHub
+- Linkar commits/PRs a issues do Linear
+- Issue fecha automaticamente quando PR e mergeado (configuravel)

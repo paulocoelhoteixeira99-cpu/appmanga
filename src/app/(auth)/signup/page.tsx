@@ -3,10 +3,20 @@
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
+import {
+  formatPhone,
+  phoneToDigits,
+  formatCpf,
+  cpfToDigits,
+  isValidCpf,
+} from "@/lib/utils/masks";
 
 export default function SignupPage() {
+  const [firstName, setFirstName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [phone, setPhone] = useState("");
+  const [cpf, setCpf] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -17,13 +27,57 @@ export default function SignupPage() {
     setLoading(true);
     setError(null);
 
-    const { error } = await supabase.auth.signUp({
+    const phoneDigits = phoneToDigits(phone);
+
+    if (phoneDigits.length !== 11) {
+      setError("Telefone deve ter 11 digitos (DDD + numero).");
+      setLoading(false);
+      return;
+    }
+
+    const cpfDigits = cpfToDigits(cpf);
+    if (cpfDigits && !isValidCpf(cpfDigits)) {
+      setError("CPF invalido.");
+      setLoading(false);
+      return;
+    }
+
+    // Check phone availability before signup
+    const { data: phoneAvailable, error: rpcError } = await supabase.rpc(
+      "is_phone_available",
+      { phone_number: phoneDigits }
+    );
+
+    if (rpcError) {
+      setError("Erro ao verificar telefone. Tente novamente.");
+      setLoading(false);
+      return;
+    }
+
+    if (!phoneAvailable) {
+      setError("Este numero de WhatsApp ja esta vinculado a outra conta.");
+      setLoading(false);
+      return;
+    }
+
+    const { error: signUpError } = await supabase.auth.signUp({
       email,
       password,
+      options: {
+        data: {
+          first_name: firstName.trim(),
+          phone: phoneDigits,
+          cpf: cpfDigits || null,
+        },
+      },
     });
 
-    if (error) {
-      setError(error.message);
+    if (signUpError) {
+      if (signUpError.message.includes("profiles_phone_unique")) {
+        setError("Este numero de WhatsApp ja esta vinculado a outra conta.");
+      } else {
+        setError(signUpError.message);
+      }
     } else {
       setSuccess(true);
     }
@@ -68,6 +122,24 @@ export default function SignupPage() {
         <form onSubmit={handleSignup} className="space-y-4">
           <div>
             <label
+              htmlFor="firstName"
+              className="block text-sm font-medium text-neutral-700 mb-1"
+            >
+              Primeiro nome
+            </label>
+            <input
+              id="firstName"
+              type="text"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              required
+              className="w-full px-3 py-2 rounded-lg border border-neutral-300 bg-white text-neutral-900 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              placeholder="Como podemos te chamar?"
+            />
+          </div>
+
+          <div>
+            <label
               htmlFor="email"
               className="block text-sm font-medium text-neutral-700 mb-1"
             >
@@ -81,6 +153,42 @@ export default function SignupPage() {
               required
               className="w-full px-3 py-2 rounded-lg border border-neutral-300 bg-white text-neutral-900 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               placeholder="seu@email.com"
+            />
+          </div>
+
+          <div>
+            <label
+              htmlFor="phone"
+              className="block text-sm font-medium text-neutral-700 mb-1"
+            >
+              WhatsApp
+            </label>
+            <input
+              id="phone"
+              type="tel"
+              value={phone}
+              onChange={(e) => setPhone(formatPhone(e.target.value))}
+              required
+              className="w-full px-3 py-2 rounded-lg border border-neutral-300 bg-white text-neutral-900 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              placeholder="(11) 99999-9999"
+            />
+          </div>
+
+          <div>
+            <label
+              htmlFor="cpf"
+              className="block text-sm font-medium text-neutral-700 mb-1"
+            >
+              CPF{" "}
+              <span className="text-neutral-400 font-normal">(opcional)</span>
+            </label>
+            <input
+              id="cpf"
+              type="text"
+              value={cpf}
+              onChange={(e) => setCpf(formatCpf(e.target.value))}
+              className="w-full px-3 py-2 rounded-lg border border-neutral-300 bg-white text-neutral-900 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              placeholder="000.000.000-00"
             />
           </div>
 

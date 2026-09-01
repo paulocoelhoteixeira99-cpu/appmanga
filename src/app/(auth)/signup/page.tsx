@@ -60,6 +60,26 @@ export default function SignupPage() {
       return;
     }
 
+    // Check CPF availability before signup
+    if (cpfDigits) {
+      const { data: cpfAvailable, error: cpfRpcError } = await supabase.rpc(
+        "is_cpf_available",
+        { cpf_number: cpfDigits }
+      );
+
+      if (cpfRpcError) {
+        setError("Erro ao verificar CPF. Tente novamente.");
+        setLoading(false);
+        return;
+      }
+
+      if (!cpfAvailable) {
+        setError("Este CPF ja esta vinculado a outra conta.");
+        setLoading(false);
+        return;
+      }
+    }
+
     const { error: signUpError } = await supabase.auth.signUp({
       email,
       password,
@@ -75,6 +95,8 @@ export default function SignupPage() {
     if (signUpError) {
       if (signUpError.message.includes("profiles_phone_unique")) {
         setError("Este numero de WhatsApp ja esta vinculado a outra conta.");
+      } else if (signUpError.message.includes("idx_profiles_cpf_unique")) {
+        setError("Este CPF ja esta vinculado a outra conta.");
       } else {
         setError(signUpError.message);
       }

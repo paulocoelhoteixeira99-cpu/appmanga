@@ -11,6 +11,8 @@ import {
   isValidCpf,
   maskCpfDisplay,
 } from "@/lib/utils/masks";
+import { Button } from "@/components/ui/button";
+import { TextField } from "@/components/ui/text-field";
 
 interface Profile {
   id: string;
@@ -150,98 +152,58 @@ export function ProfileForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <div>
-        <label
-          htmlFor="email"
-          className="block text-sm font-medium text-neutral-700 mb-1"
-        >
-          E-mail
-        </label>
-        <input
-          id="email"
-          type="email"
-          value={userEmail}
-          disabled
-          className="w-full px-3 py-2 rounded-lg border border-neutral-200 bg-neutral-50 text-neutral-500 cursor-not-allowed"
-        />
-        <p className="text-xs text-neutral-400 mt-1">
-          O e-mail nao pode ser alterado por aqui.
-        </p>
-      </div>
+      <TextField
+        label="E-mail"
+        type="email"
+        value={userEmail}
+        disabled
+        helperText="O e-mail nao pode ser alterado por aqui."
+      />
 
-      <div>
-        <label
-          htmlFor="firstName"
-          className="block text-sm font-medium text-neutral-700 mb-1"
-        >
-          Primeiro nome
-        </label>
-        <input
-          id="firstName"
-          type="text"
-          value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
-          required
-          className="w-full px-3 py-2 rounded-lg border border-neutral-300 bg-white text-neutral-900 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-        />
-      </div>
+      <TextField
+        label="Primeiro nome"
+        type="text"
+        value={firstName}
+        onChange={(e) => setFirstName(e.target.value)}
+        required
+      />
 
-      <div>
-        <label
-          htmlFor="phone"
-          className="block text-sm font-medium text-neutral-700 mb-1"
-        >
-          WhatsApp
-        </label>
-        <input
-          id="phone"
-          type="tel"
-          value={phone}
-          onChange={(e) => setPhone(formatPhone(e.target.value))}
-          required
-          className="w-full px-3 py-2 rounded-lg border border-neutral-300 bg-white text-neutral-900 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-          placeholder="(11) 99999-9999"
-        />
-      </div>
+      <TextField
+        label="WhatsApp"
+        type="tel"
+        value={phone}
+        onChange={(e) => setPhone(formatPhone(e.target.value))}
+        required
+        placeholder="(11) 99999-9999"
+      />
 
-      <div>
-        <label
-          htmlFor="cpf"
-          className="block text-sm font-medium text-neutral-700 mb-1"
-        >
-          CPF{" "}
-          <span className="text-neutral-400 font-normal">(opcional)</span>
-        </label>
-        <div className="relative">
-          <input
-            id="cpf"
-            type="text"
-            value={
-              !showCpf && profile.cpf && cpf === formatCpf(profile.cpf)
-                ? maskCpfDisplay(profile.cpf)
-                : cpf
-            }
-            onFocus={() => setShowCpf(true)}
-            onBlur={() => setShowCpf(false)}
-            onChange={(e) => setCpf(formatCpf(e.target.value))}
-            className="w-full px-3 py-2 rounded-lg border border-neutral-300 bg-white text-neutral-900 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-            placeholder="000.000.000-00"
-          />
-        </div>
-      </div>
+      <TextField
+        label={
+          <>
+            CPF{" "}
+            <span className="text-neutral-400 font-normal">(opcional)</span>
+          </>
+        }
+        type="text"
+        value={
+          !showCpf && profile.cpf && cpf === formatCpf(profile.cpf)
+            ? maskCpfDisplay(profile.cpf)
+            : cpf
+        }
+        onFocus={() => setShowCpf(true)}
+        onBlur={() => setShowCpf(false)}
+        onChange={(e) => setCpf(formatCpf(e.target.value))}
+        placeholder="000.000.000-00"
+      />
 
       {error && <p className="text-error-500 text-sm">{error}</p>}
       {success && (
-        <p className="text-green-600 text-sm">Perfil atualizado com sucesso!</p>
+        <p className="text-success-500 text-sm">Perfil atualizado com sucesso!</p>
       )}
 
-      <button
-        type="submit"
-        disabled={loading}
-        className="w-full py-2.5 rounded-lg bg-primary-500 text-white font-medium hover:bg-primary-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        {loading ? "Salvando..." : "Salvar alteracoes"}
-      </button>
+      <Button type="submit" loading={loading} className="w-full">
+        Salvar alteracoes
+      </Button>
     </form>
   );
 }

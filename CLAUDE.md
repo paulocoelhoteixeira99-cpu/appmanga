@@ -42,6 +42,23 @@ Essencia de marca: Orientacao. Arquetipo: Companion + Caregiver.
 - `npm test` - Rodar testes
 - `npm run dev` - Rodar em modo desenvolvimento
 
+## Design System
+- **Referencia tecnica:** `docs/DESIGN-SYSTEM.md` — tokens, componentes, hierarquia tipografica, divergencias
+- **Figma:** file key `wpGrZPa3pUk4W3JMfMc2k1` (Manga — Foundations & DS) — consulta via MCP, somente leitura, NUNCA editar
+- **Referencia de marca:** `docs/BRAND-IDENTITY.md` — cores, tipografia, tom de voz
+- **Tokens de cor:** definidos em `src/app/globals.css` (bloco `@theme`)
+- **Variaveis Figma:** 2 colecoes — Primitives (cores, spacing, radius, opacity, border) e Semantic Colors (surface, text, border, field, action, feedback, chip, overlay)
+- Antes de implementar qualquer tela ou componente, SEMPRE:
+  1. Consultar `docs/DESIGN-SYSTEM.md` para tokens e padroes existentes
+  2. Consultar o Figma via MCP (`create_session` com fileKey `wpGrZPa3pUk4W3JMfMc2k1`, depois `get_metadata`/`search_design_system`/`get_design_context`)
+  3. Verificar se ja existe componente React reutilizavel em `src/components/`
+  4. Reutilizar componentes e tokens existentes — NUNCA criar duplicatas
+  5. Se um componente necessario nao existir, informar a lacuna e aguardar aprovacao
+- NAO criar novos padroes visuais (cores, fontes, espacamentos, componentes) sem aprovacao
+- NAO tomar decisoes de design independentes — seguir o Figma e as especificacoes
+- NAO recriar logotipos ou elementos de marca com CSS — usar assets oficiais
+- Em caso de conflito, prioridade: especificacoes de produto > Design System > handoff > arquitetura existente > boas praticas
+
 ## Regras
 - Nunca commitar arquivos .env
 - Sempre rodar testes antes de fazer push

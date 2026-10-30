@@ -10,6 +10,8 @@ import {
   cpfToDigits,
   isValidCpf,
 } from "@/lib/utils/masks";
+import { Button } from "@/components/ui/button";
+import { TextField } from "@/components/ui/text-field";
 
 export default function SignupPage() {
   const [firstName, setFirstName] = useState("");
@@ -142,106 +144,61 @@ export default function SignupPage() {
         </div>
 
         <form onSubmit={handleSignup} className="space-y-4">
-          <div>
-            <label
-              htmlFor="firstName"
-              className="block text-sm font-medium text-neutral-700 mb-1"
-            >
-              Primeiro nome
-            </label>
-            <input
-              id="firstName"
-              type="text"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-              required
-              className="w-full px-3 py-2 rounded-lg border border-neutral-300 bg-white text-neutral-900 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              placeholder="Como podemos te chamar?"
-            />
-          </div>
+          <TextField
+            label="Primeiro nome"
+            type="text"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+            required
+            placeholder="Como podemos te chamar?"
+          />
 
-          <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-neutral-700 mb-1"
-            >
-              E-mail
-            </label>
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full px-3 py-2 rounded-lg border border-neutral-300 bg-white text-neutral-900 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              placeholder="seu@email.com"
-            />
-          </div>
+          <TextField
+            label="E-mail"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            placeholder="seu@email.com"
+          />
 
-          <div>
-            <label
-              htmlFor="phone"
-              className="block text-sm font-medium text-neutral-700 mb-1"
-            >
-              WhatsApp
-            </label>
-            <input
-              id="phone"
-              type="tel"
-              value={phone}
-              onChange={(e) => setPhone(formatPhone(e.target.value))}
-              required
-              className="w-full px-3 py-2 rounded-lg border border-neutral-300 bg-white text-neutral-900 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              placeholder="(11) 99999-9999"
-            />
-          </div>
+          <TextField
+            label="WhatsApp"
+            type="tel"
+            value={phone}
+            onChange={(e) => setPhone(formatPhone(e.target.value))}
+            required
+            placeholder="(11) 99999-9999"
+          />
 
-          <div>
-            <label
-              htmlFor="cpf"
-              className="block text-sm font-medium text-neutral-700 mb-1"
-            >
-              CPF{" "}
-              <span className="text-neutral-400 font-normal">(opcional)</span>
-            </label>
-            <input
-              id="cpf"
-              type="text"
-              value={cpf}
-              onChange={(e) => setCpf(formatCpf(e.target.value))}
-              className="w-full px-3 py-2 rounded-lg border border-neutral-300 bg-white text-neutral-900 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              placeholder="000.000.000-00"
-            />
-          </div>
+          <TextField
+            label={
+              <>
+                CPF{" "}
+                <span className="text-neutral-400 font-normal">(opcional)</span>
+              </>
+            }
+            type="text"
+            value={cpf}
+            onChange={(e) => setCpf(formatCpf(e.target.value))}
+            placeholder="000.000.000-00"
+          />
 
-          <div>
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-neutral-700 mb-1"
-            >
-              Senha
-            </label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              minLength={6}
-              className="w-full px-3 py-2 rounded-lg border border-neutral-300 bg-white text-neutral-900 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              placeholder="Minimo 6 caracteres"
-            />
-          </div>
+          <TextField
+            label="Senha"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            minLength={6}
+            placeholder="Minimo 6 caracteres"
+          />
 
           {error && <p className="text-error-500 text-sm">{error}</p>}
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full py-2.5 rounded-lg bg-primary-500 text-white font-medium hover:bg-primary-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {loading ? "Criando conta..." : "Criar conta"}
-          </button>
+          <Button type="submit" loading={loading} className="w-full">
+            Criar conta
+          </Button>
         </form>
 
         <p className="text-center text-sm text-neutral-600 mt-6">

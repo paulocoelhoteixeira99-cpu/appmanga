@@ -41,6 +41,22 @@ import {
   DrawerClose,
 } from "@/components/ui/drawer";
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuLabel,
+} from "@/components/ui/dropdown-menu";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverHeader,
+  PopoverTitle,
+  PopoverDescription,
+} from "@/components/ui/popover";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -543,6 +559,45 @@ export default function ComponentsShowcasePage() {
                 </TooltipContent>
               </Tooltip>
             </div>
+          </section>
+
+          {/* ── Dropdown Menu ── */}
+          <section>
+            <SectionTitle>Dropdown Menu</SectionTitle>
+            <DropdownMenu>
+              <DropdownMenuTrigger render={<Button variant="secondary" />}>
+                Abrir menu
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuLabel>Opcoes</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>Editar transacao</DropdownMenuItem>
+                <DropdownMenuItem>Duplicar</DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem className="text-error-500">Excluir</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </section>
+
+          {/* ── Popover ── */}
+          <section>
+            <SectionTitle>Popover</SectionTitle>
+            <Popover>
+              <PopoverTrigger render={<Button variant="secondary" />}>
+                Abrir popover
+              </PopoverTrigger>
+              <PopoverContent>
+                <PopoverHeader>
+                  <PopoverTitle>Filtros</PopoverTitle>
+                  <PopoverDescription>Selecione os filtros para a listagem.</PopoverDescription>
+                </PopoverHeader>
+                <div className="p-4 space-y-3">
+                  <TextField label="De" type="date" />
+                  <TextField label="Ate" type="date" />
+                  <Button className="w-full" size="sm">Aplicar</Button>
+                </div>
+              </PopoverContent>
+            </Popover>
           </section>
 
           {/* ── Separator ── */}

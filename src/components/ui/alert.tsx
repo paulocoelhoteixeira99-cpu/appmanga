@@ -2,9 +2,11 @@ import { type HTMLAttributes } from "react";
 import { cn } from "@/lib/utils/cn";
 
 type AlertType = "success" | "warning" | "danger" | "info";
+type AlertVariant = "soft" | "outline";
 
 interface AlertProps extends HTMLAttributes<HTMLDivElement> {
   type?: AlertType;
+  variant?: AlertVariant;
   title?: string;
   onClose?: () => void;
 }
@@ -48,9 +50,17 @@ const typeStyles: Record<AlertType, { soft: string; text: string; icon: React.Re
   },
 };
 
+const outlineAlertStyles: Record<AlertType, string> = {
+  success: "bg-transparent border-success-500",
+  warning: "bg-transparent border-warning-500",
+  danger: "bg-transparent border-error-500",
+  info: "bg-transparent border-blue-500",
+};
+
 function Alert({
   className,
   type = "info",
+  variant = "soft",
   title,
   onClose,
   children,
@@ -63,7 +73,7 @@ function Alert({
       role="alert"
       className={cn(
         "flex gap-3 items-start p-4 rounded-lg border",
-        styles.soft,
+        variant === "soft" ? styles.soft : outlineAlertStyles[type],
         styles.text,
         className
       )}

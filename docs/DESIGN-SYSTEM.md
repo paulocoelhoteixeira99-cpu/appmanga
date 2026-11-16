@@ -263,67 +263,78 @@ Variaveis da colecao **Semantic Colors** — usar para mapear intencao, nao cor 
 
 ### UI Base (pagina: Componentes)
 
-| Componente | Pagina ID | Prioridade MVP |
-|------------|-----------|---------------|
-| **Button** | `28:309` | Alta |
-| **Text Field** | `261:941` | Alta |
-| **Text Area** | `261:1220` | Alta |
-| **Card** | `279:245` | Alta |
-| **Alert** | `272:852` | Alta |
-| **Toast** | `272:851` | Alta |
-| **Dialog** | `285:292` | Alta |
-| **Drawer** | `285:293` | Alta |
-| **List Item** | `279:544` | Alta |
-| **Avatar** | `279:938` | Media |
-| **Badge** | `272:845` | Media |
-| **Chip** | `272:846` | Media |
-| **Spinner** | `272:849` | Media |
-| **Skeleton** | `272:850` | Media |
-| **Progress Bar** | `279:1060` | Media |
-| **Empty State** | `279:2218` | Media |
-| **Checkbox** | `261:1234` | Media |
-| **Radio Button** | `261:1253` | Media |
-| **Switch** | `261:1263` | Media |
-| **Select** | `261:1273` | Media |
-| **Tab Item / Tab List** | `353:2` / `353:7197` | Media |
-| **Segment Item / Segmented Control** | `353:7115` / `353:7243` | Media |
-| **Bottom Navigation** | `353:7334` | Media |
-| **Sidebar** | `353:7409` | Media |
-| **Tooltip** | `272:847` | Baixa |
-| **Divider** | `272:848` | Baixa |
-| **Table** | `279:2369` | Baixa |
-| **Popover** | `285:294` | Baixa |
-| **Dropdown Menu** | `285:295` | Baixa |
-| **Date Picker** | `285:296` | Baixa |
-| **Calendar** | `285:297` | Baixa |
+| Componente | Pagina ID | Prioridade MVP | Variants Figma |
+|------------|-----------|---------------|----------------|
+| **Button** | `28:309` | Alta | Primary, Secondary, Tertiary, Destructive × Small/Medium/Large |
+| **Text Field** | `261:941` | Alta | — |
+| **Text Area** | `261:1220` | Alta | — |
+| **Card** | `279:245` | Alta | — |
+| **Alert** | `272:852` | Alta | Soft, Outline × Success/Warning/Danger/Info |
+| **Toast** | `272:851` | Alta | — |
+| **Dialog** | `285:292` | Alta | — |
+| **Drawer** | `285:293` | Alta | — |
+| **List Item** | `279:544` | Alta | — |
+| **Avatar** | `279:938` | Media | — |
+| **Badge** | `272:845` | Media | Soft, Outline × Neutral/Success/Warning/Danger/Info × Small/Medium |
+| **Chip** | `272:846` | Media | Filter, Input × Small/Medium × Selected/Unselected × Default/Hover/Focus/Disabled |
+| **Spinner** | `272:849` | Media | — |
+| **Skeleton** | `272:850` | Media | — |
+| **Progress Bar** | `279:1060` | Media | — |
+| **Empty State** | `279:2218` | Media | — |
+| **Checkbox** | `261:1234` | Media | — |
+| **Radio Button** | `261:1253` | Media | — |
+| **Switch** | `261:1263` | Media | — |
+| **Select** | `261:1273` | Media | — |
+| **Tab Item / Tab List** | `353:2` / `353:7197` | Media | — |
+| **Segment Item / Segmented Control** | `353:7115` / `353:7243` | Media | — |
+| **Bottom Navigation** | `353:7334` | Media | — |
+| **Sidebar** | `353:7409` | Media | — |
+| **FAB** | `400:1240` | Media | — |
+| **Tooltip** | `272:847` | Baixa | — |
+| **Divider** | `272:848` | Baixa | — |
+| **Table** | `279:2369` | Baixa | — |
+| **Popover** | `285:294` | Baixa | — |
+| **Dropdown Menu** | `285:295` | Baixa | — |
+| **Date Picker** | `285:296` | Baixa | — |
+| **Calendar** | `285:297` | Baixa | — |
 
 ### Componentes de Produto (pagina: Componentes de Produto)
 
-| Componente | Pagina ID | Descricao |
-|------------|-----------|-----------|
-| **Logo** | `346:2` | Logotipo oficial |
-| **Transaction Item** | `297:48` | Item de movimentacao |
-| **Account Card** | `297:844` | Card de conta bancaria |
-| **Balance Card** | `297:1469` | Card de saldo |
-| **Goal Card** | `297:1620` | Card de meta financeira |
-| **Category Item** | `297:2424` | Item de categoria |
-| **Financial Summary** | `297:3788` | Resumo financeiro |
+| Componente | Pagina ID | Descricao | Notas |
+|------------|-----------|-----------|-------|
+| **Logo** | `346:2` | Logotipo oficial | — |
+| **Transaction Item** | `297:48` | Item de movimentacao | — |
+| **Account Card** | `297:844` | Card de conta bancaria | — |
+| **Balance Card** | `297:1469` | Card de saldo | — |
+| **Financial Card** | `419:5` | Card financeiro generico | **NOVO** — pendente implementacao |
+| **Goal Card** | `297:1620` | Card de meta financeira | Atualizado: Goal Avatar, opcoes icone/cor, Personalization Sheet |
+| **Category Item** | `297:2424` | Item de categoria | Atualizado: Spending Progress (65%, 90%) |
+| **Financial Summary** | `297:3788` | Resumo financeiro | — |
+| **Manga Insights** | `437:7` | Cards de insights e orientacao | **NOVO** — Indicator, Actions, 10 imagens ref |
 
 ---
 
 ## 9. Divergencias Codigo vs Figma
 
-| Item | Figma | Codigo atual | Acao necessaria |
-|------|-------|-------------|-----------------|
+| Item | Figma | Codigo atual | Status |
+|------|-------|-------------|--------|
 | Tipografia | 15 text styles com SemiBold 600 | Pesos mistos (bold, semibold) e tamanhos ad-hoc | Alinhar com tokens do Figma |
-| Radius de botao | `radius/md` = 8px (`rounded-lg`) | `rounded-lg` (OK) | Nenhuma |
-| Radius de input | `radius/md` = 8px (`rounded-lg`) | `rounded-lg` (OK) | Nenhuma |
+| Radius de botao | `radius/md` = 8px (`rounded-lg`) | `rounded-lg` | OK |
+| Radius de input | `radius/md` = 8px (`rounded-lg`) | `rounded-lg` | OK |
 | Sombras | 3 effect styles definidos | Nenhuma sombra usada | Implementar quando necessario |
 | Semantic tokens | Colecao completa (surface, action, field, feedback) | Apenas primitivas no CSS | **Criar camada semantica** |
-| Componentes React | 40+ componentes no Figma | Button, TextField criados | **Criar demais conforme demanda** |
-| shadcn/ui | Na stack | Nao instalado | Instalar como base |
+| shadcn/ui | Na stack | Instalado (v4, base-nova, @base-ui/react) | OK |
 | Fonte Comfortaa | Usada na marca | Nao carregada | Carregar para marca |
-| Assets de marca | Logo com variantes no Figma | Nenhum asset em public/ | **Exportar do Figma** |
+| Assets de marca | Logo + assets organizados no Figma | Logo SVG em src/assets/ | Parcial — outras versoes pendentes |
+| Button | 4 variants (Primary/Secondary/Tertiary/Destructive) | 4 variants implementadas | OK |
+| Badge | Soft + Outline × 5 tones × 2 sizes | Soft + Outline implementados | OK |
+| Alert | Soft + Outline × 4 types | Soft + Outline implementados | OK |
+| Chip | Filter/Input × estados completos | Nao implementado | **Pendente** |
+| FAB | Componente no Figma | Nao implementado | **Pendente** |
+| Financial Card | Componente de produto no Figma | Nao implementado | **Pendente** |
+| Manga Insights | Componente de produto no Figma | Nao implementado | **Pendente** |
+| Goal Card | Avatar + personalizacao no Figma | Versao basica implementada | **Atualizar** |
+| Category Item | Spending Progress no Figma | Versao basica implementada | **Atualizar** |
 
 ---
 

@@ -95,6 +95,7 @@ export default function ComponentsShowcasePage() {
                 <div className="flex flex-wrap items-center gap-3">
                   <Button variant="primary">Primary</Button>
                   <Button variant="secondary">Secondary</Button>
+                  <Button variant="tertiary">Tertiary</Button>
                   <Button variant="destructive">Destructive</Button>
                 </div>
               </Group>
@@ -197,32 +198,56 @@ export default function ComponentsShowcasePage() {
           {/* ── Alert ── */}
           <section>
             <SectionTitle>Alert</SectionTitle>
-            <div className="space-y-4">
-              <Alert type="success" title="Sucesso">
-                Perfil atualizado com sucesso.
-              </Alert>
-              <Alert type="warning" title="Atencao">
-                Sua assinatura expira em 3 dias.
-              </Alert>
-              <Alert type="danger" title="Erro">
-                Nao foi possivel salvar. Tente novamente.
-              </Alert>
-              <Alert type="info" title="Informacao">
-                Novos recursos disponiveis na proxima versao.
-              </Alert>
-              {alertVisible && (
-                <Alert type="info" title="Dispensavel" onClose={() => setAlertVisible(false)}>
-                  Clique no X para fechar este alerta.
-                </Alert>
-              )}
-              {!alertVisible && (
-                <button
-                  onClick={() => setAlertVisible(true)}
-                  className="text-sm text-primary-500 hover:text-primary-600"
-                >
-                  Mostrar alerta novamente
-                </button>
-              )}
+            <div className="space-y-6">
+              <Group title="Soft (default)">
+                <div className="space-y-4">
+                  <Alert type="success" title="Sucesso">
+                    Perfil atualizado com sucesso.
+                  </Alert>
+                  <Alert type="warning" title="Atencao">
+                    Sua assinatura expira em 3 dias.
+                  </Alert>
+                  <Alert type="danger" title="Erro">
+                    Nao foi possivel salvar. Tente novamente.
+                  </Alert>
+                  <Alert type="info" title="Informacao">
+                    Novos recursos disponiveis na proxima versao.
+                  </Alert>
+                </div>
+              </Group>
+              <Group title="Outline">
+                <div className="space-y-4">
+                  <Alert variant="outline" type="success" title="Sucesso">
+                    Perfil atualizado com sucesso.
+                  </Alert>
+                  <Alert variant="outline" type="warning" title="Atencao">
+                    Sua assinatura expira em 3 dias.
+                  </Alert>
+                  <Alert variant="outline" type="danger" title="Erro">
+                    Nao foi possivel salvar. Tente novamente.
+                  </Alert>
+                  <Alert variant="outline" type="info" title="Informacao">
+                    Novos recursos disponiveis na proxima versao.
+                  </Alert>
+                </div>
+              </Group>
+              <Group title="Dispensavel">
+                <div className="space-y-4">
+                  {alertVisible && (
+                    <Alert type="info" title="Dispensavel" onClose={() => setAlertVisible(false)}>
+                      Clique no X para fechar este alerta.
+                    </Alert>
+                  )}
+                  {!alertVisible && (
+                    <button
+                      onClick={() => setAlertVisible(true)}
+                      className="text-sm text-primary-500 hover:text-primary-600"
+                    >
+                      Mostrar alerta novamente
+                    </button>
+                  )}
+                </div>
+              </Group>
             </div>
           </section>
 
@@ -230,7 +255,7 @@ export default function ComponentsShowcasePage() {
           <section>
             <SectionTitle>Badge</SectionTitle>
             <div className="space-y-6">
-              <Group title="Tones — Small">
+              <Group title="Soft — Small">
                 <div className="flex flex-wrap items-center gap-2">
                   <Badge tone="neutral">Neutro</Badge>
                   <Badge tone="success">Sucesso</Badge>
@@ -239,13 +264,31 @@ export default function ComponentsShowcasePage() {
                   <Badge tone="info">Info</Badge>
                 </div>
               </Group>
-              <Group title="Tones — Medium">
+              <Group title="Soft — Medium">
                 <div className="flex flex-wrap items-center gap-2">
                   <Badge tone="neutral" size="md">Neutro</Badge>
                   <Badge tone="success" size="md">Sucesso</Badge>
                   <Badge tone="warning" size="md">Atencao</Badge>
                   <Badge tone="danger" size="md">Erro</Badge>
                   <Badge tone="info" size="md">Info</Badge>
+                </div>
+              </Group>
+              <Group title="Outline — Small">
+                <div className="flex flex-wrap items-center gap-2">
+                  <Badge variant="outline" tone="neutral">Neutro</Badge>
+                  <Badge variant="outline" tone="success">Sucesso</Badge>
+                  <Badge variant="outline" tone="warning">Atencao</Badge>
+                  <Badge variant="outline" tone="danger">Erro</Badge>
+                  <Badge variant="outline" tone="info">Info</Badge>
+                </div>
+              </Group>
+              <Group title="Outline — Medium">
+                <div className="flex flex-wrap items-center gap-2">
+                  <Badge variant="outline" tone="neutral" size="md">Neutro</Badge>
+                  <Badge variant="outline" tone="success" size="md">Sucesso</Badge>
+                  <Badge variant="outline" tone="warning" size="md">Atencao</Badge>
+                  <Badge variant="outline" tone="danger" size="md">Erro</Badge>
+                  <Badge variant="outline" tone="info" size="md">Info</Badge>
                 </div>
               </Group>
             </div>
@@ -768,6 +811,33 @@ export default function ComponentsShowcasePage() {
               />
             </div>
           </section>
+
+          {/* ── Pending Components ── */}
+          <section>
+            <SectionTitle>Pendentes (Figma)</SectionTitle>
+            <div className="space-y-3">
+              {[
+                { name: "FAB (Floating Action Button)", type: "UI", page: "400:1240" },
+                { name: "Chip (Filter / Input)", type: "UI", page: "272:846" },
+                { name: "Financial Card", type: "Produto", page: "419:5" },
+                { name: "Manga Insights", type: "Produto", page: "437:7" },
+              ].map((item) => (
+                <Card key={item.name} variant="outline">
+                  <CardContent>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm font-semibold text-neutral-900">{item.name}</p>
+                        <p className="text-xs text-neutral-500">Figma page: {item.page}</p>
+                      </div>
+                      <Badge tone="warning" size="md">{item.type} · Pendente</Badge>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </section>
+
+          <Separator />
 
           {/* ── Form example ── */}
           <section>

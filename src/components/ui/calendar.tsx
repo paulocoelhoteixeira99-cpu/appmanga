@@ -102,7 +102,7 @@ function Calendar({ value, onChange, density = "default", minDate, maxDate, clas
           <div
             key={day}
             className={cn(
-              "flex items-center justify-center text-xs font-medium text-neutral-500",
+              "flex items-center justify-center text-xs font-semibold text-neutral-500",
               cellSize
             )}
           >
@@ -132,13 +132,13 @@ function Calendar({ value, onChange, density = "default", minDate, maxDate, clas
               className={cn(
                 "inline-flex items-center justify-center rounded-lg font-semibold transition-colors",
                 cellSize,
-                disabled && "opacity-40 cursor-not-allowed",
+                disabled && "text-neutral-400 cursor-not-allowed",
                 isSelected
                   ? "bg-primary-500 text-white"
                   : isToday
                     ? "ring-1 ring-primary-500 text-primary-700"
                     : "text-neutral-900 hover:bg-neutral-100",
-                !disabled && !isSelected && "focus-visible:ring-2 focus-visible:ring-blue-600 outline-none"
+                !disabled && !isSelected && "focus-visible:ring-2 focus-visible:ring-primary-500 outline-none"
               )}
             >
               {date.getDate()}

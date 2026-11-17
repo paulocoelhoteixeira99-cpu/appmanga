@@ -27,8 +27,8 @@ const Chip = forwardRef<HTMLButtonElement, ChipProps>(function Chip(
       disabled={disabled}
       className={cn(
         "inline-flex items-center rounded-full leading-[1.5] transition-colors select-none",
-        "focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 outline-none",
-        "disabled:opacity-50 disabled:cursor-not-allowed",
+        "focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 outline-none",
+        "disabled:bg-neutral-100 disabled:text-neutral-400 disabled:cursor-not-allowed",
         sizeStyles[size],
         selected
           ? "bg-primary-50 text-primary-900 font-semibold hover:bg-primary-100"

@@ -16,7 +16,7 @@ const softStyles: Record<BadgeTone, string> = {
   success: "bg-success-50 text-success-700",
   warning: "bg-warning-50 text-warning-700",
   danger: "bg-error-50 text-error-700",
-  info: "bg-blue-50 text-blue-800",
+  info: "bg-info-50 text-info-700",
 };
 
 const outlineStyles: Record<BadgeTone, string> = {
@@ -24,7 +24,7 @@ const outlineStyles: Record<BadgeTone, string> = {
   success: "border border-success-500 text-success-700 bg-transparent",
   warning: "border border-warning-500 text-warning-700 bg-transparent",
   danger: "border border-error-500 text-error-700 bg-transparent",
-  info: "border border-blue-500 text-blue-800 bg-transparent",
+  info: "border border-info-500 text-info-700 bg-transparent",
 };
 
 function Badge({

@@ -61,7 +61,7 @@ function DialogContent({
         {showCloseButton && (
           <DialogPrimitive.Close
             data-slot="dialog-close"
-            className="absolute top-2 right-2 inline-flex size-7 items-center justify-center rounded-lg text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
+            className="absolute top-2 right-2 inline-flex size-7 items-center justify-center rounded-lg text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
           >
             <XIcon className="size-4" />
             <span className="sr-only">Fechar</span>
@@ -101,7 +101,7 @@ function DialogFooter({
     >
       {children}
       {showCloseButton && (
-        <DialogPrimitive.Close className="inline-flex h-10 items-center justify-center rounded-lg border border-neutral-300 bg-white px-4 text-sm font-semibold text-neutral-900 hover:bg-neutral-100 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2">
+        <DialogPrimitive.Close className="inline-flex h-10 items-center justify-center rounded-lg border border-neutral-300 bg-[var(--color-surface-default)] px-4 text-sm font-semibold text-neutral-900 hover:bg-neutral-100 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2">
           Fechar
         </DialogPrimitive.Close>
       )}
@@ -114,7 +114,7 @@ function DialogTitle({ className, ...props }: DialogPrimitive.Title.Props) {
     <DialogPrimitive.Title
       data-slot="dialog-title"
       className={cn(
-        "font-heading text-base leading-none font-medium",
+        "font-heading text-base leading-none font-semibold",
         className
       )}
       {...props}

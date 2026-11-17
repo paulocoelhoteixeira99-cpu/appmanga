@@ -17,12 +17,12 @@ function NavItem({ icon, label, active = false, collapsed = false, disabled, cla
       onClick={onClick}
       className={cn(
         "flex items-center rounded-lg transition-colors select-none",
-        "focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 outline-none",
-        "disabled:opacity-50 disabled:cursor-not-allowed",
+        "focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 outline-none",
+        "disabled:text-neutral-400 disabled:cursor-not-allowed",
         collapsed ? "justify-center size-11" : "gap-3 px-3 h-11 w-full text-sm",
         active
           ? "bg-primary-50 text-primary-800 font-semibold"
-          : "text-neutral-600 font-medium hover:bg-neutral-200 hover:text-neutral-900",
+          : "text-neutral-600 font-semibold hover:bg-neutral-200 hover:text-neutral-900",
         className
       )}
       title={collapsed ? label : undefined}
@@ -49,8 +49,8 @@ function NavItemMobile({ icon, label, active = false, disabled, className, onCli
       onClick={onClick}
       className={cn(
         "flex flex-col items-center justify-center gap-1 py-2 min-w-[80px] transition-colors select-none",
-        "focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 outline-none",
-        "disabled:opacity-50 disabled:cursor-not-allowed",
+        "focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 outline-none",
+        "disabled:text-neutral-400 disabled:cursor-not-allowed",
         className
       )}
       {...props}

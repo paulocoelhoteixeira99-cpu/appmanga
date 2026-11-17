@@ -9,7 +9,7 @@ function Sidebar({ collapsed = false, className, children, ...props }: SidebarPr
   return (
     <aside
       className={cn(
-        "h-full bg-white flex flex-col gap-6 transition-[width] duration-200",
+        "h-full bg-[var(--color-surface-default)] flex flex-col gap-6 transition-[width] duration-200",
         collapsed ? "w-[72px] items-center px-3.5 py-6" : "w-[260px] px-4 py-6",
         className
       )}

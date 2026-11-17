@@ -38,12 +38,12 @@ function Card({
         "flex flex-col gap-4 rounded-xl",
         padding === "sm" && "p-4",
         padding === "md" && "p-6",
-        variant === "default" && "bg-white",
+        variant === "default" && "bg-[var(--color-surface-default)]",
         variant === "elevated" &&
-          "bg-white shadow-[0px_2px_8px_rgba(26,16,48,0.06)]",
-        variant === "outline" && "bg-white border border-neutral-200",
+          "bg-[var(--color-surface-default)] shadow-sm",
+        variant === "outline" && "bg-[var(--color-surface-default)] border border-neutral-200",
         interactive &&
-          "cursor-pointer hover:shadow-[0px_4px_16px_rgba(26,16,48,0.1)] active:bg-neutral-50 transition-all focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 outline-none",
+          "cursor-pointer hover:shadow-md active:bg-neutral-50 transition-all focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 outline-none",
         className
       )}
       {...props}

@@ -40,10 +40,10 @@ const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
               "w-full h-10 px-3 rounded-lg border text-base leading-[1.5] text-neutral-900 placeholder:text-neutral-400 outline-none transition-colors",
               !hasError &&
                 !disabled &&
-                "border-neutral-400 bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-600",
+                "border-neutral-400 bg-[var(--color-surface-default)] focus:border-primary-500 focus:ring-2 focus:ring-primary-500",
               hasError &&
                 !disabled &&
-                "border-error-500 bg-white focus:ring-2 focus:ring-error-500",
+                "border-error-500 bg-[var(--color-surface-default)] focus:ring-2 focus:ring-error-500",
               disabled &&
                 "bg-neutral-100 border-neutral-200 text-neutral-400 cursor-not-allowed",
               className

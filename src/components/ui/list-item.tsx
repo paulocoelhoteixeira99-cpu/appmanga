@@ -39,7 +39,7 @@ function ListItem({
         itemStyle === "default" && "bg-transparent",
         itemStyle === "surface" && "bg-neutral-50",
         interactive && "cursor-pointer hover:bg-neutral-50 active:bg-neutral-100 transition-colors",
-        onClick && "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-inset rounded-lg",
+        onClick && "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-inset rounded-lg",
         className
       )}
       {...props}
@@ -48,7 +48,7 @@ function ListItem({
         <div className="shrink-0">{leading}</div>
       )}
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium leading-[1.5] text-neutral-900 truncate">
+        <p className="text-sm font-semibold leading-[1.5] text-neutral-900 truncate">
           {title}
         </p>
         {subtitle && (

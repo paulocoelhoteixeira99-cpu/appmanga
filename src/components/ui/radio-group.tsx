@@ -51,7 +51,7 @@ function RadioItem({ value, label, description, className, disabled, id, ...prop
         className
       )}
     >
-      <div className="relative flex items-center justify-center pt-0.5">
+      <div className="flex items-center justify-center pt-0.5">
         <input
           type="radio"
           id={inputId}
@@ -65,7 +65,7 @@ function RadioItem({ value, label, description, className, disabled, id, ...prop
         />
         <div
           className={cn(
-            "size-5 rounded-full border-2 transition-colors",
+            "relative size-5 rounded-full border-2 transition-colors",
             "peer-focus-visible:ring-2 peer-focus-visible:ring-blue-600 peer-focus-visible:ring-offset-2",
             checked
               ? "border-primary-500 bg-primary-500"

@@ -80,11 +80,11 @@ function GoalCard({
           : undefined
       }
       className={cn(
-        "relative flex flex-col gap-3 rounded-xl bg-white border border-neutral-200",
+        "relative flex flex-col gap-3 rounded-xl bg-[var(--color-surface-default)] border border-neutral-200",
         sizes.container,
         variant === "elevated" && "shadow-sm border-0",
         onClick &&
-          "cursor-pointer hover:bg-neutral-50 active:bg-neutral-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600",
+          "cursor-pointer hover:bg-neutral-50 active:bg-neutral-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500",
         className
       )}
     >
@@ -109,7 +109,7 @@ function GoalCard({
       {/* Progress bar */}
       <div className={cn("w-full rounded-full bg-neutral-200 overflow-hidden", sizes.bar)}>
         <div
-          className="h-full rounded-full bg-primary-600 transition-all duration-300 ease-out"
+          className="h-full rounded-full bg-primary-500 transition-all duration-300 ease-out"
           style={{ width: `${clampedPercentage}%` }}
         />
       </div>

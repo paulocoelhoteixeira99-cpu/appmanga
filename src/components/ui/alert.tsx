@@ -40,8 +40,8 @@ const typeStyles: Record<AlertType, { soft: string; text: string; icon: React.Re
     ),
   },
   info: {
-    soft: "bg-blue-50 border-blue-500",
-    text: "text-blue-800",
+    soft: "bg-info-50 border-info-500",
+    text: "text-info-700",
     icon: (
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-5 shrink-0">
         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
@@ -54,7 +54,7 @@ const outlineAlertStyles: Record<AlertType, string> = {
   success: "bg-transparent border-success-500",
   warning: "bg-transparent border-warning-500",
   danger: "bg-transparent border-error-500",
-  info: "bg-transparent border-blue-500",
+  info: "bg-transparent border-info-500",
 };
 
 function Alert({

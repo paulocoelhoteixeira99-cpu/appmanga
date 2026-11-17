@@ -1,13 +1,19 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Geist } from "next/font/google";
+import { Inter, Comfortaa } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 const inter = Inter({
   subsets: ["latin"],
   display: "swap",
+  weight: ["400", "500", "600"],
+  variable: "--font-sans",
+});
+
+const comfortaa = Comfortaa({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-brand",
 });
 
 export const metadata: Metadata = {
@@ -35,8 +41,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="pt-BR" className={cn("font-sans", geist.variable)}>
-      <body className={`${inter.className} antialiased`}>{children}</body>
+    <html lang="pt-BR" className={cn(inter.variable, comfortaa.variable)}>
+      <body className="font-sans antialiased">{children}</body>
     </html>
   );
 }

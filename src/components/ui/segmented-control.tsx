@@ -49,10 +49,10 @@ function SegmentItem({ value, disabled, className, children, ...props }: Segment
       onClick={() => ctx.onChange(value)}
       className={cn(
         "px-3 py-1.5 rounded text-sm font-semibold leading-[1.5] transition-all select-none",
-        "focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1 outline-none",
-        "disabled:opacity-50 disabled:cursor-not-allowed",
+        "focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 outline-none",
+        "disabled:text-neutral-400 disabled:cursor-not-allowed",
         selected
-          ? "bg-white text-neutral-900 shadow-sm"
+          ? "bg-[var(--color-surface-default)] text-neutral-900 shadow-sm"
           : "bg-transparent text-neutral-600 hover:text-neutral-900",
         className
       )}

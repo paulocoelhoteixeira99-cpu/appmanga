@@ -334,14 +334,15 @@ Variaveis da colecao **Semantic Colors** — usar para mapear intencao, nao cor 
 
 | Item | Figma | Codigo atual | Status |
 |------|-------|-------------|--------|
-| Tipografia | 15 text styles com SemiBold 600 | Pesos mistos (bold, semibold) e tamanhos ad-hoc | Alinhar com tokens do Figma |
+| Tipografia | 15 text styles com SemiBold 600 | Pesos alinhados com Figma (400/500/600) | OK |
 | Radius de botao | `radius/md` = 8px (`rounded-lg`) | `rounded-lg` | OK |
 | Radius de input | `radius/md` = 8px (`rounded-lg`) | `rounded-lg` | OK |
-| Sombras | 3 effect styles definidos | Nenhuma sombra usada | Implementar quando necessario |
-| Semantic tokens | Colecao completa (surface, action, field, feedback) | Apenas primitivas no CSS | **Criar camada semantica** |
+| Sombras | 3 effect styles definidos | Tokenizadas (`shadow-sm`/`shadow-md`/`shadow-lg`) | OK |
+| Semantic tokens | Colecao completa (surface, action, field, feedback) | Implementados em `globals.css` | OK |
 | shadcn/ui | Na stack | Instalado (v4, base-nova, @base-ui/react) | OK |
-| Fonte Comfortaa | Usada na marca | Nao carregada | Carregar para marca |
-| Assets de marca | Logo 16 variantes organizadas no Figma | 1 SVG gradiente em src/assets/ | **15 variantes pendentes**  |
+| Fonte Comfortaa | Usada na marca | Carregada via `next/font` | OK |
+| Focus ring | `ring-primary-500` padronizado | `ring-primary-500 ring-offset-2` em todos componentes | OK |
+| Assets de marca | Logo 16 variantes organizadas no Figma | 1 SVG gradiente em src/assets/ | **15 variantes pendentes** |
 
 ### 9.2 Componentes criados nesta sprint (12) ✅
 

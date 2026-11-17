@@ -20,7 +20,7 @@ function BottomNav({ className, children }: BottomNavProps) {
   return (
     <nav
       className={cn(
-        "fixed bottom-0 inset-x-0 z-40 flex items-center justify-around border-t border-neutral-200 bg-white px-2 pb-[env(safe-area-inset-bottom)]",
+        "fixed bottom-0 inset-x-0 z-40 flex items-center justify-around border-t border-neutral-200 bg-[var(--color-surface-default)] px-2 pb-[env(safe-area-inset-bottom)]",
         className
       )}
     >
@@ -41,7 +41,7 @@ function BottomNavItem({ className, icon, label, active = false, onClick }: Bott
       )}
     >
       <div className="size-6">{icon}</div>
-      <span className="text-[10px] font-medium leading-[1.5]">{label}</span>
+      <span className="text-[10px] font-semibold leading-[1.5]">{label}</span>
     </button>
   );
 }

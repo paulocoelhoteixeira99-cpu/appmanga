@@ -77,9 +77,9 @@ function DatePicker({
         disabled={disabled}
         onClick={() => setOpen(!open)}
         className={cn(
-          "w-full inline-flex items-center gap-2 rounded-lg border bg-white transition-colors text-left",
-          "focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 outline-none",
-          "disabled:opacity-50 disabled:cursor-not-allowed",
+          "w-full inline-flex items-center gap-2 rounded-lg border bg-[var(--color-surface-default)] transition-colors text-left",
+          "focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 outline-none",
+          "disabled:bg-neutral-100 disabled:text-neutral-400 disabled:cursor-not-allowed",
           sizeStyles[size],
           hasError
             ? "border-error-500"
@@ -103,7 +103,7 @@ function DatePicker({
       )}
 
       {open && (
-        <div className="absolute z-50 mt-1 p-3 bg-white rounded-xl border border-neutral-200 shadow-[0px_4px_16px_rgba(26,16,48,0.10)]">
+        <div className="absolute z-50 mt-1 p-3 bg-[var(--color-surface-default)] rounded-xl border border-neutral-200 shadow-md">
           <Calendar value={value} onChange={handleSelect} />
         </div>
       )}

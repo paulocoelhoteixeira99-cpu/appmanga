@@ -47,7 +47,7 @@ function RadioItem({ value, label, description, className, disabled, id, ...prop
       htmlFor={inputId}
       className={cn(
         "flex items-start gap-3 cursor-pointer",
-        disabled && "opacity-50 cursor-not-allowed",
+        disabled && "text-neutral-400 cursor-not-allowed",
         className
       )}
     >
@@ -66,10 +66,10 @@ function RadioItem({ value, label, description, className, disabled, id, ...prop
         <div
           className={cn(
             "relative size-5 rounded-full border-2 transition-colors",
-            "peer-focus-visible:ring-2 peer-focus-visible:ring-blue-600 peer-focus-visible:ring-offset-2",
+            "peer-focus-visible:ring-2 peer-focus-visible:ring-primary-500 peer-focus-visible:ring-offset-2",
             checked
               ? "border-primary-500 bg-primary-500"
-              : "border-neutral-400 bg-white",
+              : "border-neutral-400 bg-[var(--color-surface-default)]",
             disabled && "cursor-not-allowed"
           )}
         >
@@ -81,7 +81,7 @@ function RadioItem({ value, label, description, className, disabled, id, ...prop
         </div>
       </div>
       <div className="flex flex-col gap-0.5">
-        <span className="text-sm font-medium leading-[1.5] text-neutral-900">{label}</span>
+        <span className="text-sm font-semibold leading-[1.5] text-neutral-900">{label}</span>
         {description && (
           <span className="text-sm leading-[1.5] text-neutral-500">{description}</span>
         )}

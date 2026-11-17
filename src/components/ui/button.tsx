@@ -13,13 +13,13 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary:
-    "bg-primary-500 text-white hover:bg-primary-600 active:bg-primary-700 focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2",
+    "bg-primary-500 text-white hover:bg-primary-600 active:bg-primary-700 focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2",
   secondary:
-    "bg-white text-neutral-900 border border-neutral-300 hover:bg-neutral-100 active:bg-neutral-200 focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2",
+    "bg-[var(--color-surface-default)] text-neutral-900 border border-neutral-300 hover:bg-neutral-100 active:bg-neutral-200 focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2",
   tertiary:
-    "bg-transparent text-primary-500 hover:bg-primary-50 active:bg-primary-100 focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2",
+    "bg-transparent text-primary-500 hover:bg-primary-50 active:bg-primary-100 focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2",
   destructive:
-    "bg-error-500 text-white hover:bg-error-700 focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2",
+    "bg-error-500 text-white hover:bg-error-700 focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2",
 };
 
 const sizeStyles: Record<ButtonSize, string> = {
@@ -53,7 +53,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
       disabled={disabled || loading}
       className={cn(
         "inline-flex items-center justify-center rounded-lg font-semibold leading-[1.5] transition-colors outline-none select-none",
-        "disabled:opacity-50 disabled:cursor-not-allowed",
+        "disabled:bg-neutral-200 disabled:text-neutral-400 disabled:cursor-not-allowed",
         variantStyles[variant],
         iconOnly ? iconOnlySizes[size] : sizeStyles[size],
         loading && "relative",

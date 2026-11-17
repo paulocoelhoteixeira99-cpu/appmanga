@@ -59,6 +59,16 @@ Essencia de marca: Orientacao. Arquetipo: Companion + Caregiver.
 - NAO recriar logotipos ou elementos de marca com CSS — usar assets oficiais
 - Em caso de conflito, prioridade: especificacoes de produto > Design System > handoff > arquitetura existente > boas praticas
 
+## Regras de Tokens (obrigatorio)
+- NUNCA usar cores do Tailwind que nao estao no DS (ex: `blue-*`, `gray-*`, `slate-*`, `zinc-*`)
+- NUNCA usar `bg-white` hardcoded — usar `bg-[var(--color-surface-default)]`
+- NUNCA usar `disabled:opacity-50` — usar cores semanticas de disabled (`text-neutral-400`, `bg-neutral-200`)
+- NUNCA usar sombras inline (`shadow-[...]`) quando existe token (`shadow-sm`, `shadow-md`, `shadow-lg`)
+- Focus ring SEMPRE `ring-primary-500 ring-offset-2` (nunca `ring-blue-*`)
+- Texto secundario SEMPRE `text-neutral-600` (nunca 500 ou 700 para secondary)
+- Font weight para labels/headings SEMPRE `font-semibold` (600), nunca `font-medium` ou `font-bold`
+- Consultar `globals.css` antes de usar qualquer cor — se nao tem token, nao usar
+
 ## Regras
 - Nunca commitar arquivos .env
 - Sempre rodar testes antes de fazer push

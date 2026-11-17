@@ -61,7 +61,7 @@ function TransactionItem({
         isCompact ? "min-h-[48px] px-3 py-2" : "min-h-[64px] px-4 py-3",
         itemStyle === "surface" && "bg-neutral-50",
         onClick &&
-          "cursor-pointer hover:bg-neutral-50 active:bg-neutral-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-inset",
+          "cursor-pointer hover:bg-neutral-50 active:bg-neutral-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-inset",
         className
       )}
     >

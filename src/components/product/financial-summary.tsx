@@ -33,7 +33,7 @@ function FinancialSummary({
     <div
       className={cn(
         "relative flex flex-col gap-6 p-6 rounded-2xl",
-        variant === "default" && "bg-white border border-neutral-200",
+        variant === "default" && "bg-[var(--color-surface-default)] border border-neutral-200",
         variant === "embedded" && "bg-transparent",
         className
       )}

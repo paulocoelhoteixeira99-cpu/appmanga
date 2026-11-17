@@ -4,11 +4,26 @@ import * as React from "react"
 import { Drawer as DrawerPrimitive } from "@base-ui/react/drawer"
 import { cn } from "cn"
 
+type DrawerPlacement = "bottom" | "right"
+type DrawerSize = "sm" | "md" | "lg"
+
+const placementToSwipeDirection: Record<DrawerPlacement, NonNullable<DrawerPrimitive.Root.Props["swipeDirection"]>> = {
+  bottom: "down",
+  right: "left",
+}
+
+const drawerSizeClasses: Record<DrawerSize, string> = {
+  sm: "data-[swipe-axis=x]:sm:[--drawer-content-width:20rem]",
+  md: "data-[swipe-axis=x]:sm:[--drawer-content-width:24rem]",
+  lg: "data-[swipe-axis=x]:sm:[--drawer-content-width:32rem]",
+}
+
 type DrawerContextProps = {
   hasSnapPoints: boolean
   modal: DrawerPrimitive.Root.Props["modal"]
   showSwipeHandle: boolean
   swipeDirection: NonNullable<DrawerPrimitive.Root.Props["swipeDirection"]>
+  size: DrawerSize
 }
 
 const DrawerContext = React.createContext<DrawerContextProps | null>(null)
@@ -27,15 +42,20 @@ function Drawer({
   modal = true,
   showSwipeHandle = false,
   snapPoints,
-  swipeDirection = "down",
+  swipeDirection,
+  placement = "bottom",
+  size = "md",
   ...props
 }: DrawerPrimitive.Root.Props & {
   showSwipeHandle?: boolean
+  placement?: DrawerPlacement
+  size?: DrawerSize
 }) {
+  const resolvedDirection = swipeDirection ?? placementToSwipeDirection[placement]
   const hasSnapPoints = snapPoints != null && snapPoints.length > 0
   const contextValue = React.useMemo(
-    () => ({ hasSnapPoints, modal, showSwipeHandle, swipeDirection }),
-    [hasSnapPoints, modal, showSwipeHandle, swipeDirection]
+    () => ({ hasSnapPoints, modal, showSwipeHandle, swipeDirection: resolvedDirection, size }),
+    [hasSnapPoints, modal, showSwipeHandle, resolvedDirection, size]
   )
 
   return (
@@ -44,7 +64,7 @@ function Drawer({
         data-slot="drawer"
         modal={modal}
         snapPoints={snapPoints}
-        swipeDirection={swipeDirection}
+        swipeDirection={resolvedDirection}
         {...props}
       />
     </DrawerContext.Provider>
@@ -101,7 +121,7 @@ function DrawerContent({
   children,
   ...props
 }: DrawerPrimitive.Popup.Props) {
-  const { hasSnapPoints, modal, showSwipeHandle, swipeDirection } = useDrawer()
+  const { hasSnapPoints, modal, showSwipeHandle, swipeDirection, size } = useDrawer()
   const swipeAxis =
     swipeDirection === "down" || swipeDirection === "up" ? "y" : "x"
 
@@ -127,7 +147,8 @@ function DrawerContent({
             // Bleed.
             "after:pointer-events-none after:absolute after:bg-(--drawer-bleed-background,var(--color-popover)) data-[swipe-axis=x]:after:inset-y-0 data-[swipe-axis=x]:after:w-(--bleed) data-[swipe-axis=y]:after:inset-x-0 data-[swipe-axis=y]:after:h-(--bleed) data-[swipe-direction=down]:after:top-full data-[swipe-direction=left]:after:right-full data-[swipe-direction=right]:after:left-full data-[swipe-direction=up]:after:bottom-full",
             // Sizing.
-            "[--drawer-content-height:var(--drawer-height,auto)] data-[swipe-axis=x]:[--drawer-content-width:75%] data-[swipe-axis=y]:[--drawer-content-max-height:calc(100dvh-6rem)] data-[swipe-axis=y]:data-snap-points:[--drawer-content-height:100dvh] data-[swipe-axis=x]:sm:[--drawer-content-width:24rem]",
+            "[--drawer-content-height:var(--drawer-height,auto)] data-[swipe-axis=x]:[--drawer-content-width:75%] data-[swipe-axis=y]:[--drawer-content-max-height:calc(100dvh-6rem)] data-[swipe-axis=y]:data-snap-points:[--drawer-content-height:100dvh]",
+            drawerSizeClasses[size],
             // Stack.
             "[--bleed:3rem] [--peek:1rem] [--stack-height:var(--drawer-frontmost-height,var(--drawer-height,0px))] [--stack-peek-offset:max(0px,calc((var(--nested-drawers)-var(--stack-progress))*var(--peek)))] [--stack-progress:clamp(0,var(--drawer-swipe-progress),1)] [--stack-scale-base:max(0,calc(1-(var(--nested-drawers)*var(--stack-step))))] [--stack-scale:clamp(0,calc(var(--stack-scale-base)+(var(--stack-step)*var(--stack-progress))),1)] [--stack-shrink:calc(1-var(--stack-scale))] [--stack-step:0.05]",
             // Transitions.
@@ -191,7 +212,7 @@ function DrawerTitle({ className, ...props }: DrawerPrimitive.Title.Props) {
     <DrawerPrimitive.Title
       data-slot="drawer-title"
       className={cn(
-        "font-heading text-base font-medium text-foreground",
+        "font-heading text-base font-semibold text-foreground",
         className
       )}
       {...props}

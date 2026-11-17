@@ -141,7 +141,7 @@ Variaveis da colecao **Semantic Colors** — usar para mapear intencao, nao cor 
 | Fonte | Uso | Status no codigo |
 |-------|-----|-----------------|
 | **Inter** | Interface do produto (exclusiva) | Carregada via `next/font/google` |
-| **Comfortaa** | Marca, comunicacao, banners | **NAO carregada** — pendente |
+| **Comfortaa** | Marca, comunicacao, banners | Carregada via `next/font/google` (`--font-brand`) |
 
 ### Hierarquia — 15 Text Styles (do Figma)
 
@@ -274,8 +274,8 @@ Variaveis da colecao **Semantic Colors** — usar para mapear intencao, nao cor 
 | 4 | **Card** | `279:245` | 30: 3 styles × Padding 16/24 × Interactive/Static × states | 3 styles, interactive (onClick, hover, focus, keyboard) | ✅ OK |
 | 5 | **Alert** | `272:852` | 8: Soft/Outline × 4 types | Soft/Outline × 4 types | OK |
 | 6 | **Toast** | `272:851` | 4 types | 4 types (via sonner) | OK |
-| 7 | **Dialog** | `285:292` | 9: Default/Confirmation/Destructive × S/M/L | Compound basico | Falta: `type` e `size` props |
-| 8 | **Drawer** | `285:293` | 5: Bottom (Content/Expanded) + Right (S/M/L) | Compound basico | Falta: `placement` e `size` props |
+| 7 | **Dialog** | `285:292` | 9: Default/Confirmation/Destructive × S/M/L | type (default/confirmation/destructive) + size (sm/md/lg) | ✅ OK |
+| 8 | **Drawer** | `285:293` | 5: Bottom (Content/Expanded) + Right (S/M/L) | placement (bottom/right) + size (sm/md/lg) | ✅ OK |
 | 9 | **List Item** | `279:544` | 24: Medium/Large × Default/Surface × Interactive × states | size md/lg, itemStyle default/surface | ✅ OK |
 | 10 | **Avatar** | `279:938` | 24: Icon/Image/Initials × Circle/Rounded × 4 sizes | 3 types × 2 shapes × 4 sizes | OK |
 | 11 | **Badge** | `272:845` | 20: Soft/Outline × 5 tones × 2 sizes | Soft/Outline × 5 tones × 2 sizes | OK |
@@ -308,7 +308,7 @@ Variaveis da colecao **Semantic Colors** — usar para mapear intencao, nao cor 
 
 | # | Componente | Page ID | Variants Figma | Codigo | Status |
 |---|------------|---------|---------------|--------|--------|
-| 1 | **Logo** | `346:2` | 16: 4 tipos (Logomarca/Logomarca Brand/Simbolo/Simbolo Brand) × 4 versoes (Gradiente/Flat/Clara/Escura) | Apenas SVG gradiente | Falta: 15 variantes |
+| 1 | **Logo** | `346:2` | 16: 4 tipos (Logomarca/Logomarca Brand/Simbolo/Simbolo Brand) × 4 versoes (Gradiente/Flat/Clara/Escura) | Inline SVG, type + version + brand + size | ✅ OK |
 | 2 | **Transaction Item** | `297:48` | 24: Compact/Default × Default/Surface × Interactive/Static × states | size default/compact, itemStyle default/surface | ✅ OK |
 | 3 | **Account Card** | `297:844` | 24: Compact/Default × Default/Elevated × Interactive/Static × states | size default/compact | ✅ OK |
 | 4 | **Balance Card** | `297:1469` | 9: Compact/Default/Featured × Default/Subtle/Brand | size default/compact/featured | ✅ OK |
@@ -322,9 +322,9 @@ Variaveis da colecao **Semantic Colors** — usar para mapear intencao, nao cor 
 
 | Categoria | Figma | Codigo | Alinhado | Pendencias menores |
 |-----------|-------|--------|----------|-------------------|
-| UI | 35 | 35 | 33 | 2 (Dialog type/size, Drawer placement/size) |
-| Produto | 9 | 9 | 8 | 1 (Logo 15 variantes) |
-| **Total** | **44** | **44** | **41** | **3** |
+| UI | 35 | 35 | 35 | 0 |
+| Produto | 9 | 9 | 9 | 0 |
+| **Total** | **44** | **44** | **44** | **0** |
 
 ---
 
@@ -342,7 +342,7 @@ Variaveis da colecao **Semantic Colors** — usar para mapear intencao, nao cor 
 | shadcn/ui | Na stack | Instalado (v4, base-nova, @base-ui/react) | OK |
 | Fonte Comfortaa | Usada na marca | Carregada via `next/font` | OK |
 | Focus ring | `ring-primary-500` padronizado | `ring-primary-500 ring-offset-2` em todos componentes | OK |
-| Assets de marca | Logo 16 variantes organizadas no Figma | 1 SVG gradiente em src/assets/ | **15 variantes pendentes** |
+| Assets de marca | Logo 16 variantes organizadas no Figma | Inline SVG com 16 variantes (type × version × brand) | OK |
 
 ### 9.2 Componentes criados nesta sprint (12) ✅
 
@@ -378,13 +378,9 @@ Todos implementados em 2026-11-16:
 | GoalCard | `size` default/compact/featured |
 | CategoryItem | `budget`/`spent` com progress bar |
 
-### 9.4 Pendencias restantes (3)
+### 9.4 Pendencias restantes
 
-| Componente | O que falta |
-|------------|------------|
-| Dialog | Props `type` (Default/Confirmation/Destructive), `size` (S/M/L) |
-| Drawer | Props `placement` (Bottom/Right), `size` |
-| Logo | 15 variantes de tipo/versao (Flat, Clara, Escura, Brand, Simbolo) |
+Nenhuma pendencia. Todos os 44 componentes estao alinhados com o Figma.
 
 ---
 

@@ -237,6 +237,10 @@ export default function ComponentsShowcasePage() {
                 <CardContent>Com borda ao inves de sombra.</CardContent>
                 <CardFooter>Atualizado hoje</CardFooter>
               </Card>
+              <Card interactive onClick={() => toast.info("Card clicado!")}>
+                <CardHeader>Interactive</CardHeader>
+                <CardContent>Clique neste card. Hover e focus tambem funcionam.</CardContent>
+              </Card>
             </div>
           </section>
 
@@ -564,6 +568,14 @@ export default function ComponentsShowcasePage() {
                 <ProgressLabel>Limite do cartao</ProgressLabel>
                 <ProgressValue />
               </Progress>
+              <Progress value={80} variant="success" height={8}>
+                <ProgressLabel>Meta de investimento (success, h=8)</ProgressLabel>
+                <ProgressValue />
+              </Progress>
+              <Progress value={45} variant="neutral" height={12}>
+                <ProgressLabel>Leitura mensal (neutral, h=12)</ProgressLabel>
+                <ProgressValue />
+              </Progress>
             </div>
           </section>
 
@@ -698,37 +710,73 @@ export default function ComponentsShowcasePage() {
           <section>
             <SectionTitle>Separator</SectionTitle>
             <div className="space-y-4">
-              <p className="text-sm text-neutral-600">Conteudo acima</p>
-              <Separator />
-              <p className="text-sm text-neutral-600">Conteudo abaixo</p>
+              <Group title="Default">
+                <div className="space-y-3">
+                  <p className="text-sm text-neutral-600">Conteudo acima</p>
+                  <Separator />
+                  <p className="text-sm text-neutral-600">Conteudo abaixo</p>
+                </div>
+              </Group>
+              <Group title="Subtle">
+                <div className="space-y-3">
+                  <p className="text-sm text-neutral-600">Conteudo acima</p>
+                  <Separator variant="subtle" />
+                  <p className="text-sm text-neutral-600">Conteudo abaixo (sutil)</p>
+                </div>
+              </Group>
             </div>
           </section>
 
           {/* ── List Item ── */}
           <section>
             <SectionTitle>List Item</SectionTitle>
-            <Card variant="outline" className="overflow-hidden">
-              <ListItem
-                leading={<Avatar size="sm" initials="MC" />}
-                title="McDonald's"
-                subtitle="Alimentacao — hoje"
-                trailing={<span className="text-sm font-semibold text-error-500">-R$ 42,90</span>}
-              />
-              <ListDivider />
-              <ListItem
-                leading={<Avatar size="sm" initials="NB" />}
-                title="Nubank"
-                subtitle="Receita — ontem"
-                trailing={<span className="text-sm font-semibold text-success-500">+R$ 3.200,00</span>}
-              />
-              <ListDivider />
-              <ListItem
-                leading={<Avatar size="sm" initials="SP" />}
-                title="Spotify"
-                subtitle="Assinatura — 28/10"
-                trailing={<span className="text-sm font-semibold text-error-500">-R$ 21,90</span>}
-              />
-            </Card>
+            <div className="space-y-6">
+              <Group title="Default (md, default style)">
+                <Card variant="outline" className="overflow-hidden">
+                  <ListItem
+                    leading={<Avatar size="sm" initials="MC" />}
+                    title="McDonald's"
+                    subtitle="Alimentacao — hoje"
+                    trailing={<span className="text-sm font-semibold text-error-500">-R$ 42,90</span>}
+                  />
+                  <ListDivider />
+                  <ListItem
+                    leading={<Avatar size="sm" initials="NB" />}
+                    title="Nubank"
+                    subtitle="Receita — ontem"
+                    trailing={<span className="text-sm font-semibold text-success-500">+R$ 3.200,00</span>}
+                  />
+                  <ListDivider />
+                  <ListItem
+                    leading={<Avatar size="sm" initials="SP" />}
+                    title="Spotify"
+                    subtitle="Assinatura — 28/10"
+                    trailing={<span className="text-sm font-semibold text-error-500">-R$ 21,90</span>}
+                  />
+                </Card>
+              </Group>
+              <Group title="Large + Surface style">
+                <Card variant="outline" className="overflow-hidden">
+                  <ListItem
+                    size="lg"
+                    itemStyle="surface"
+                    leading={<Avatar size="sm" initials="MC" />}
+                    title="McDonald's"
+                    subtitle="Alimentacao — hoje"
+                    trailing={<span className="text-sm font-semibold text-error-500">-R$ 42,90</span>}
+                  />
+                  <ListDivider />
+                  <ListItem
+                    size="lg"
+                    itemStyle="surface"
+                    leading={<Avatar size="sm" initials="NB" />}
+                    title="Nubank"
+                    subtitle="Receita — ontem"
+                    trailing={<span className="text-sm font-semibold text-success-500">+R$ 3.200,00</span>}
+                  />
+                </Card>
+              </Group>
+            </div>
           </section>
 
           {/* ── Skeleton ── */}
@@ -760,18 +808,31 @@ export default function ComponentsShowcasePage() {
           {/* ── Empty State ── */}
           <section>
             <SectionTitle>Empty State</SectionTitle>
-            <Card variant="outline">
-              <EmptyState
-                icon={
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-12">
-                    <path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm11 15H4v-2h16v2zm0-5H4V8h5.08L7 10.83 8.62 12 12 7.4l3.38 4.6L17 10.83 14.92 8H20v6z" />
-                  </svg>
-                }
-                title="Nenhuma transacao"
-                description="Comece registrando sua primeira receita ou despesa pelo WhatsApp."
-                action={<Button>Adicionar transacao</Button>}
-              />
-            </Card>
+            <div className="space-y-6">
+              <Group title="Default (neutral)">
+                <Card variant="outline">
+                  <EmptyState
+                    icon={
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-12">
+                        <path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm11 15H4v-2h16v2zm0-5H4V8h5.08L7 10.83 8.62 12 12 7.4l3.38 4.6L17 10.83 14.92 8H20v6z" />
+                      </svg>
+                    }
+                    title="Nenhuma transacao"
+                    description="Comece registrando sua primeira receita ou despesa pelo WhatsApp."
+                    action={<Button>Adicionar transacao</Button>}
+                  />
+                </Card>
+              </Group>
+              <Group title="Compact + Surface">
+                <EmptyState
+                  size="compact"
+                  emptyStateStyle="surface"
+                  title="Sem metas"
+                  description="Crie sua primeira meta financeira."
+                  action={<Button size="sm">Criar meta</Button>}
+                />
+              </Group>
+            </div>
           </section>
 
           {/* ── Bottom Navigation ── */}
@@ -939,79 +1000,143 @@ export default function ComponentsShowcasePage() {
           {/* ── Transaction Item ── */}
           <section>
             <SectionTitle>Transaction Item</SectionTitle>
-            <Card variant="outline" className="overflow-hidden">
-              <TransactionItem
-                icon={<WalletIcon className="size-6" />}
-                title="Salario"
-                subtitle="18 out · Conta principal"
-                value="R$ 2.500,00"
-                type="income"
-              />
-              <ListDivider />
-              <TransactionItem
-                icon={<WalletIcon className="size-6" />}
-                title="Supermercado Extra"
-                subtitle="17 out · Cartao Nubank"
-                value="R$ 245,90"
-                type="expense"
-              />
-              <ListDivider />
-              <TransactionItem
-                icon={<WalletIcon className="size-6" />}
-                title="Transferencia para poupanca"
-                subtitle="15 out · Conta principal"
-                value="R$ 500,00"
-                type="transfer"
-              />
-            </Card>
+            <div className="space-y-6">
+              <Group title="Default">
+                <Card variant="outline" className="overflow-hidden">
+                  <TransactionItem
+                    icon={<WalletIcon className="size-6" />}
+                    title="Salario"
+                    subtitle="18 out · Conta principal"
+                    value="R$ 2.500,00"
+                    type="income"
+                  />
+                  <ListDivider />
+                  <TransactionItem
+                    icon={<WalletIcon className="size-6" />}
+                    title="Supermercado Extra"
+                    subtitle="17 out · Cartao Nubank"
+                    value="R$ 245,90"
+                    type="expense"
+                  />
+                  <ListDivider />
+                  <TransactionItem
+                    icon={<WalletIcon className="size-6" />}
+                    title="Transferencia para poupanca"
+                    subtitle="15 out · Conta principal"
+                    value="R$ 500,00"
+                    type="transfer"
+                  />
+                </Card>
+              </Group>
+              <Group title="Compact + Surface">
+                <Card variant="outline" className="overflow-hidden">
+                  <TransactionItem
+                    size="compact"
+                    itemStyle="surface"
+                    icon={<WalletIcon className="size-5" />}
+                    title="Almoco"
+                    subtitle="Hoje"
+                    value="R$ 32,00"
+                    type="expense"
+                  />
+                  <ListDivider />
+                  <TransactionItem
+                    size="compact"
+                    itemStyle="surface"
+                    icon={<WalletIcon className="size-5" />}
+                    title="Pix recebido"
+                    subtitle="Hoje"
+                    value="R$ 150,00"
+                    type="income"
+                  />
+                </Card>
+              </Group>
+            </div>
           </section>
 
           {/* ── Account Card ── */}
           <section>
             <SectionTitle>Account Card</SectionTitle>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <AccountCard
-                initials="MP"
-                title="Conta principal"
-                accountType="Conta corrente"
-                value="R$ 12.450,00"
-                supportingText="Atualizado hoje"
-              />
-              <AccountCard
-                variant="elevated"
-                initials="NB"
-                title="Nubank"
-                accountType="Conta digital"
-                value="R$ 3.200,00"
-                supportingText="Atualizado hoje"
-              />
+            <div className="space-y-6">
+              <Group title="Default size">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <AccountCard
+                    initials="MP"
+                    title="Conta principal"
+                    accountType="Conta corrente"
+                    value="R$ 12.450,00"
+                    supportingText="Atualizado hoje"
+                  />
+                  <AccountCard
+                    variant="elevated"
+                    initials="NB"
+                    title="Nubank"
+                    accountType="Conta digital"
+                    value="R$ 3.200,00"
+                    supportingText="Atualizado hoje"
+                  />
+                </div>
+              </Group>
+              <Group title="Compact size">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <AccountCard
+                    size="compact"
+                    initials="BB"
+                    title="Banco do Brasil"
+                    accountType="Poupanca"
+                    value="R$ 5.000,00"
+                  />
+                  <AccountCard
+                    size="compact"
+                    variant="elevated"
+                    initials="IT"
+                    title="Itau"
+                    accountType="Corrente"
+                    value="R$ 1.890,00"
+                  />
+                </div>
+              </Group>
             </div>
           </section>
 
           {/* ── Balance Card ── */}
           <section>
             <SectionTitle>Balance Card</SectionTitle>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <BalanceCard
-                icon={<WalletIcon className="size-6" />}
-                title="Saldo disponivel"
-                value="R$ 12.450,00"
-                supportingText="Atualizado hoje"
-              />
-              <BalanceCard
-                style="subtle"
-                icon={<WalletIcon className="size-6" />}
-                title="Investimentos"
-                value="R$ 8.300,00"
-                supportingText="Renda fixa + variavel"
-              />
-              <BalanceCard
-                style="brand"
-                icon={<WalletIcon className="size-6" />}
-                title="Patrimonio total"
-                value="R$ 20.750,00"
-                supportingText="Todas as contas"
-              />
+            <div className="space-y-6">
+              <Group title="Default size">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <BalanceCard
+                    icon={<WalletIcon className="size-6" />}
+                    title="Saldo disponivel"
+                    value="R$ 12.450,00"
+                    supportingText="Atualizado hoje"
+                  />
+                  <BalanceCard
+                    style="subtle"
+                    icon={<WalletIcon className="size-6" />}
+                    title="Investimentos"
+                    value="R$ 8.300,00"
+                    supportingText="Renda fixa + variavel"
+                  />
+                  <BalanceCard
+                    style="brand"
+                    icon={<WalletIcon className="size-6" />}
+                    title="Patrimonio total"
+                    value="R$ 20.750,00"
+                    supportingText="Todas as contas"
+                  />
+                </div>
+              </Group>
+              <Group title="Compact">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <BalanceCard size="compact" icon={<WalletIcon className="size-5" />} title="Saldo" value="R$ 12.450,00" />
+                  <BalanceCard size="compact" style="subtle" icon={<WalletIcon className="size-5" />} title="Investimentos" value="R$ 8.300,00" />
+                  <BalanceCard size="compact" style="brand" icon={<WalletIcon className="size-5" />} title="Total" value="R$ 20.750,00" />
+                </div>
+              </Group>
+              <Group title="Featured">
+                <BalanceCard size="featured" style="brand" icon={<WalletIcon className="size-8" />} title="Patrimonio total" value="R$ 20.750,00" supportingText="Todas as contas somadas" />
+              </Group>
             </div>
           </section>
 
@@ -1046,26 +1171,65 @@ export default function ComponentsShowcasePage() {
           {/* ── Goal Card ── */}
           <section>
             <SectionTitle>Goal Card</SectionTitle>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <GoalCard
-                initials="RV"
-                title="Reserva de viagem"
-                value="R$ 6.500,00"
-                target="de R$ 10.000,00"
-                percentage={65}
-                status="Ativa"
-                supportingText="Faltam R$ 3.500,00 · ate dez 2026"
-              />
-              <GoalCard
-                variant="elevated"
-                initials="RE"
-                title="Reserva de emergencia"
-                value="R$ 15.000,00"
-                target="de R$ 15.000,00"
-                percentage={100}
-                status="Concluida"
-                supportingText="Meta atingida!"
-              />
+            <div className="space-y-6">
+              <Group title="Default size">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <GoalCard
+                    initials="RV"
+                    title="Reserva de viagem"
+                    value="R$ 6.500,00"
+                    target="de R$ 10.000,00"
+                    percentage={65}
+                    status="Ativa"
+                    supportingText="Faltam R$ 3.500,00 · ate dez 2026"
+                  />
+                  <GoalCard
+                    variant="elevated"
+                    initials="RE"
+                    title="Reserva de emergencia"
+                    value="R$ 15.000,00"
+                    target="de R$ 15.000,00"
+                    percentage={100}
+                    status="Concluida"
+                    supportingText="Meta atingida!"
+                  />
+                </div>
+              </Group>
+              <Group title="Compact">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <GoalCard
+                    size="compact"
+                    initials="CP"
+                    title="Computador novo"
+                    value="R$ 2.000,00"
+                    target="de R$ 5.000,00"
+                    percentage={40}
+                    status="Ativa"
+                  />
+                  <GoalCard
+                    size="compact"
+                    initials="CL"
+                    title="Curso de ingles"
+                    value="R$ 800,00"
+                    target="de R$ 1.200,00"
+                    percentage={67}
+                    status="Ativa"
+                  />
+                </div>
+              </Group>
+              <Group title="Featured">
+                <GoalCard
+                  size="featured"
+                  variant="elevated"
+                  initials="RV"
+                  title="Reserva de viagem"
+                  value="R$ 6.500,00"
+                  target="de R$ 10.000,00"
+                  percentage={65}
+                  status="Ativa"
+                  supportingText="Faltam R$ 3.500,00 · ate dez 2026"
+                />
+              </Group>
             </div>
           </section>
 

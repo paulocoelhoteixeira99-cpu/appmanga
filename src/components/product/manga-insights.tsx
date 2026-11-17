@@ -87,7 +87,7 @@ function MangaInsights({
                   disabled={action.disabled}
                   className={cn(
                     "h-11 px-4 rounded-lg text-sm font-semibold transition-colors",
-                    "disabled:opacity-50 disabled:cursor-not-allowed",
+                    "disabled:text-neutral-400 disabled:cursor-not-allowed",
                     i === 0
                       ? "text-primary-700 hover:bg-primary-100"
                       : "text-neutral-600 hover:bg-neutral-100"
@@ -152,7 +152,7 @@ function MangaInsights({
                 disabled={action.disabled}
                 className={cn(
                   "h-11 px-4 rounded-lg text-sm font-semibold transition-colors",
-                  "disabled:opacity-50 disabled:cursor-not-allowed",
+                  "disabled:text-neutral-400 disabled:cursor-not-allowed",
                   i === 0
                     ? "text-primary-700 hover:bg-primary-100"
                     : "text-neutral-600 hover:bg-neutral-100"

@@ -44,11 +44,11 @@ function AccountCard({
           : undefined
       }
       className={cn(
-        "relative flex flex-col gap-3 rounded-xl bg-white border border-neutral-200",
+        "relative flex flex-col gap-3 rounded-xl bg-[var(--color-surface-default)] border border-neutral-200",
         isCompact ? "p-3" : "p-6",
         variant === "elevated" && "shadow-sm border-0",
         onClick &&
-          "cursor-pointer hover:bg-neutral-50 active:bg-neutral-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2",
+          "cursor-pointer hover:bg-neutral-50 active:bg-neutral-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2",
         className
       )}
     >

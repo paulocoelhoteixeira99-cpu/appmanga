@@ -48,7 +48,7 @@ function FinancialCard({
 
   if (state === "loading") {
     return (
-      <div className={cn("bg-white border border-neutral-200 rounded-xl", padding, className)}>
+      <div className={cn("bg-[var(--color-surface-default)] border border-neutral-200 rounded-xl", padding, className)}>
         <div className="animate-pulse space-y-3">
           <div className="flex items-center gap-3">
             <div className="size-10 rounded-lg bg-neutral-200" />
@@ -63,7 +63,7 @@ function FinancialCard({
 
   if (state === "error") {
     return (
-      <div className={cn("bg-white border border-neutral-200 rounded-xl", padding, className)}>
+      <div className={cn("bg-[var(--color-surface-default)] border border-neutral-200 rounded-xl", padding, className)}>
         <div className="flex flex-col items-center text-center py-4">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-8 text-error-500 mb-2">
             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
@@ -84,7 +84,7 @@ function FinancialCard({
   }
 
   return (
-    <div className={cn("bg-white border border-neutral-200 rounded-xl", padding, className)}>
+    <div className={cn("bg-[var(--color-surface-default)] border border-neutral-200 rounded-xl", padding, className)}>
       {/* Header */}
       <div className="flex items-center gap-3 mb-3">
         {icon && (

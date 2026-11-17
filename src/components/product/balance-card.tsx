@@ -14,7 +14,7 @@ interface BalanceCardProps {
 }
 
 const styleMap: Record<BalanceCardStyle, string> = {
-  default: "bg-white border border-neutral-200",
+  default: "bg-[var(--color-surface-default)] border border-neutral-200",
   subtle: "bg-neutral-50 border border-neutral-200",
   brand: "bg-primary-500 border-0 text-white",
 };

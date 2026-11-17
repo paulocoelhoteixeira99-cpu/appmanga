@@ -216,18 +216,28 @@ Os dados existem para servir o usuario, nao o contrario.
 **Comfortaa** — identidade de marca, comunicacao, banners, materiais externos
 **Inter** — fonte exclusiva de interface, toda a experiencia dentro do produto
 
-#### Hierarquia — Interface
+#### Hierarquia — Interface (alinhada com Figma)
 
-| Token | Fonte | Tamanho | Peso | Line Height | Letter Spacing | Uso |
-| --- | --- | --- | --- | --- | --- | --- |
-| Display | Inter | 40px | 800 | 48px | -0.02em | Numeros grandes, destaque de saldo |
-| H1 | Inter | 32px | 700 | 40px | -0.02em | Titulos de tela |
-| H2 | Inter | 24px | 600 | 32px | -0.01em | Titulos de secao |
-| H3 | Inter | 20px | 600 | 28px | -0.01em | Titulos de card |
-| Body Large | Inter | 16px | 400 | 24px | 0em | Texto principal, descricoes |
-| Body Small | Inter | 14px | 400 | 20px | 0em | Texto secundario, suporte |
-| Label | Inter | 12px | 500 | 16px | +0.01em | Labels, badges, tabs |
-| Caption | Inter | 10px | 400 | 14px | +0.02em | Textos auxiliares, legendas |
+| Token | Fonte | Tamanho | Peso | Line Height | Uso |
+| --- | --- | --- | --- | --- | --- |
+| Display LG | Inter | 48px | 600 (SemiBold) | 120% | Numeros grandes, saldo principal |
+| Display MD | Inter | 40px | 600 | 120% | Destaque secundario |
+| Display SM | Inter | 32px | 600 | 120% | Destaque menor |
+| Heading H1 | Inter | 32px | 600 | 120% | Titulos de tela |
+| Heading H2 | Inter | 24px | 600 | 120% | Titulos de secao |
+| Heading H3 | Inter | 20px | 600 | 120% | Titulos de card |
+| Heading H4 | Inter | 18px | 600 | 120% | Subtitulos |
+| Body LG | Inter | 18px | 400 (Regular) | 150% | Texto principal, descricoes |
+| Body MD | Inter | 16px | 400 | 150% | Texto padrao |
+| Body SM | Inter | 14px | 400 | 150% | Texto secundario |
+| Label LG | Inter | 16px | 600 | 150% | Botoes, controles |
+| Label MD | Inter | 14px | 600 | 150% | Labels de campo |
+| Label SM | Inter | 12px | 600 | 150% | Badges, tabs |
+| Caption MD | Inter | 12px | 400 | 150% | Legendas |
+| Caption SM | Inter | 12px | 500 (Medium) | 150% | Textos auxiliares |
+
+> **Fonte de verdade:** Figma (file key `wpGrZPa3pUk4W3JMfMc2k1`), pagina "Text".
+> Letter spacing removido desta tabela — consultar Figma para valores exatos.
 
 > **Nota:** Ativar `font-feature-settings: "tnum"` em todos os tokens que exibirao valores financeiros para garantir numerais tabulares alinhados.
 

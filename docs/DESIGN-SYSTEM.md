@@ -261,60 +261,76 @@ Variaveis da colecao **Semantic Colors** — usar para mapear intencao, nao cor 
 
 ## 8. Componentes — Biblioteca Figma
 
-### UI Base (pagina: Componentes)
+> **Totais Figma:** 55 component sets, ~700 variantes.
+> **Totais Codigo:** 32 componentes implementados (25 UI + 7 produto).
 
-| Componente | Pagina ID | Prioridade MVP | Variants Figma |
-|------------|-----------|---------------|----------------|
-| **Button** | `28:309` | Alta | Primary, Secondary, Tertiary, Destructive × Small/Medium/Large |
-| **Text Field** | `261:941` | Alta | — |
-| **Text Area** | `261:1220` | Alta | — |
-| **Card** | `279:245` | Alta | — |
-| **Alert** | `272:852` | Alta | Soft, Outline × Success/Warning/Danger/Info |
-| **Toast** | `272:851` | Alta | — |
-| **Dialog** | `285:292` | Alta | — |
-| **Drawer** | `285:293` | Alta | — |
-| **List Item** | `279:544` | Alta | — |
-| **Avatar** | `279:938` | Media | — |
-| **Badge** | `272:845` | Media | Soft, Outline × Neutral/Success/Warning/Danger/Info × Small/Medium |
-| **Chip** | `272:846` | Media | Filter, Input × Small/Medium × Selected/Unselected × Default/Hover/Focus/Disabled |
-| **Spinner** | `272:849` | Media | — |
-| **Skeleton** | `272:850` | Media | — |
-| **Progress Bar** | `279:1060` | Media | — |
-| **Empty State** | `279:2218` | Media | — |
-| **Checkbox** | `261:1234` | Media | — |
-| **Radio Button** | `261:1253` | Media | — |
-| **Switch** | `261:1263` | Media | — |
-| **Select** | `261:1273` | Media | — |
-| **Tab Item / Tab List** | `353:2` / `353:7197` | Media | — |
-| **Segment Item / Segmented Control** | `353:7115` / `353:7243` | Media | — |
-| **Bottom Navigation** | `353:7334` | Media | — |
-| **Sidebar** | `353:7409` | Media | — |
-| **FAB** | `400:1240` | Media | — |
-| **Tooltip** | `272:847` | Baixa | — |
-| **Divider** | `272:848` | Baixa | — |
-| **Table** | `279:2369` | Baixa | — |
-| **Popover** | `285:294` | Baixa | — |
-| **Dropdown Menu** | `285:295` | Baixa | — |
-| **Date Picker** | `285:296` | Baixa | — |
-| **Calendar** | `285:297` | Baixa | — |
+### 8.1 UI Base — Mapa completo
 
-### Componentes de Produto (pagina: Componentes de Produto)
+| # | Componente | Page ID | Variants Figma | Codigo | Status |
+|---|------------|---------|---------------|--------|--------|
+| 1 | **Button** | `28:309` | 120: 4 variants × 3 sizes × 5 states × icon-only | 4 variants × 3 sizes, loading/disabled | Falta: `iconOnly` prop |
+| 2 | **Text Field** | `261:941` | 21: Text/Password/Number × 7 states | Tipos via HTML `type`, estados via props | OK |
+| 3 | **Text Area** | `261:1220` | 7 states | Estados via props | OK |
+| 4 | **Card** | `279:245` | 30: 3 styles × Padding 16/24 × Interactive/Static × states | 3 styles (default/elevated/outline) | Falta: `padding` prop, interactive states |
+| 5 | **Alert** | `272:852` | 8: Soft/Outline × 4 types | Soft/Outline × 4 types | OK |
+| 6 | **Toast** | `272:851` | 4 types | 4 types (via sonner) | OK |
+| 7 | **Dialog** | `285:292` | 9: Default/Confirmation/Destructive × S/M/L | Compound basico | Falta: `type` e `size` props |
+| 8 | **Drawer** | `285:293` | 5: Bottom (Content/Expanded) + Right (S/M/L) | Compound basico | Falta: `placement` e `size` props |
+| 9 | **List Item** | `279:544` | 24: Medium/Large × Default/Surface × Interactive × states | Basico | Falta: `size`, `style` props |
+| 10 | **Avatar** | `279:938` | 24: Icon/Image/Initials × Circle/Rounded × 4 sizes | 3 types × 2 shapes × 4 sizes | OK |
+| 11 | **Badge** | `272:845` | 20: Soft/Outline × 5 tones × 2 sizes | Soft/Outline × 5 tones × 2 sizes | OK |
+| 12 | **Chip** | `272:846` | 48: Filter/Input × 2 sizes × Selected/Unselected × 4 states | **Nao existe** | CRIAR |
+| 13 | **Spinner** | `272:849` | 9: 3 styles × 3 sizes | 3 styles × 3 sizes | OK |
+| 14 | **Skeleton** | `272:850` | 3 shapes | 3 shapes | OK |
+| 15 | **Progress Bar** | `279:1060` | 9: Neutral/Primary/Success × Height 4/8/12 | Basico (apenas primary) | Falta: `variant` e `height` props |
+| 16 | **Empty State** | `279:2218` | 4: Compact/Default × Neutral/Surface | Basico | Falta: `size` e `style` props |
+| 17 | **Checkbox** | `261:1234` | 12: 3 selections × 4 states | Via shadcn | OK |
+| 18 | **Radio Button** | `261:1253` | 8: 2 selections × 4 states | Via custom component | OK |
+| 19 | **Switch** | `261:1263` | 8: On/Off × 4 states | Via shadcn | OK |
+| 20 | **Select** | `261:1273` | 10 states + Menu | Via shadcn | OK |
+| 21 | **Tab Item / Tab List** | `353:2` / `353:7197` | 8 + 1 | Via shadcn Tabs | OK |
+| 22 | **Segment Item** | `353:7115` | 8: Selected/Unselected × 4 states | **Nao existe** | CRIAR |
+| 23 | **Segmented Control** | `353:7243` | 3: 2/3/4 segments | **Nao existe** | CRIAR |
+| 24 | **Navigation Item** | `353:7155` | 16: Collapsed/Expanded × Active/Inactive × 4 states | **Nao existe** | CRIAR |
+| 25 | **Navigation Item Mobile** | `353:7292` | 8: Active/Inactive × 4 states | **Nao existe** | CRIAR |
+| 26 | **Bottom Navigation** | `353:7334` | 3: Items 3/4/5 | Implementado | OK |
+| 27 | **Sidebar** | `353:7409` | 2: Collapsed/Expanded | **Nao existe** | CRIAR |
+| 28 | **FAB** | `400:1240` | 15: 3 sizes × 5 states | **Nao existe** | CRIAR |
+| 29 | **Tooltip** | `272:847` | 4 positions | Via shadcn | OK |
+| 30 | **Divider** | `272:848` | 4: H/V × Default/Subtle | Separator (shadcn) | OK |
+| 31 | **Table** | `279:2369` | 32: Cell/Header/Row + Density × Sort × States | **Nao existe** | CRIAR |
+| 32 | **Popover** | `285:294` | 12: 4 placements × 3 sizes | Via shadcn (basico) | OK |
+| 33 | **Dropdown Menu** | `285:295` | 22: 2 densities × Default/Destructive × states | Via shadcn (basico) | OK |
+| 34 | **Date Picker** | `285:296` | 36: Single/Range × 3 sizes × 6 states | **Nao existe** | CRIAR |
+| 35 | **Calendar** | `285:297` | 28: Day/Header/Grid + 2 densities × 12 states | **Nao existe** | CRIAR |
 
-| Componente | Pagina ID | Descricao | Notas |
-|------------|-----------|-----------|-------|
-| **Logo** | `346:2` | Logotipo oficial | — |
-| **Transaction Item** | `297:48` | Item de movimentacao | — |
-| **Account Card** | `297:844` | Card de conta bancaria | — |
-| **Balance Card** | `297:1469` | Card de saldo | — |
-| **Financial Card** | `419:5` | Card financeiro generico | **NOVO** — pendente implementacao |
-| **Goal Card** | `297:1620` | Card de meta financeira | Atualizado: Goal Avatar, opcoes icone/cor, Personalization Sheet |
-| **Category Item** | `297:2424` | Item de categoria | Atualizado: Spending Progress (65%, 90%) |
-| **Financial Summary** | `297:3788` | Resumo financeiro | — |
-| **Manga Insights** | `437:7` | Cards de insights e orientacao | **NOVO** — Indicator, Actions, 10 imagens ref |
+### 8.2 Componentes de Produto — Mapa completo
+
+| # | Componente | Page ID | Variants Figma | Codigo | Status |
+|---|------------|---------|---------------|--------|--------|
+| 1 | **Logo** | `346:2` | 16: 4 tipos (Logomarca/Logomarca Brand/Simbolo/Simbolo Brand) × 4 versoes (Gradiente/Flat/Clara/Escura) | Apenas SVG gradiente | Falta: 15 variantes |
+| 2 | **Transaction Item** | `297:48` | 24: Compact/Default × Default/Surface × Interactive/Static × states | types (income/expense/transfer) | Falta: `size`, `style` props |
+| 3 | **Account Card** | `297:844` | 24: Compact/Default × Default/Elevated × Interactive/Static × states | Default/Elevated | Falta: `size` compact, interaction states |
+| 4 | **Balance Card** | `297:1469` | 9: Compact/Default/Featured × Default/Subtle/Brand | 3 styles | Falta: sizes `compact`/`featured` |
+| 5 | **Financial Card** | `419:5` | 12: Single/Summary × Compact/Default × Default/Error/Loading | **Nao existe** | CRIAR |
+| 6 | **Goal Card** | `297:1620` | 54: 3 sizes × 2 styles × Interactive/Static × states + Goal Avatar (9 variants) + Icon/Color options | Versao basica | Falta: sizes, avatar, personalizacao |
+| 7 | **Category Item** | `297:2424` | Base + Spending Progress (65%/90%) | Basico | Falta: Spending Progress |
+| 8 | **Financial Summary** | `297:3788` | Componente individual | Implementado | OK |
+| 9 | **Manga Insights** | `437:7` | 17: Indicator + 6 card states + 5 action states | **Nao existe** | CRIAR |
+
+### 8.3 Resumo quantitativo
+
+| Categoria | Figma | Codigo | Nao existe | Existe c/ gaps | Alinhado |
+|-----------|-------|--------|-----------|---------------|----------|
+| UI | 35 | 25 | 10 | 7 | 18 |
+| Produto | 9 | 7 | 2 | 5 | 1 (Fin. Summary) |
+| **Total** | **44** | **32** | **12** | **12** | **19** |
 
 ---
 
-## 9. Divergencias Codigo vs Figma
+## 9. Divergencias Globais
+
+### 9.1 Tokens e Fundacao
 
 | Item | Figma | Codigo atual | Status |
 |------|-------|-------------|--------|
@@ -325,16 +341,42 @@ Variaveis da colecao **Semantic Colors** — usar para mapear intencao, nao cor 
 | Semantic tokens | Colecao completa (surface, action, field, feedback) | Apenas primitivas no CSS | **Criar camada semantica** |
 | shadcn/ui | Na stack | Instalado (v4, base-nova, @base-ui/react) | OK |
 | Fonte Comfortaa | Usada na marca | Nao carregada | Carregar para marca |
-| Assets de marca | Logo + assets organizados no Figma | Logo SVG em src/assets/ | Parcial — outras versoes pendentes |
-| Button | 4 variants (Primary/Secondary/Tertiary/Destructive) | 4 variants implementadas | OK |
-| Badge | Soft + Outline × 5 tones × 2 sizes | Soft + Outline implementados | OK |
-| Alert | Soft + Outline × 4 types | Soft + Outline implementados | OK |
-| Chip | Filter/Input × estados completos | Nao implementado | **Pendente** |
-| FAB | Componente no Figma | Nao implementado | **Pendente** |
-| Financial Card | Componente de produto no Figma | Nao implementado | **Pendente** |
-| Manga Insights | Componente de produto no Figma | Nao implementado | **Pendente** |
-| Goal Card | Avatar + personalizacao no Figma | Versao basica implementada | **Atualizar** |
-| Category Item | Spending Progress no Figma | Versao basica implementada | **Atualizar** |
+| Assets de marca | Logo 16 variantes organizadas no Figma | 1 SVG gradiente em src/assets/ | **15 variantes pendentes**  |
+
+### 9.2 Componentes que precisam CRIAR (12)
+
+| Componente | Tipo | Variants Figma | Prioridade |
+|------------|------|---------------|------------|
+| Chip (Filter + Input) | UI | 48 | Media |
+| Segment Item + Segmented Control | UI | 11 | Media |
+| Navigation Item (desktop) | UI | 16 | Media |
+| Navigation Item Mobile | UI | 8 | Media |
+| Sidebar | UI | 2 | Media |
+| FAB | UI | 15 | Media |
+| Table (+ Cell, Header, Row) | UI | 32 | Baixa |
+| Date Picker (Single + Range) | UI | 36 | Baixa |
+| Calendar (+ Day, Header) | UI | 28 | Baixa |
+| Financial Card | Produto | 12 | Alta |
+| Manga Insights (+ Action) | Produto | 17 | Alta |
+| Goal Avatar + Icon/Color options | Produto | ~18 | Media |
+
+### 9.3 Componentes que precisam ATUALIZAR (12)
+
+| Componente | O que falta | Variants faltando |
+|------------|------------|-------------------|
+| Button | Prop `iconOnly` (Show label=False) | 60 (metade das 120) |
+| Card | Props `padding` (16/24), interactive states | ~15 |
+| Dialog | Props `type` (Default/Confirmation/Destructive), `size` (S/M/L) | 9 |
+| Drawer | Props `placement` (Bottom/Right), `size` | 5 |
+| List Item | Props `size` (Medium/Large), `style` (Default/Surface) | ~20 |
+| Progress Bar | Props `variant` (Neutral/Primary/Success), `height` (4/8/12) | 9 |
+| Empty State | Props `size` (Compact/Default), `style` (Neutral/Surface) | 4 |
+| Logo | 15 variantes de tipo/versao (Flat, Clara, Escura, Brand, Simbolo) | 15 |
+| Transaction Item | Props `size` (Compact/Default), `style` (Default/Surface) | ~20 |
+| Account Card | Prop `size` (Compact), interaction states | ~12 |
+| Balance Card | Props `size` (Compact/Featured) | 6 |
+| Goal Card | Sizes (Compact/Featured), Goal Avatar, personalizacao | ~40 |
+| Category Item | Spending Progress bar | 2 |
 
 ---
 

@@ -867,24 +867,65 @@ export default function ComponentsShowcasePage() {
             </div>
           </section>
 
-          {/* ── Pending Components ── */}
+          {/* ── Pending: Components to CREATE ── */}
           <section>
-            <SectionTitle>Pendentes (Figma)</SectionTitle>
-            <div className="space-y-3">
+            <SectionTitle>Componentes a criar (12)</SectionTitle>
+            <div className="space-y-2">
               {[
-                { name: "FAB (Floating Action Button)", type: "UI", page: "400:1240" },
-                { name: "Chip (Filter / Input)", type: "UI", page: "272:846" },
-                { name: "Financial Card", type: "Produto", page: "419:5" },
-                { name: "Manga Insights", type: "Produto", page: "437:7" },
+                { name: "Chip (Filter + Input)", type: "UI", variants: 48 },
+                { name: "Segment Item + Segmented Control", type: "UI", variants: 11 },
+                { name: "Navigation Item (desktop)", type: "UI", variants: 16 },
+                { name: "Navigation Item Mobile", type: "UI", variants: 8 },
+                { name: "Sidebar", type: "UI", variants: 2 },
+                { name: "FAB (Floating Action Button)", type: "UI", variants: 15 },
+                { name: "Table (+ Cell, Header, Row)", type: "UI", variants: 32 },
+                { name: "Date Picker (Single + Range)", type: "UI", variants: 36 },
+                { name: "Calendar (+ Day, Header)", type: "UI", variants: 28 },
+                { name: "Financial Card", type: "Produto", variants: 12 },
+                { name: "Manga Insights (+ Action)", type: "Produto", variants: 17 },
+                { name: "Goal Avatar + Icon/Color options", type: "Produto", variants: 18 },
               ].map((item) => (
                 <Card key={item.name} variant="outline">
                   <CardContent>
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-sm font-semibold text-neutral-900">{item.name}</p>
-                        <p className="text-xs text-neutral-500">Figma page: {item.page}</p>
+                        <p className="text-xs text-neutral-500">{item.variants} variantes no Figma</p>
                       </div>
-                      <Badge tone="warning" size="md">{item.type} · Pendente</Badge>
+                      <Badge tone="danger" size="md">{item.type} · Criar</Badge>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </section>
+
+          {/* ── Pending: Components to UPDATE ── */}
+          <section>
+            <SectionTitle>Componentes a atualizar (12)</SectionTitle>
+            <div className="space-y-2">
+              {[
+                { name: "Button", gap: "Prop iconOnly (Show label=False)", missing: 60 },
+                { name: "Card", gap: "Props padding (16/24), interactive states", missing: 15 },
+                { name: "Dialog", gap: "Props type, size (S/M/L)", missing: 9 },
+                { name: "Drawer", gap: "Props placement, size", missing: 5 },
+                { name: "List Item", gap: "Props size (M/L), style (Default/Surface)", missing: 20 },
+                { name: "Progress Bar", gap: "Props variant, height (4/8/12)", missing: 9 },
+                { name: "Empty State", gap: "Props size, style", missing: 4 },
+                { name: "Logo", gap: "15 variantes (Flat, Clara, Escura, Brand, Simbolo)", missing: 15 },
+                { name: "Transaction Item", gap: "Props size (Compact), style (Surface)", missing: 20 },
+                { name: "Account Card", gap: "Prop size (Compact), interaction states", missing: 12 },
+                { name: "Balance Card", gap: "Props size (Compact/Featured)", missing: 6 },
+                { name: "Goal Card", gap: "Sizes, Goal Avatar, personalizacao", missing: 40 },
+              ].map((item) => (
+                <Card key={item.name} variant="outline">
+                  <CardContent>
+                    <div className="flex items-center justify-between gap-4">
+                      <div>
+                        <p className="text-sm font-semibold text-neutral-900">{item.name}</p>
+                        <p className="text-xs text-neutral-500">{item.gap}</p>
+                      </div>
+                      <Badge tone="warning" size="md">~{item.missing} faltam</Badge>
                     </div>
                   </CardContent>
                 </Card>

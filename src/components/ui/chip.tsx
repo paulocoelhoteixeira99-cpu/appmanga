@@ -13,7 +13,7 @@ interface ChipProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const sizeStyles: Record<ChipSize, string> = {
   sm: "h-7 px-2.5 text-xs gap-1.5",
-  md: "h-8 px-3 text-sm gap-2",
+  md: "h-9 px-3 text-sm gap-1.5",
 };
 
 const Chip = forwardRef<HTMLButtonElement, ChipProps>(function Chip(
@@ -26,13 +26,13 @@ const Chip = forwardRef<HTMLButtonElement, ChipProps>(function Chip(
       type="button"
       disabled={disabled}
       className={cn(
-        "inline-flex items-center rounded-full font-medium leading-[1.5] border transition-colors select-none",
+        "inline-flex items-center rounded-full leading-[1.5] transition-colors select-none",
         "focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 outline-none",
         "disabled:opacity-50 disabled:cursor-not-allowed",
         sizeStyles[size],
         selected
-          ? "bg-primary-50 border-primary-500 text-primary-700 hover:bg-primary-100"
-          : "bg-white border-neutral-300 text-neutral-700 hover:bg-neutral-50",
+          ? "bg-primary-50 text-primary-900 font-semibold hover:bg-primary-100"
+          : "bg-neutral-200 text-neutral-800 font-semibold hover:bg-neutral-300",
         className
       )}
       onClick={onClick}
@@ -48,7 +48,7 @@ const Chip = forwardRef<HTMLButtonElement, ChipProps>(function Chip(
         <button
           type="button"
           onClick={(e) => { e.stopPropagation(); onRemove(); }}
-          className="shrink-0 size-4 flex items-center justify-center rounded-full hover:bg-neutral-200 transition-colors"
+          className="shrink-0 size-4 flex items-center justify-center rounded-full hover:bg-neutral-300 transition-colors"
           aria-label="Remover"
           disabled={disabled}
         >

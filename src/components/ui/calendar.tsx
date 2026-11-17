@@ -130,13 +130,13 @@ function Calendar({ value, onChange, density = "default", minDate, maxDate, clas
               disabled={disabled}
               onClick={() => onChange?.(date)}
               className={cn(
-                "inline-flex items-center justify-center rounded-full transition-colors",
+                "inline-flex items-center justify-center rounded-lg font-semibold transition-colors",
                 cellSize,
                 disabled && "opacity-40 cursor-not-allowed",
                 isSelected
-                  ? "bg-primary-500 text-white font-semibold"
+                  ? "bg-primary-500 text-white"
                   : isToday
-                    ? "ring-1 ring-primary-500 text-primary-700 font-medium"
+                    ? "ring-1 ring-primary-500 text-primary-700"
                     : "text-neutral-900 hover:bg-neutral-100",
                 !disabled && !isSelected && "focus-visible:ring-2 focus-visible:ring-blue-600 outline-none"
               )}

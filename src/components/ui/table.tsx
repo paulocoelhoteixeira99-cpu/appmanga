@@ -5,7 +5,7 @@ type TableDensity = "comfortable" | "compact";
 
 const densityCell: Record<TableDensity, string> = {
   comfortable: "px-4 py-3",
-  compact: "px-3 py-2",
+  compact: "px-3 py-3",
 };
 
 const Table = forwardRef<HTMLTableElement, HTMLAttributes<HTMLTableElement>>(
@@ -27,7 +27,7 @@ const TableHeader = forwardRef<HTMLTableSectionElement, HTMLAttributes<HTMLTable
     return (
       <thead
         ref={ref}
-        className={cn("bg-neutral-50 border-b border-neutral-200", className)}
+        className={cn("bg-neutral-100 border-b border-neutral-200", className)}
         {...props}
       />
     );
@@ -59,7 +59,7 @@ const TableRow = forwardRef<HTMLTableRowElement, TableRowProps>(
         ref={ref}
         className={cn(
           "transition-colors",
-          interactive && "cursor-pointer hover:bg-neutral-50 active:bg-neutral-100",
+          interactive && "cursor-pointer hover:bg-primary-50 active:bg-primary-100",
           selected && "bg-primary-50",
           striped && "even:bg-neutral-50",
           className
@@ -81,7 +81,7 @@ const TableHead = forwardRef<HTMLTableCellElement, TableHeadProps>(
       <th
         ref={ref}
         className={cn(
-          "text-left text-xs font-semibold text-neutral-600 uppercase tracking-wide",
+          "text-left text-sm font-semibold text-neutral-900",
           densityCell[density],
           sortDirection && "cursor-pointer select-none hover:text-neutral-900",
           className

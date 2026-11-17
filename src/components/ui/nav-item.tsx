@@ -19,10 +19,10 @@ function NavItem({ icon, label, active = false, collapsed = false, disabled, cla
         "flex items-center rounded-lg transition-colors select-none",
         "focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 outline-none",
         "disabled:opacity-50 disabled:cursor-not-allowed",
-        collapsed ? "justify-center size-10" : "gap-3 px-3 py-2 w-full text-sm font-medium",
+        collapsed ? "justify-center size-11" : "gap-3 px-3 h-11 w-full text-sm",
         active
-          ? "bg-primary-50 text-primary-700"
-          : "text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900",
+          ? "bg-primary-50 text-primary-800 font-semibold"
+          : "text-neutral-600 font-medium hover:bg-neutral-200 hover:text-neutral-900",
         className
       )}
       title={collapsed ? label : undefined}
@@ -48,16 +48,30 @@ function NavItemMobile({ icon, label, active = false, disabled, className, onCli
       disabled={disabled}
       onClick={onClick}
       className={cn(
-        "flex flex-col items-center justify-center gap-0.5 py-2 px-3 min-w-[64px] transition-colors select-none",
+        "flex flex-col items-center justify-center gap-1 py-2 min-w-[80px] transition-colors select-none",
         "focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 outline-none",
         "disabled:opacity-50 disabled:cursor-not-allowed",
-        active ? "text-primary-500" : "text-neutral-500",
         className
       )}
       {...props}
     >
-      <span className="size-6 flex items-center justify-center">{icon}</span>
-      <span className="text-[10px] font-medium leading-[1.5]">{label}</span>
+      <span className={cn(
+        "flex items-center justify-center w-12 h-7 rounded-full transition-colors",
+        active ? "bg-primary-50" : ""
+      )}>
+        <span className={cn(
+          "size-6 flex items-center justify-center",
+          active ? "text-primary-800" : "text-neutral-600"
+        )}>
+          {icon}
+        </span>
+      </span>
+      <span className={cn(
+        "text-xs font-semibold leading-[1.5]",
+        active ? "text-primary-800" : "text-neutral-600"
+      )}>
+        {label}
+      </span>
     </button>
   );
 }

@@ -95,7 +95,7 @@ function FinancialCard({
             {icon}
           </div>
         )}
-        <span className={cn("font-semibold text-neutral-900", isCompact ? "text-sm" : "text-base")}>
+        <span className={cn("font-semibold text-neutral-900", isCompact ? "text-sm" : "text-base leading-[1.5]")}>
           {title}
         </span>
       </div>
@@ -104,7 +104,7 @@ function FinancialCard({
       {layout === "single" && (
         <>
           {value && (
-            <p className={cn("font-semibold text-neutral-900 leading-[1.2]", isCompact ? "text-xl" : "text-2xl")}>
+            <p className={cn("font-semibold text-neutral-900 leading-[1.2]", isCompact ? "text-2xl" : "text-[32px]")}>
               {value}
             </p>
           )}

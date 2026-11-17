@@ -383,16 +383,13 @@ export default function ComponentsShowcasePage() {
             <div className="space-y-6">
               <Group title="Sizes">
                 <div className="flex items-center gap-4">
-                  <FAB size="sm" icon={<PlusIcon className="size-5" />} />
+                  <FAB size="sm" icon={<PlusIcon className="size-6" />} />
                   <FAB size="default" icon={<PlusIcon className="size-6" />} />
                   <FAB size="lg" icon={<PlusIcon className="size-6" />} />
                 </div>
               </Group>
-              <Group title="Extended (with label)">
-                <FAB icon={<PlusIcon className="size-5" />} label="Nova transacao" />
-              </Group>
               <Group title="Disabled">
-                <FAB icon={<PlusIcon className="size-5" />} disabled />
+                <FAB icon={<PlusIcon className="size-6" />} disabled />
               </Group>
             </div>
           </section>

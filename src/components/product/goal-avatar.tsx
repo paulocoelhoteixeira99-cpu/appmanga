@@ -43,7 +43,7 @@ function GoalAvatar({
       <div
         className={cn(
           baseClasses,
-          "border-2 border-dashed border-neutral-300 text-neutral-400"
+          "bg-neutral-100 text-neutral-500"
         )}
       >
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={iconSizeMap[size]}>
@@ -56,7 +56,7 @@ function GoalAvatar({
   if (content === "icon" && icon) {
     return (
       <div
-        className={cn(baseClasses, "bg-primary-100 text-primary-700")}
+        className={cn(baseClasses, "bg-primary-50 text-primary-700")}
         style={color ? { backgroundColor: color } : undefined}
       >
         <span className={iconSizeMap[size]}>{icon}</span>
@@ -67,7 +67,7 @@ function GoalAvatar({
   // Initials (default)
   return (
     <div
-      className={cn(baseClasses, "bg-primary-100 text-primary-700")}
+      className={cn(baseClasses, "bg-primary-50 text-primary-700")}
       style={color ? { backgroundColor: color } : undefined}
     >
       {initials?.slice(0, 2).toUpperCase() || "?"}

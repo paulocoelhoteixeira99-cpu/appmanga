@@ -41,18 +41,23 @@ function MangaInsights({
   className,
 }: MangaInsightsProps) {
   const isCompact = size === "compact";
-  const padding = isCompact ? "p-3" : "p-4";
+  const padding = isCompact ? "p-4" : "p-5";
 
   if (state === "loading") {
     return (
-      <div className={cn("bg-white border border-neutral-200 rounded-xl", padding, className)}>
-        <div className="animate-pulse space-y-3">
+      <div className={cn("bg-primary-50 rounded-2xl", padding, className)}>
+        <div className="animate-pulse space-y-4">
           <div className="flex items-center gap-3">
-            <div className="size-10 rounded-lg bg-neutral-200" />
-            <div className="h-4 w-32 bg-neutral-200 rounded" />
+            <div className="size-9 rounded-full bg-primary-100" />
+            <div className="h-4 w-24 bg-primary-100 rounded" />
           </div>
-          <div className="h-3 w-full bg-neutral-200 rounded" />
-          <div className="h-3 w-2/3 bg-neutral-200 rounded" />
+          <div className="space-y-2">
+            <div className="h-5 w-3/4 bg-primary-100 rounded" />
+            <div className="h-4 w-full bg-primary-100 rounded" />
+            <div className="h-4 w-2/3 bg-primary-100 rounded" />
+          </div>
+          <div className="h-10 w-full bg-primary-100 rounded-lg" />
+          <div className="h-11 w-32 bg-primary-100 rounded-lg" />
         </div>
       </div>
     );
@@ -60,74 +65,105 @@ function MangaInsights({
 
   if (state === "error") {
     return (
-      <div className={cn("bg-white border border-neutral-200 rounded-xl", padding, className)}>
-        <div className="flex items-center gap-3 text-neutral-500">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-5 text-error-500 shrink-0">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
-          </svg>
-          <span className="text-sm">Nao foi possivel carregar o insight.</span>
+      <div className={cn("bg-primary-50 rounded-2xl", padding, className)}>
+        <div className="space-y-4">
+          {icon && (
+            <div className="flex items-center gap-3">
+              <div className="shrink-0 size-9 rounded-full bg-white/60 flex items-center justify-center text-primary-700">
+                {icon}
+              </div>
+              <span className="text-xs font-semibold text-primary-700 uppercase tracking-wide">Manga Insights</span>
+            </div>
+          )}
+          <h3 className={cn("font-semibold text-neutral-900", isCompact ? "text-base" : "text-xl")}>{title}</h3>
+          <p className="text-sm text-neutral-600">{description || "Nao foi possivel carregar. Tente novamente."}</p>
+          {actions && actions.length > 0 && (
+            <div className="flex items-center gap-2">
+              {actions.map((action, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  onClick={action.onClick}
+                  disabled={action.disabled}
+                  className={cn(
+                    "h-11 px-4 rounded-lg text-sm font-semibold transition-colors",
+                    "disabled:opacity-50 disabled:cursor-not-allowed",
+                    i === 0
+                      ? "text-primary-700 hover:bg-primary-100"
+                      : "text-neutral-600 hover:bg-neutral-100"
+                  )}
+                >
+                  {action.label}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     );
   }
 
   return (
-    <div className={cn("bg-white border border-neutral-200 rounded-xl", padding, className)}>
-      {/* Header */}
-      <div className="flex items-start gap-3">
+    <div className={cn("bg-primary-50 rounded-2xl", padding, className)}>
+      <div className="space-y-4">
+        {/* Signature */}
         {icon && (
-          <div className={cn(
-            "shrink-0 rounded-lg bg-primary-50 text-primary-600 flex items-center justify-center",
-            isCompact ? "size-8" : "size-10"
-          )}>
-            {icon}
+          <div className="flex items-center gap-3">
+            <div className="shrink-0 size-9 rounded-full bg-white/60 flex items-center justify-center text-primary-700">
+              {icon}
+            </div>
+            <span className="text-xs font-semibold text-primary-700 uppercase tracking-wide">Manga Insights</span>
           </div>
         )}
-        <div className="flex-1 min-w-0">
-          <div className="flex items-start justify-between gap-2">
-            <h3 className={cn("font-semibold text-neutral-900", isCompact ? "text-sm" : "text-base")}>
-              {title}
-            </h3>
-            {indicator && (
-              <span className={cn(
-                "shrink-0 inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold",
-                indicatorTones[indicator.tone || "neutral"]
-              )}>
-                {indicator.value}
-              </span>
+
+        {/* Title */}
+        <h3 className={cn("font-semibold text-neutral-900", isCompact ? "text-base" : "text-xl")}>
+          {title}
+        </h3>
+
+        {/* Description */}
+        <p className="text-sm text-neutral-600">
+          {description}
+        </p>
+
+        {/* Indicator */}
+        {indicator && (
+          <div className="space-y-1">
+            <span className={cn(
+              "inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold",
+              indicatorTones[indicator.tone || "neutral"]
+            )}>
+              {indicator.value}
+            </span>
+            {indicator.label && (
+              <p className="text-xs text-neutral-500">{indicator.label}</p>
             )}
           </div>
-          <p className={cn("text-neutral-600 mt-1", isCompact ? "text-xs" : "text-sm")}>
-            {description}
-          </p>
-          {indicator?.label && (
-            <p className="text-xs text-neutral-500 mt-0.5">{indicator.label}</p>
-          )}
-        </div>
-      </div>
+        )}
 
-      {/* Actions */}
-      {actions && actions.length > 0 && (
-        <div className={cn("flex items-center gap-2 mt-3", icon ? "pl-[52px]" : "")}>
-          {actions.map((action, i) => (
-            <button
-              key={i}
-              type="button"
-              onClick={action.onClick}
-              disabled={action.disabled}
-              className={cn(
-                "text-sm font-semibold transition-colors",
-                "disabled:opacity-50 disabled:cursor-not-allowed",
-                i === 0
-                  ? "text-primary-500 hover:text-primary-600"
-                  : "text-neutral-600 hover:text-neutral-900"
-              )}
-            >
-              {action.label}
-            </button>
-          ))}
-        </div>
-      )}
+        {/* Actions */}
+        {actions && actions.length > 0 && (
+          <div className="flex items-center gap-2">
+            {actions.map((action, i) => (
+              <button
+                key={i}
+                type="button"
+                onClick={action.onClick}
+                disabled={action.disabled}
+                className={cn(
+                  "h-11 px-4 rounded-lg text-sm font-semibold transition-colors",
+                  "disabled:opacity-50 disabled:cursor-not-allowed",
+                  i === 0
+                    ? "text-primary-700 hover:bg-primary-100"
+                    : "text-neutral-600 hover:bg-neutral-100"
+                )}
+              >
+                {action.label}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

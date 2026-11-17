@@ -20,7 +20,7 @@ function SegmentedControl({ value, onChange, className, children, ...props }: Se
     <SegmentedControlContext.Provider value={{ value, onChange }}>
       <div
         role="tablist"
-        className={cn("inline-flex bg-neutral-100 rounded-lg p-1 gap-1", className)}
+        className={cn("inline-flex bg-neutral-200 rounded-lg p-1", className)}
         {...props}
       >
         {children}
@@ -48,7 +48,7 @@ function SegmentItem({ value, disabled, className, children, ...props }: Segment
       disabled={disabled}
       onClick={() => ctx.onChange(value)}
       className={cn(
-        "px-4 py-1.5 rounded-md text-sm font-semibold leading-[1.5] transition-all select-none",
+        "px-3 py-1.5 rounded text-sm font-semibold leading-[1.5] transition-all select-none",
         "focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1 outline-none",
         "disabled:opacity-50 disabled:cursor-not-allowed",
         selected

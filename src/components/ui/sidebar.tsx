@@ -9,8 +9,8 @@ function Sidebar({ collapsed = false, className, children, ...props }: SidebarPr
   return (
     <aside
       className={cn(
-        "h-full bg-white border-r border-neutral-200 flex flex-col py-4 transition-[width] duration-200",
-        collapsed ? "w-16 items-center px-2" : "w-60 px-3",
+        "h-full bg-white flex flex-col gap-6 transition-[width] duration-200",
+        collapsed ? "w-[72px] items-center px-3.5 py-6" : "w-[260px] px-4 py-6",
         className
       )}
       {...props}

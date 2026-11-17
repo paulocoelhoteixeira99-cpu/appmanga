@@ -47,3 +47,6 @@ public/swe-worker-*.js
 
 # MCP config (contém tokens sensíveis)
 .mcp.json
+
+*storybook.log
+storybook-static

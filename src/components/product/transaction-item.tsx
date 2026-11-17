@@ -1,6 +1,8 @@
 import { cn } from "@/lib/utils/cn";
 
 type TransactionType = "income" | "expense" | "transfer";
+type TransactionSize = "default" | "compact";
+type TransactionStyle = "default" | "surface";
 
 interface TransactionItemProps {
   className?: string;
@@ -9,6 +11,8 @@ interface TransactionItemProps {
   subtitle?: string;
   value: string;
   type?: TransactionType;
+  size?: TransactionSize;
+  itemStyle?: TransactionStyle;
   onClick?: () => void;
 }
 
@@ -31,8 +35,12 @@ function TransactionItem({
   subtitle,
   value,
   type = "expense",
+  size = "default",
+  itemStyle = "default",
   onClick,
 }: TransactionItemProps) {
+  const isCompact = size === "compact";
+
   return (
     <div
       role={onClick ? "button" : undefined}
@@ -49,7 +57,9 @@ function TransactionItem({
           : undefined
       }
       className={cn(
-        "flex items-center gap-3 min-h-[64px] px-4 py-3 rounded-lg",
+        "flex items-center gap-3 rounded-lg",
+        isCompact ? "min-h-[48px] px-3 py-2" : "min-h-[64px] px-4 py-3",
+        itemStyle === "surface" && "bg-neutral-50",
         onClick &&
           "cursor-pointer hover:bg-neutral-50 active:bg-neutral-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-inset",
         className
@@ -61,7 +71,12 @@ function TransactionItem({
           {title}
         </p>
         {subtitle && (
-          <p className="text-sm leading-[1.5] text-neutral-500 truncate">
+          <p
+            className={cn(
+              "leading-[1.5] text-neutral-500 truncate",
+              isCompact ? "text-xs" : "text-sm"
+            )}
+          >
             {subtitle}
           </p>
         )}
@@ -79,4 +94,9 @@ function TransactionItem({
   );
 }
 
-export { TransactionItem, type TransactionItemProps };
+export {
+  TransactionItem,
+  type TransactionItemProps,
+  type TransactionSize,
+  type TransactionStyle,
+};

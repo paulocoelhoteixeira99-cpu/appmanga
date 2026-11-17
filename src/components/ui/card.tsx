@@ -7,17 +7,33 @@ type CardPadding = "sm" | "md";
 interface CardProps extends HTMLAttributes<HTMLDivElement> {
   variant?: CardVariant;
   padding?: CardPadding;
+  interactive?: boolean;
 }
 
 function Card({
   className,
   variant = "default",
   padding = "sm",
+  interactive = false,
   children,
+  onClick,
   ...props
 }: CardProps) {
   return (
     <div
+      role={interactive ? "button" : undefined}
+      tabIndex={interactive ? 0 : undefined}
+      onClick={onClick}
+      onKeyDown={
+        interactive
+          ? (e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                onClick?.(e as never);
+              }
+            }
+          : undefined
+      }
       className={cn(
         "flex flex-col gap-4 rounded-xl",
         padding === "sm" && "p-4",
@@ -26,6 +42,8 @@ function Card({
         variant === "elevated" &&
           "bg-white shadow-[0px_2px_8px_rgba(26,16,48,0.06)]",
         variant === "outline" && "bg-white border border-neutral-200",
+        interactive &&
+          "cursor-pointer hover:shadow-[0px_4px_16px_rgba(26,16,48,0.1)] active:bg-neutral-50 transition-all focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 outline-none",
         className
       )}
       {...props}

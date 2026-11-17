@@ -7,8 +7,16 @@ interface CategoryItemProps {
   subtitle?: string;
   value?: string;
   color?: string;
+  budget?: number;
+  spent?: number;
   onClick?: () => void;
   selected?: boolean;
+}
+
+function getBudgetBarColor(percentage: number): string {
+  if (percentage >= 100) return "bg-error-500";
+  if (percentage >= 80) return "bg-warning-500";
+  return "bg-primary-500";
 }
 
 function CategoryItem({
@@ -17,9 +25,15 @@ function CategoryItem({
   name,
   subtitle,
   value,
+  budget,
+  spent,
   onClick,
   selected = false,
 }: CategoryItemProps) {
+  const hasBudget = budget != null && spent != null;
+  const budgetPercentage = hasBudget ? Math.round((spent / budget) * 100) : 0;
+  const clampedWidth = hasBudget ? Math.min(budgetPercentage, 100) : 0;
+
   return (
     <div
       role={onClick ? "button" : undefined}
@@ -54,11 +68,29 @@ function CategoryItem({
           </p>
         )}
       </div>
-      {value && (
-        <span className="text-base font-semibold leading-[1.5] text-neutral-900 whitespace-nowrap">
-          {value}
-        </span>
-      )}
+      <div className="flex flex-col items-end shrink-0">
+        {value && (
+          <span className="text-base font-semibold leading-[1.5] text-neutral-900 whitespace-nowrap">
+            {value}
+          </span>
+        )}
+        {hasBudget && (
+          <div className="flex items-center gap-1.5 mt-1">
+            <div className="w-16 h-1.5 rounded-full bg-neutral-200 overflow-hidden">
+              <div
+                className={cn(
+                  "h-full rounded-full transition-all duration-300 ease-out",
+                  getBudgetBarColor(budgetPercentage)
+                )}
+                style={{ width: `${clampedWidth}%` }}
+              />
+            </div>
+            <span className="text-xs text-neutral-500 whitespace-nowrap">
+              {budgetPercentage}%
+            </span>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

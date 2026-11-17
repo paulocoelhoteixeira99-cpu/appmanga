@@ -3,12 +3,34 @@
 import { Progress as ProgressPrimitive } from "@base-ui/react/progress"
 import { cn } from "cn"
 
+type ProgressVariant = "primary" | "neutral" | "success";
+type ProgressHeight = 4 | 8 | 12;
+
+interface ProgressProps extends ProgressPrimitive.Root.Props {
+  variant?: ProgressVariant;
+  height?: ProgressHeight;
+}
+
+const heightStyles: Record<ProgressHeight, string> = {
+  4: "h-1",
+  8: "h-2",
+  12: "h-3",
+};
+
+const indicatorStyles: Record<ProgressVariant, string> = {
+  primary: "bg-primary-500",
+  neutral: "bg-neutral-400",
+  success: "bg-success-500",
+};
+
 function Progress({
   className,
   children,
   value,
+  variant = "primary",
+  height = 8,
   ...props
-}: ProgressPrimitive.Root.Props) {
+}: ProgressProps) {
   return (
     <ProgressPrimitive.Root
       value={value}
@@ -17,18 +39,23 @@ function Progress({
       {...props}
     >
       {children}
-      <ProgressTrack>
-        <ProgressIndicator />
+      <ProgressTrack height={height}>
+        <ProgressIndicator variant={variant} />
       </ProgressTrack>
     </ProgressPrimitive.Root>
   )
 }
 
-function ProgressTrack({ className, ...props }: ProgressPrimitive.Track.Props) {
+interface ProgressTrackProps extends ProgressPrimitive.Track.Props {
+  height?: ProgressHeight;
+}
+
+function ProgressTrack({ className, height = 8, ...props }: ProgressTrackProps) {
   return (
     <ProgressPrimitive.Track
       className={cn(
-        "relative flex h-1 w-full items-center overflow-x-hidden rounded-full bg-muted",
+        "relative flex w-full items-center overflow-x-hidden rounded-full bg-muted",
+        heightStyles[height],
         className
       )}
       data-slot="progress-track"
@@ -37,14 +64,19 @@ function ProgressTrack({ className, ...props }: ProgressPrimitive.Track.Props) {
   )
 }
 
+interface ProgressIndicatorProps extends ProgressPrimitive.Indicator.Props {
+  variant?: ProgressVariant;
+}
+
 function ProgressIndicator({
   className,
+  variant = "primary",
   ...props
-}: ProgressPrimitive.Indicator.Props) {
+}: ProgressIndicatorProps) {
   return (
     <ProgressPrimitive.Indicator
       data-slot="progress-indicator"
-      className={cn("h-full bg-primary transition-all", className)}
+      className={cn("h-full transition-all", indicatorStyles[variant], className)}
       {...props}
     />
   )
@@ -79,4 +111,7 @@ export {
   ProgressIndicator,
   ProgressLabel,
   ProgressValue,
+  type ProgressVariant,
+  type ProgressHeight,
+  type ProgressProps,
 }

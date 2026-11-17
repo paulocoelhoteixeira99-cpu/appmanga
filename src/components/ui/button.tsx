@@ -8,6 +8,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
   size?: ButtonSize;
   loading?: boolean;
+  iconOnly?: boolean;
 }
 
 const variantStyles: Record<ButtonVariant, string> = {
@@ -27,12 +28,19 @@ const sizeStyles: Record<ButtonSize, string> = {
   lg: "h-12 px-6 text-base gap-2",
 };
 
+const iconOnlySizes: Record<ButtonSize, string> = {
+  sm: "size-8 p-0",
+  md: "size-10 p-0",
+  lg: "size-12 p-0",
+};
+
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
   {
     className,
     variant = "primary",
     size = "md",
     loading = false,
+    iconOnly = false,
     disabled,
     children,
     ...props
@@ -47,7 +55,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
         "inline-flex items-center justify-center rounded-lg font-semibold leading-[1.5] transition-colors outline-none select-none",
         "disabled:opacity-50 disabled:cursor-not-allowed",
         variantStyles[variant],
-        sizeStyles[size],
+        iconOnly ? iconOnlySizes[size] : sizeStyles[size],
         loading && "relative",
         className
       )}

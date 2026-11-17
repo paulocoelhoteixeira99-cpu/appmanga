@@ -69,6 +69,21 @@ import { GoalCard } from "@/components/product/goal-card";
 import { CategoryItem } from "@/components/product/category-item";
 import { FinancialSummary } from "@/components/product/financial-summary";
 
+// New UI components
+import { Chip } from "@/components/ui/chip";
+import { FAB } from "@/components/ui/fab";
+import { SegmentedControl, SegmentItem } from "@/components/ui/segmented-control";
+import { NavItem, NavItemMobile } from "@/components/ui/nav-item";
+import { Sidebar } from "@/components/ui/sidebar";
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
+import { Calendar } from "@/components/ui/calendar";
+import { DatePicker } from "@/components/ui/date-picker";
+
+// New product components
+import { GoalAvatar } from "@/components/product/goal-avatar";
+import { FinancialCard } from "@/components/product/financial-card";
+import { MangaInsights } from "@/components/product/manga-insights";
+
 export default function ComponentsShowcasePage() {
   const [inputValue, setInputValue] = useState("");
   const [textAreaValue, setTextAreaValue] = useState("");
@@ -79,6 +94,10 @@ export default function ComponentsShowcasePage() {
   const [switchChecked, setSwitchChecked] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [segmentValue, setSegmentValue] = useState("resumo");
+  const [chipFilters, setChipFilters] = useState<Record<string, boolean>>({ alimentacao: true, transporte: false, lazer: false });
+  const [calendarDate, setCalendarDate] = useState<Date | null>(null);
+  const [datePickerDate, setDatePickerDate] = useState<Date | null>(null);
 
   function simulateLoading(key: string) {
     setLoadingButtons((prev) => ({ ...prev, [key]: true }));
@@ -140,6 +159,16 @@ export default function ComponentsShowcasePage() {
                   <Button variant="secondary" className="w-full">
                     Secondary full width
                   </Button>
+                </div>
+              </Group>
+              <Group title="Icon only">
+                <div className="flex flex-wrap items-center gap-3">
+                  <Button iconOnly size="sm"><PlusIcon className="size-4" /></Button>
+                  <Button iconOnly size="md"><PlusIcon className="size-5" /></Button>
+                  <Button iconOnly size="lg"><PlusIcon className="size-6" /></Button>
+                  <Button iconOnly variant="secondary"><PlusIcon className="size-5" /></Button>
+                  <Button iconOnly variant="tertiary"><PlusIcon className="size-5" /></Button>
+                  <Button iconOnly variant="destructive"><PlusIcon className="size-5" /></Button>
                 </div>
               </Group>
             </div>
@@ -310,6 +339,60 @@ export default function ComponentsShowcasePage() {
             </div>
           </section>
 
+          {/* ── Chip ── */}
+          <section>
+            <SectionTitle>Chip</SectionTitle>
+            <div className="space-y-6">
+              <Group title="Filter — Toggle">
+                <div className="flex flex-wrap gap-2">
+                  {Object.entries(chipFilters).map(([key, selected]) => (
+                    <Chip
+                      key={key}
+                      variant="filter"
+                      selected={selected}
+                      onClick={() => setChipFilters(prev => ({ ...prev, [key]: !prev[key] }))}
+                    >
+                      {key.charAt(0).toUpperCase() + key.slice(1)}
+                    </Chip>
+                  ))}
+                </div>
+              </Group>
+              <Group title="Input — Removable">
+                <div className="flex flex-wrap gap-2">
+                  <Chip variant="input" onRemove={() => {}}>Nubank</Chip>
+                  <Chip variant="input" onRemove={() => {}}>Itau</Chip>
+                  <Chip variant="input" disabled onRemove={() => {}}>Desabilitado</Chip>
+                </div>
+              </Group>
+              <Group title="Sizes">
+                <div className="flex flex-wrap items-center gap-2">
+                  <Chip size="sm" selected>Small</Chip>
+                  <Chip size="md" selected>Medium</Chip>
+                </div>
+              </Group>
+            </div>
+          </section>
+
+          {/* ── FAB ── */}
+          <section>
+            <SectionTitle>FAB</SectionTitle>
+            <div className="space-y-6">
+              <Group title="Sizes">
+                <div className="flex items-center gap-4">
+                  <FAB size="sm" icon={<PlusIcon className="size-5" />} />
+                  <FAB size="default" icon={<PlusIcon className="size-6" />} />
+                  <FAB size="lg" icon={<PlusIcon className="size-6" />} />
+                </div>
+              </Group>
+              <Group title="Extended (with label)">
+                <FAB icon={<PlusIcon className="size-5" />} label="Nova transacao" />
+              </Group>
+              <Group title="Disabled">
+                <FAB icon={<PlusIcon className="size-5" />} disabled />
+              </Group>
+            </div>
+          </section>
+
           {/* ── Avatar ── */}
           <section>
             <SectionTitle>Avatar</SectionTitle>
@@ -456,6 +539,17 @@ export default function ComponentsShowcasePage() {
                 </Card>
               </TabsContent>
             </Tabs>
+          </section>
+
+          {/* ── Segmented Control ── */}
+          <section>
+            <SectionTitle>Segmented Control</SectionTitle>
+            <SegmentedControl value={segmentValue} onChange={setSegmentValue}>
+              <SegmentItem value="resumo">Resumo</SegmentItem>
+              <SegmentItem value="receitas">Receitas</SegmentItem>
+              <SegmentItem value="despesas">Despesas</SegmentItem>
+            </SegmentedControl>
+            <p className="text-sm text-neutral-500 mt-2">Selecionado: {segmentValue}</p>
           </section>
 
           {/* ── Progress (shadcn) ── */}
@@ -695,6 +789,130 @@ export default function ComponentsShowcasePage() {
             </Card>
           </section>
 
+          {/* ── Navigation Item ── */}
+          <section>
+            <SectionTitle>Navigation Item</SectionTitle>
+            <div className="space-y-6">
+              <Group title="Desktop — Expanded">
+                <div className="w-60 bg-white border border-neutral-200 rounded-xl p-2 space-y-1">
+                  <NavItem icon={<HomeIcon className="size-5" />} label="Inicio" active />
+                  <NavItem icon={<ChartIcon className="size-5" />} label="Resumo" />
+                  <NavItem icon={<GoalIcon className="size-5" />} label="Metas" />
+                  <NavItem icon={<ProfileIcon className="size-5" />} label="Perfil" disabled />
+                </div>
+              </Group>
+              <Group title="Desktop — Collapsed">
+                <div className="w-16 bg-white border border-neutral-200 rounded-xl p-2 space-y-1 flex flex-col items-center">
+                  <NavItem icon={<HomeIcon className="size-5" />} label="Inicio" active collapsed />
+                  <NavItem icon={<ChartIcon className="size-5" />} label="Resumo" collapsed />
+                  <NavItem icon={<GoalIcon className="size-5" />} label="Metas" collapsed />
+                </div>
+              </Group>
+              <Group title="Mobile">
+                <Card variant="outline" className="overflow-hidden">
+                  <div className="flex items-center justify-around bg-white px-2 py-1">
+                    <NavItemMobile icon={<HomeIcon className="size-6" />} label="Inicio" active />
+                    <NavItemMobile icon={<ChartIcon className="size-6" />} label="Resumo" />
+                    <NavItemMobile icon={<GoalIcon className="size-6" />} label="Metas" />
+                    <NavItemMobile icon={<ProfileIcon className="size-6" />} label="Perfil" />
+                  </div>
+                </Card>
+              </Group>
+            </div>
+          </section>
+
+          {/* ── Sidebar ── */}
+          <section>
+            <SectionTitle>Sidebar</SectionTitle>
+            <div className="flex gap-4">
+              <Card variant="outline" className="overflow-hidden h-64">
+                <Sidebar>
+                  <NavItem icon={<HomeIcon className="size-5" />} label="Inicio" active />
+                  <NavItem icon={<ChartIcon className="size-5" />} label="Resumo" />
+                  <NavItem icon={<GoalIcon className="size-5" />} label="Metas" />
+                </Sidebar>
+              </Card>
+              <Card variant="outline" className="overflow-hidden h-64">
+                <Sidebar collapsed>
+                  <NavItem icon={<HomeIcon className="size-5" />} label="Inicio" active collapsed />
+                  <NavItem icon={<ChartIcon className="size-5" />} label="Resumo" collapsed />
+                  <NavItem icon={<GoalIcon className="size-5" />} label="Metas" collapsed />
+                </Sidebar>
+              </Card>
+            </div>
+          </section>
+
+          {/* ── Table ── */}
+          <section>
+            <SectionTitle>Table</SectionTitle>
+            <Card variant="outline" className="overflow-hidden">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead sortDirection="descending">Data</TableHead>
+                    <TableHead>Descricao</TableHead>
+                    <TableHead>Categoria</TableHead>
+                    <TableHead sortDirection="none">Valor</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  <TableRow interactive>
+                    <TableCell>18/10</TableCell>
+                    <TableCell>Supermercado Extra</TableCell>
+                    <TableCell>Alimentacao</TableCell>
+                    <TableCell className="text-error-500 font-semibold">-R$ 245,90</TableCell>
+                  </TableRow>
+                  <TableRow interactive>
+                    <TableCell>17/10</TableCell>
+                    <TableCell>Salario</TableCell>
+                    <TableCell>Receita</TableCell>
+                    <TableCell className="text-success-500 font-semibold">+R$ 2.500,00</TableCell>
+                  </TableRow>
+                  <TableRow interactive>
+                    <TableCell>15/10</TableCell>
+                    <TableCell>Spotify</TableCell>
+                    <TableCell>Assinatura</TableCell>
+                    <TableCell className="text-error-500 font-semibold">-R$ 21,90</TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </Card>
+          </section>
+
+          {/* ── Calendar ── */}
+          <section>
+            <SectionTitle>Calendar</SectionTitle>
+            <div className="space-y-6">
+              <Group title="Default">
+                <Card variant="outline" className="inline-block p-3">
+                  <Calendar value={calendarDate} onChange={setCalendarDate} />
+                </Card>
+                {calendarDate && <p className="text-sm text-neutral-500">Selecionado: {calendarDate.toLocaleDateString("pt-BR")}</p>}
+              </Group>
+              <Group title="Compact">
+                <Card variant="outline" className="inline-block p-3">
+                  <Calendar value={calendarDate} onChange={setCalendarDate} density="compact" />
+                </Card>
+              </Group>
+            </div>
+          </section>
+
+          {/* ── Date Picker ── */}
+          <section>
+            <SectionTitle>Date Picker</SectionTitle>
+            <div className="max-w-sm space-y-6">
+              <Group title="Default">
+                <DatePicker label="Data da transacao" value={datePickerDate} onChange={setDatePickerDate} helperText="Selecione uma data" />
+              </Group>
+              <Group title="With error">
+                <DatePicker label="Vencimento" error="Data obrigatoria" />
+              </Group>
+              <Group title="Disabled">
+                <DatePicker label="Data fixa" value={new Date()} disabled />
+              </Group>
+            </div>
+          </section>
+
           <Separator />
 
           {/* ══════ PRODUCT COMPONENTS ══════ */}
@@ -797,6 +1015,34 @@ export default function ComponentsShowcasePage() {
             </div>
           </section>
 
+          {/* ── Goal Avatar ── */}
+          <section>
+            <SectionTitle>Goal Avatar</SectionTitle>
+            <div className="space-y-6">
+              <Group title="Initials">
+                <div className="flex items-center gap-4">
+                  <GoalAvatar size={32} initials="RV" />
+                  <GoalAvatar size={48} initials="RE" />
+                  <GoalAvatar size={72} initials="CP" />
+                </div>
+              </Group>
+              <Group title="Icon">
+                <div className="flex items-center gap-4">
+                  <GoalAvatar size={32} content="icon" icon={<GoalIcon className="size-4" />} />
+                  <GoalAvatar size={48} content="icon" icon={<GoalIcon className="size-5" />} />
+                  <GoalAvatar size={72} content="icon" icon={<GoalIcon className="size-7" />} />
+                </div>
+              </Group>
+              <Group title="Placeholder">
+                <div className="flex items-center gap-4">
+                  <GoalAvatar size={32} content="placeholder" />
+                  <GoalAvatar size={48} content="placeholder" />
+                  <GoalAvatar size={72} content="placeholder" />
+                </div>
+              </Group>
+            </div>
+          </section>
+
           {/* ── Goal Card ── */}
           <section>
             <SectionTitle>Goal Card</SectionTitle>
@@ -847,6 +1093,24 @@ export default function ComponentsShowcasePage() {
                 subtitle="Streaming, jogos, cinema"
                 value="R$ 189,90"
               />
+              <ListDivider />
+              <CategoryItem
+                icon={<WalletIcon className="size-6" />}
+                name="Alimentacao"
+                subtitle="Orcamento mensal"
+                value="R$ 1.234,56"
+                budget={1500}
+                spent={1234.56}
+              />
+              <ListDivider />
+              <CategoryItem
+                icon={<WalletIcon className="size-6" />}
+                name="Lazer"
+                subtitle="Quase estourou"
+                value="R$ 475,00"
+                budget={500}
+                spent={475}
+              />
             </Card>
           </section>
 
@@ -867,69 +1131,61 @@ export default function ComponentsShowcasePage() {
             </div>
           </section>
 
-          {/* ── Pending: Components to CREATE ── */}
+          {/* ── Financial Card ── */}
           <section>
-            <SectionTitle>Componentes a criar (12)</SectionTitle>
-            <div className="space-y-2">
-              {[
-                { name: "Chip (Filter + Input)", type: "UI", variants: 48 },
-                { name: "Segment Item + Segmented Control", type: "UI", variants: 11 },
-                { name: "Navigation Item (desktop)", type: "UI", variants: 16 },
-                { name: "Navigation Item Mobile", type: "UI", variants: 8 },
-                { name: "Sidebar", type: "UI", variants: 2 },
-                { name: "FAB (Floating Action Button)", type: "UI", variants: 15 },
-                { name: "Table (+ Cell, Header, Row)", type: "UI", variants: 32 },
-                { name: "Date Picker (Single + Range)", type: "UI", variants: 36 },
-                { name: "Calendar (+ Day, Header)", type: "UI", variants: 28 },
-                { name: "Financial Card", type: "Produto", variants: 12 },
-                { name: "Manga Insights (+ Action)", type: "Produto", variants: 17 },
-                { name: "Goal Avatar + Icon/Color options", type: "Produto", variants: 18 },
-              ].map((item) => (
-                <Card key={item.name} variant="outline">
-                  <CardContent>
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm font-semibold text-neutral-900">{item.name}</p>
-                        <p className="text-xs text-neutral-500">{item.variants} variantes no Figma</p>
-                      </div>
-                      <Badge tone="danger" size="md">{item.type} · Criar</Badge>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+            <SectionTitle>Financial Card</SectionTitle>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <FinancialCard
+                icon={<WalletIcon className="size-6" />}
+                title="Saldo disponivel"
+                value="R$ 12.450,00"
+                subtitle="Atualizado hoje"
+              />
+              <FinancialCard
+                layout="summary"
+                icon={<WalletIcon className="size-6" />}
+                title="Outubro 2026"
+                items={[
+                  { label: "Receitas", value: "R$ 2.500,00", tone: "positive" },
+                  { label: "Despesas", value: "R$ 245,90", tone: "negative" },
+                  { label: "Resultado", value: "R$ 2.254,10", tone: "positive" },
+                ]}
+              />
+              <FinancialCard
+                state="loading"
+                title="Carregando..."
+              />
+              <FinancialCard
+                state="error"
+                title="Erro"
+                errorMessage="Nao foi possivel carregar o saldo."
+                onRetry={() => {}}
+              />
             </div>
           </section>
 
-          {/* ── Pending: Components to UPDATE ── */}
+          {/* ── Manga Insights ── */}
           <section>
-            <SectionTitle>Componentes a atualizar (12)</SectionTitle>
-            <div className="space-y-2">
-              {[
-                { name: "Button", gap: "Prop iconOnly (Show label=False)", missing: 60 },
-                { name: "Card", gap: "Props padding (16/24), interactive states", missing: 15 },
-                { name: "Dialog", gap: "Props type, size (S/M/L)", missing: 9 },
-                { name: "Drawer", gap: "Props placement, size", missing: 5 },
-                { name: "List Item", gap: "Props size (M/L), style (Default/Surface)", missing: 20 },
-                { name: "Progress Bar", gap: "Props variant, height (4/8/12)", missing: 9 },
-                { name: "Empty State", gap: "Props size, style", missing: 4 },
-                { name: "Logo", gap: "15 variantes (Flat, Clara, Escura, Brand, Simbolo)", missing: 15 },
-                { name: "Transaction Item", gap: "Props size (Compact), style (Surface)", missing: 20 },
-                { name: "Account Card", gap: "Prop size (Compact), interaction states", missing: 12 },
-                { name: "Balance Card", gap: "Props size (Compact/Featured)", missing: 6 },
-                { name: "Goal Card", gap: "Sizes, Goal Avatar, personalizacao", missing: 40 },
-              ].map((item) => (
-                <Card key={item.name} variant="outline">
-                  <CardContent>
-                    <div className="flex items-center justify-between gap-4">
-                      <div>
-                        <p className="text-sm font-semibold text-neutral-900">{item.name}</p>
-                        <p className="text-xs text-neutral-500">{item.gap}</p>
-                      </div>
-                      <Badge tone="warning" size="md">~{item.missing} faltam</Badge>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+            <SectionTitle>Manga Insights</SectionTitle>
+            <div className="space-y-4 max-w-md">
+              <MangaInsights
+                icon={<ChartIcon className="size-5" />}
+                title="Gastos acima da media"
+                description="Seus gastos com alimentacao estao 23% acima da sua media dos ultimos 3 meses."
+                indicator={{ label: "vs media 3 meses", value: "+23%", tone: "negative" }}
+                actions={[
+                  { label: "Ver detalhes", onClick: () => {} },
+                  { label: "Ignorar", onClick: () => {} },
+                ]}
+              />
+              <MangaInsights
+                icon={<GoalIcon className="size-5" />}
+                title="Meta quase concluida"
+                description="Sua reserva de viagem esta a R$ 500 de ser atingida. Continue assim!"
+                indicator={{ label: "progresso", value: "95%", tone: "positive" }}
+                actions={[{ label: "Ver meta", onClick: () => {} }]}
+              />
+              <MangaInsights state="loading" title="" description="" />
             </div>
           </section>
 

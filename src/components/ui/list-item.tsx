@@ -1,12 +1,17 @@
 import { type HTMLAttributes } from "react";
 import { cn } from "@/lib/utils/cn";
 
+type ListItemSize = "md" | "lg";
+type ListItemStyle = "default" | "surface";
+
 interface ListItemProps extends Omit<HTMLAttributes<HTMLDivElement>, "title"> {
   leading?: React.ReactNode;
   trailing?: React.ReactNode;
   title: React.ReactNode;
   subtitle?: React.ReactNode;
   interactive?: boolean;
+  size?: ListItemSize;
+  itemStyle?: ListItemStyle;
 }
 
 function ListItem({
@@ -16,6 +21,8 @@ function ListItem({
   title,
   subtitle,
   interactive = true,
+  size = "md",
+  itemStyle = "default",
   onClick,
   ...props
 }: ListItemProps) {
@@ -26,7 +33,11 @@ function ListItem({
       onClick={onClick}
       onKeyDown={onClick ? (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onClick(e as never); } } : undefined}
       className={cn(
-        "flex items-center gap-3 px-4 py-3",
+        "flex items-center gap-3 px-4",
+        size === "md" && "py-3",
+        size === "lg" && "py-4",
+        itemStyle === "default" && "bg-transparent",
+        itemStyle === "surface" && "bg-neutral-50",
         interactive && "cursor-pointer hover:bg-neutral-50 active:bg-neutral-100 transition-colors",
         onClick && "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-inset rounded-lg",
         className
@@ -59,4 +70,4 @@ function ListDivider({ className }: { className?: string }) {
   );
 }
 
-export { ListItem, ListDivider, type ListItemProps };
+export { ListItem, ListDivider, type ListItemProps, type ListItemSize, type ListItemStyle };

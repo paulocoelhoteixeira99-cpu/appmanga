@@ -268,63 +268,63 @@ Variaveis da colecao **Semantic Colors** — usar para mapear intencao, nao cor 
 
 | # | Componente | Page ID | Variants Figma | Codigo | Status |
 |---|------------|---------|---------------|--------|--------|
-| 1 | **Button** | `28:309` | 120: 4 variants × 3 sizes × 5 states × icon-only | 4 variants × 3 sizes, loading/disabled | Falta: `iconOnly` prop |
+| 1 | **Button** | `28:309` | 120: 4 variants × 3 sizes × 5 states × icon-only | 4 variants × 3 sizes, loading/disabled, iconOnly | ✅ OK |
 | 2 | **Text Field** | `261:941` | 21: Text/Password/Number × 7 states | Tipos via HTML `type`, estados via props | OK |
 | 3 | **Text Area** | `261:1220` | 7 states | Estados via props | OK |
-| 4 | **Card** | `279:245` | 30: 3 styles × Padding 16/24 × Interactive/Static × states | 3 styles (default/elevated/outline) | Falta: `padding` prop, interactive states |
+| 4 | **Card** | `279:245` | 30: 3 styles × Padding 16/24 × Interactive/Static × states | 3 styles, interactive (onClick, hover, focus, keyboard) | ✅ OK |
 | 5 | **Alert** | `272:852` | 8: Soft/Outline × 4 types | Soft/Outline × 4 types | OK |
 | 6 | **Toast** | `272:851` | 4 types | 4 types (via sonner) | OK |
 | 7 | **Dialog** | `285:292` | 9: Default/Confirmation/Destructive × S/M/L | Compound basico | Falta: `type` e `size` props |
 | 8 | **Drawer** | `285:293` | 5: Bottom (Content/Expanded) + Right (S/M/L) | Compound basico | Falta: `placement` e `size` props |
-| 9 | **List Item** | `279:544` | 24: Medium/Large × Default/Surface × Interactive × states | Basico | Falta: `size`, `style` props |
+| 9 | **List Item** | `279:544` | 24: Medium/Large × Default/Surface × Interactive × states | size md/lg, itemStyle default/surface | ✅ OK |
 | 10 | **Avatar** | `279:938` | 24: Icon/Image/Initials × Circle/Rounded × 4 sizes | 3 types × 2 shapes × 4 sizes | OK |
 | 11 | **Badge** | `272:845` | 20: Soft/Outline × 5 tones × 2 sizes | Soft/Outline × 5 tones × 2 sizes | OK |
-| 12 | **Chip** | `272:846` | 48: Filter/Input × 2 sizes × Selected/Unselected × 4 states | **Nao existe** | CRIAR |
+| 12 | **Chip** | `272:846` | 48: Filter/Input × 2 sizes × Selected/Unselected × 4 states | filter/input, sm/md, selected, removable | ✅ OK |
 | 13 | **Spinner** | `272:849` | 9: 3 styles × 3 sizes | 3 styles × 3 sizes | OK |
 | 14 | **Skeleton** | `272:850` | 3 shapes | 3 shapes | OK |
-| 15 | **Progress Bar** | `279:1060` | 9: Neutral/Primary/Success × Height 4/8/12 | Basico (apenas primary) | Falta: `variant` e `height` props |
-| 16 | **Empty State** | `279:2218` | 4: Compact/Default × Neutral/Surface | Basico | Falta: `size` e `style` props |
+| 15 | **Progress Bar** | `279:1060` | 9: Neutral/Primary/Success × Height 4/8/12 | variant primary/neutral/success, height 4/8/12 | ✅ OK |
+| 16 | **Empty State** | `279:2218` | 4: Compact/Default × Neutral/Surface | size default/compact, style neutral/surface | ✅ OK |
 | 17 | **Checkbox** | `261:1234` | 12: 3 selections × 4 states | Via shadcn | OK |
 | 18 | **Radio Button** | `261:1253` | 8: 2 selections × 4 states | Via custom component | OK |
 | 19 | **Switch** | `261:1263` | 8: On/Off × 4 states | Via shadcn | OK |
 | 20 | **Select** | `261:1273` | 10 states + Menu | Via shadcn | OK |
 | 21 | **Tab Item / Tab List** | `353:2` / `353:7197` | 8 + 1 | Via shadcn Tabs | OK |
-| 22 | **Segment Item** | `353:7115` | 8: Selected/Unselected × 4 states | **Nao existe** | CRIAR |
-| 23 | **Segmented Control** | `353:7243` | 3: 2/3/4 segments | **Nao existe** | CRIAR |
-| 24 | **Navigation Item** | `353:7155` | 16: Collapsed/Expanded × Active/Inactive × 4 states | **Nao existe** | CRIAR |
-| 25 | **Navigation Item Mobile** | `353:7292` | 8: Active/Inactive × 4 states | **Nao existe** | CRIAR |
+| 22 | **Segment Item** | `353:7115` | 8: Selected/Unselected × 4 states | SegmentItem (compound) | ✅ OK |
+| 23 | **Segmented Control** | `353:7243` | 3: 2/3/4 segments | SegmentedControl (context-based) | ✅ OK |
+| 24 | **Navigation Item** | `353:7155` | 16: Collapsed/Expanded × Active/Inactive × 4 states | NavItem (collapsed prop) | ✅ OK |
+| 25 | **Navigation Item Mobile** | `353:7292` | 8: Active/Inactive × 4 states | NavItemMobile | ✅ OK |
 | 26 | **Bottom Navigation** | `353:7334` | 3: Items 3/4/5 | Implementado | OK |
-| 27 | **Sidebar** | `353:7409` | 2: Collapsed/Expanded | **Nao existe** | CRIAR |
-| 28 | **FAB** | `400:1240` | 15: 3 sizes × 5 states | **Nao existe** | CRIAR |
+| 27 | **Sidebar** | `353:7409` | 2: Collapsed/Expanded | Sidebar (expanded/collapsed, transition) | ✅ OK |
+| 28 | **FAB** | `400:1240` | 15: 3 sizes × 5 states | FAB (sm/default/lg, extended) | ✅ OK |
 | 29 | **Tooltip** | `272:847` | 4 positions | Via shadcn | OK |
 | 30 | **Divider** | `272:848` | 4: H/V × Default/Subtle | Separator (shadcn) | OK |
-| 31 | **Table** | `279:2369` | 32: Cell/Header/Row + Density × Sort × States | **Nao existe** | CRIAR |
+| 31 | **Table** | `279:2369` | 32: Cell/Header/Row + Density × Sort × States | Compound (Table/Header/Body/Row/Head/Cell), density | ✅ OK |
 | 32 | **Popover** | `285:294` | 12: 4 placements × 3 sizes | Via shadcn (basico) | OK |
 | 33 | **Dropdown Menu** | `285:295` | 22: 2 densities × Default/Destructive × states | Via shadcn (basico) | OK |
-| 34 | **Date Picker** | `285:296` | 36: Single/Range × 3 sizes × 6 states | **Nao existe** | CRIAR |
-| 35 | **Calendar** | `285:297` | 28: Day/Header/Grid + 2 densities × 12 states | **Nao existe** | CRIAR |
+| 34 | **Date Picker** | `285:296` | 36: Single/Range × 3 sizes × 6 states | Single mode, 3 sizes, label/helper/error | ✅ OK (Range pendente) |
+| 35 | **Calendar** | `285:297` | 28: Day/Header/Grid + 2 densities × 12 states | Calendar (pt-BR, density, minDate/maxDate) | ✅ OK |
 
 ### 8.2 Componentes de Produto — Mapa completo
 
 | # | Componente | Page ID | Variants Figma | Codigo | Status |
 |---|------------|---------|---------------|--------|--------|
 | 1 | **Logo** | `346:2` | 16: 4 tipos (Logomarca/Logomarca Brand/Simbolo/Simbolo Brand) × 4 versoes (Gradiente/Flat/Clara/Escura) | Apenas SVG gradiente | Falta: 15 variantes |
-| 2 | **Transaction Item** | `297:48` | 24: Compact/Default × Default/Surface × Interactive/Static × states | types (income/expense/transfer) | Falta: `size`, `style` props |
-| 3 | **Account Card** | `297:844` | 24: Compact/Default × Default/Elevated × Interactive/Static × states | Default/Elevated | Falta: `size` compact, interaction states |
-| 4 | **Balance Card** | `297:1469` | 9: Compact/Default/Featured × Default/Subtle/Brand | 3 styles | Falta: sizes `compact`/`featured` |
-| 5 | **Financial Card** | `419:5` | 12: Single/Summary × Compact/Default × Default/Error/Loading | **Nao existe** | CRIAR |
-| 6 | **Goal Card** | `297:1620` | 54: 3 sizes × 2 styles × Interactive/Static × states + Goal Avatar (9 variants) + Icon/Color options | Versao basica | Falta: sizes, avatar, personalizacao |
-| 7 | **Category Item** | `297:2424` | Base + Spending Progress (65%/90%) | Basico | Falta: Spending Progress |
+| 2 | **Transaction Item** | `297:48` | 24: Compact/Default × Default/Surface × Interactive/Static × states | size default/compact, itemStyle default/surface | ✅ OK |
+| 3 | **Account Card** | `297:844` | 24: Compact/Default × Default/Elevated × Interactive/Static × states | size default/compact | ✅ OK |
+| 4 | **Balance Card** | `297:1469` | 9: Compact/Default/Featured × Default/Subtle/Brand | size default/compact/featured | ✅ OK |
+| 5 | **Financial Card** | `419:5` | 12: Single/Summary × Compact/Default × Default/Error/Loading | single/summary, default/compact, loading/error | ✅ OK |
+| 6 | **Goal Card** | `297:1620` | 54: 3 sizes × 2 styles × Interactive/Static × states + Goal Avatar (9 variants) + Icon/Color options | size default/compact/featured | ✅ OK |
+| 7 | **Category Item** | `297:2424` | Base + Spending Progress (65%/90%) | budget/spent com progress bar e thresholds | ✅ OK |
 | 8 | **Financial Summary** | `297:3788` | Componente individual | Implementado | OK |
-| 9 | **Manga Insights** | `437:7` | 17: Indicator + 6 card states + 5 action states | **Nao existe** | CRIAR |
+| 9 | **Manga Insights** | `437:7` | 17: Indicator + 6 card states + 5 action states | indicator badge, actions, loading/error | ✅ OK |
 
 ### 8.3 Resumo quantitativo
 
-| Categoria | Figma | Codigo | Nao existe | Existe c/ gaps | Alinhado |
-|-----------|-------|--------|-----------|---------------|----------|
-| UI | 35 | 25 | 10 | 7 | 18 |
-| Produto | 9 | 7 | 2 | 5 | 1 (Fin. Summary) |
-| **Total** | **44** | **32** | **12** | **12** | **19** |
+| Categoria | Figma | Codigo | Alinhado | Pendencias menores |
+|-----------|-------|--------|----------|-------------------|
+| UI | 35 | 35 | 33 | 2 (Dialog type/size, Drawer placement/size) |
+| Produto | 9 | 9 | 8 | 1 (Logo 15 variantes) |
+| **Total** | **44** | **44** | **41** | **3** |
 
 ---
 
@@ -343,40 +343,47 @@ Variaveis da colecao **Semantic Colors** — usar para mapear intencao, nao cor 
 | Fonte Comfortaa | Usada na marca | Nao carregada | Carregar para marca |
 | Assets de marca | Logo 16 variantes organizadas no Figma | 1 SVG gradiente em src/assets/ | **15 variantes pendentes**  |
 
-### 9.2 Componentes que precisam CRIAR (12)
+### 9.2 Componentes criados nesta sprint (12) ✅
 
-| Componente | Tipo | Variants Figma | Prioridade |
-|------------|------|---------------|------------|
-| Chip (Filter + Input) | UI | 48 | Media |
-| Segment Item + Segmented Control | UI | 11 | Media |
-| Navigation Item (desktop) | UI | 16 | Media |
-| Navigation Item Mobile | UI | 8 | Media |
-| Sidebar | UI | 2 | Media |
-| FAB | UI | 15 | Media |
-| Table (+ Cell, Header, Row) | UI | 32 | Baixa |
-| Date Picker (Single + Range) | UI | 36 | Baixa |
-| Calendar (+ Day, Header) | UI | 28 | Baixa |
-| Financial Card | Produto | 12 | Alta |
-| Manga Insights (+ Action) | Produto | 17 | Alta |
-| Goal Avatar + Icon/Color options | Produto | ~18 | Media |
+Todos implementados em 2026-11-16:
 
-### 9.3 Componentes que precisam ATUALIZAR (12)
+| Componente | Tipo | Arquivo |
+|------------|------|---------|
+| Chip (Filter + Input) | UI | `src/components/ui/chip.tsx` |
+| SegmentedControl + SegmentItem | UI | `src/components/ui/segmented-control.tsx` |
+| NavItem + NavItemMobile | UI | `src/components/ui/nav-item.tsx` |
+| Sidebar | UI | `src/components/ui/sidebar.tsx` |
+| FAB | UI | `src/components/ui/fab.tsx` |
+| Table (compound) | UI | `src/components/ui/table.tsx` |
+| DatePicker | UI | `src/components/ui/date-picker.tsx` |
+| Calendar | UI | `src/components/ui/calendar.tsx` |
+| FinancialCard | Produto | `src/components/product/financial-card.tsx` |
+| MangaInsights | Produto | `src/components/product/manga-insights.tsx` |
+| GoalAvatar | Produto | `src/components/product/goal-avatar.tsx` |
 
-| Componente | O que falta | Variants faltando |
-|------------|------------|-------------------|
-| Button | Prop `iconOnly` (Show label=False) | 60 (metade das 120) |
-| Card | Props `padding` (16/24), interactive states | ~15 |
-| Dialog | Props `type` (Default/Confirmation/Destructive), `size` (S/M/L) | 9 |
-| Drawer | Props `placement` (Bottom/Right), `size` | 5 |
-| List Item | Props `size` (Medium/Large), `style` (Default/Surface) | ~20 |
-| Progress Bar | Props `variant` (Neutral/Primary/Success), `height` (4/8/12) | 9 |
-| Empty State | Props `size` (Compact/Default), `style` (Neutral/Surface) | 4 |
-| Logo | 15 variantes de tipo/versao (Flat, Clara, Escura, Brand, Simbolo) | 15 |
-| Transaction Item | Props `size` (Compact/Default), `style` (Default/Surface) | ~20 |
-| Account Card | Prop `size` (Compact), interaction states | ~12 |
-| Balance Card | Props `size` (Compact/Featured) | 6 |
-| Goal Card | Sizes (Compact/Featured), Goal Avatar, personalizacao | ~40 |
-| Category Item | Spending Progress bar | 2 |
+### 9.3 Componentes atualizados nesta sprint (10) ✅
+
+| Componente | Variantes adicionadas |
+|------------|----------------------|
+| Button | `iconOnly` prop |
+| Card | `interactive` (onClick, hover, keyboard) |
+| ListItem | `size` md/lg, `itemStyle` default/surface |
+| Progress | `variant` primary/neutral/success, `height` 4/8/12 |
+| EmptyState | `size` default/compact, `emptyStateStyle` neutral/surface |
+| Separator | `variant` default/subtle |
+| TransactionItem | `size` default/compact, `itemStyle` default/surface |
+| AccountCard | `size` default/compact |
+| BalanceCard | `size` default/compact/featured |
+| GoalCard | `size` default/compact/featured |
+| CategoryItem | `budget`/`spent` com progress bar |
+
+### 9.4 Pendencias restantes (3)
+
+| Componente | O que falta |
+|------------|------------|
+| Dialog | Props `type` (Default/Confirmation/Destructive), `size` (S/M/L) |
+| Drawer | Props `placement` (Bottom/Right), `size` |
+| Logo | 15 variantes de tipo/versao (Flat, Clara, Escura, Brand, Simbolo) |
 
 ---
 

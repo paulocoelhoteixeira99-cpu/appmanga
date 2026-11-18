@@ -116,7 +116,7 @@ export default function ComponentsShowcasePage() {
               Manga — Component Showcase
             </h1>
             <p className="text-sm text-neutral-500 mt-1">
-              Uso interno. Visualizacao dos componentes do Design System.
+              Visualizacao dos componentes do Design System.
             </p>
           </div>
         </header>

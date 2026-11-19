@@ -36,7 +36,7 @@ export default async function ProfilePage() {
         </h1>
         <a
           href="/home"
-          className="text-manga-text-brand font-medium"
+          className="text-manga-text-link font-medium"
           style={{ fontSize: "14px", lineHeight: "21px" }}
         >
           Voltar

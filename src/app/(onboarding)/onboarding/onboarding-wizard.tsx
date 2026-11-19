@@ -100,11 +100,11 @@ function clearDraft() {
 // --- Figma C01: 5 default categories ---
 
 const SUGGESTED_CATEGORIES: CategoryDraft[] = [
-  { id: "alimentacao", name: "Alimenta\u00e7\u00e3o", icon: "restaurant", selected: true, limit: "" },
+  { id: "alimentacao", name: "Alimentação", icon: "restaurant", selected: true, limit: "" },
   { id: "moradia", name: "Moradia", icon: "home", selected: true, limit: "" },
   { id: "transporte", name: "Transporte", icon: "directions-car", selected: true, limit: "" },
   { id: "lazer", name: "Lazer", icon: "beach-access", selected: true, limit: "" },
-  { id: "saude", name: "Sa\u00fade", icon: "favorite", selected: true, limit: "" },
+  { id: "saude", name: "Saúde", icon: "favorite", selected: true, limit: "" },
 ];
 
 // --- Google icon ---
@@ -246,15 +246,15 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
 
     if (error) {
       if (error.message.includes("already registered")) {
-        setAccountError("Este e-mail j\u00e1 est\u00e1 cadastrado. Tente entrar.");
+        setAccountError("Este e-mail já está cadastrado. Tente entrar.");
       } else if (error.message.includes("password") || error.message.includes("Password")) {
         setAccountError("A senha deve ter pelo menos 6 caracteres.");
       } else if (error.message.includes("valid") || error.message.includes("email")) {
-        setAccountError("E-mail inv\u00e1lido. Verifique e tente novamente.");
+        setAccountError("E-mail inválido. Verifique e tente novamente.");
       } else if (error.message.includes("rate") || error.message.includes("limit")) {
         setAccountError("Muitas tentativas. Aguarde um momento e tente novamente.");
       } else if (error.message.includes("Database error") || error.message.includes("database")) {
-        setAccountError("Erro no banco de dados ao criar usu\u00e1rio. Verifique se todas as migrations foram aplicadas no Supabase.");
+        setAccountError("Erro no banco de dados ao criar usuário. Verifique se todas as migrations foram aplicadas no Supabase.");
       } else {
         setAccountError(`Erro ao criar conta: ${error.message}`);
       }
@@ -264,7 +264,7 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
 
     // Detect duplicate email (Supabase returns user with empty identities)
     if (data.user && (!data.user.identities || data.user.identities.length === 0)) {
-      setAccountError("Este e-mail j\u00e1 possui uma conta. Tente entrar.");
+      setAccountError("Este e-mail já possui uma conta. Tente entrar.");
       setLoading(false);
       return;
     }
@@ -337,7 +337,7 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
       return;
     }
     if (balanceValue < 0) {
-      setBalanceError("O saldo n\u00e3o pode ser negativo.");
+      setBalanceError("O saldo não pode ser negativo.");
       return;
     }
     setBalanceError(null);
@@ -372,7 +372,7 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
 
   function handleReserveContinue() {
     if (reserveValue > balanceValue) {
-      setReserveError("A reserva n\u00e3o pode ser maior que o saldo dispon\u00edvel.");
+      setReserveError("A reserva não pode ser maior que o saldo disponível.");
       return;
     }
     setReserveError(null);
@@ -637,8 +637,8 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
             className="text-manga-text-secondary text-center"
             style={{ fontSize: "14px", lineHeight: "21px" }}
           >
-            J\u00e1 tem conta?{" "}
-            <Link href="/login" className="text-manga-text-brand font-medium">
+            Já tem conta?{" "}
+            <Link href="/login" className="text-manga-text-link font-medium">
               Entrar
             </Link>
           </p>
@@ -654,7 +654,7 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
   function renderAccountVerify() {
     return (
       <div className="flex flex-col bg-manga-background-default items-center justify-center px-6 text-center" style={{ minHeight: "100dvh" }}>
-        <div className="mb-6 text-manga-text-brand">
+        <div className="mb-6 text-manga-text-link">
           <CheckCircleIcon />
         </div>
         <h1
@@ -667,7 +667,7 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
           className="text-manga-text-secondary max-w-xs"
           style={{ fontSize: "14px", lineHeight: "21px", marginBottom: "32px" }}
         >
-          Enviamos um link de confirma\u00e7\u00e3o para{" "}
+          Enviamos um link de confirmação para{" "}
           <strong className="text-manga-text-primary">{signupEmail}</strong>.
           Clique no link para ativar sua conta e continuar.
         </p>
@@ -693,7 +693,7 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
             size="large"
             loading={loading}
           >
-            Pr\u00f3ximo
+            Próximo
           </Button>
         }
       >
@@ -707,7 +707,7 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
               letterSpacing: "-0.4px",
             }}
           >
-            Como podemos chamar voc\u00ea?
+            Como podemos chamar você?
           </h1>
 
           <TextField
@@ -766,7 +766,7 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
             className="text-manga-text-secondary"
             style={{ fontSize: "16px", lineHeight: "24px" }}
           >
-            Primeiro, informe quanto voc\u00ea tem dispon\u00edvel hoje. Depois, voc\u00ea pode
+            Primeiro, informe quanto você tem disponível hoje. Depois, você pode
             organizar Categorias e criar uma Meta.
           </p>
 
@@ -775,7 +775,7 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
             className="text-manga-text-secondary"
             style={{ fontSize: "14px", lineHeight: "21px" }}
           >
-            O Manga acompanha seus registros. Voc\u00ea escolhe o que organizar agora
+            O Manga acompanha seus registros. Você escolhe o que organizar agora
             e o que deixar para depois.
           </p>
         </div>
@@ -807,7 +807,7 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
               letterSpacing: "-0.48px",
             }}
           >
-            Quanto voc\u00ea tem dispon\u00edvel hoje?
+            Quanto você tem disponível hoje?
           </h1>
 
           <TextField
@@ -830,8 +830,8 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
             className="text-manga-text-secondary"
             style={{ fontSize: "14px", lineHeight: "21px" }}
           >
-            Esse \u00e9 seu ponto de partida no Manga. A partir dele, acompanhamos o
-            que entra, o que sai e o que voc\u00ea reserva para Metas.
+            Esse é seu ponto de partida no Manga. A partir dele, acompanhamos o
+            que entra, o que sai e o que você reserva para Metas.
           </p>
 
           {/* Figma: 12/400, lh=18 */}
@@ -839,7 +839,7 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
             className="text-manga-text-secondary"
             style={{ fontSize: "12px", lineHeight: "18px" }}
           >
-            Saldo Inicial n\u00e3o conta como Entrada.
+            Saldo Inicial não conta como Entrada.
           </p>
         </div>
       </StepLayout>
@@ -876,13 +876,13 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
                 letterSpacing: "-0.48px",
               }}
             >
-              Suas categorias j\u00e1 est\u00e3o prontas!
+              Suas categorias já estão prontas!
             </h1>
             <p
               className="text-manga-text-secondary"
               style={{ fontSize: "14px", lineHeight: "21px" }}
             >
-              Comece com uma organiza\u00e7\u00e3o simples e personalize quando quiser.
+              Comece com uma organização simples e personalize quando quiser.
             </p>
           </div>
 
@@ -936,7 +936,7 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
             className="text-manga-text-secondary"
             style={{ fontSize: "14px", lineHeight: "21px" }}
           >
-            Esta etapa \u00e9 opcional. Voc\u00ea pode ajustar suas categorias depois.
+            Esta etapa é opcional. Você pode ajustar suas categorias depois.
           </p>
         </div>
       </StepLayout>
@@ -1027,14 +1027,14 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
               letterSpacing: "-0.48px",
             }}
           >
-            Existe algo para o qual voc\u00ea quer guardar dinheiro?
+            Existe algo para o qual você quer guardar dinheiro?
           </h1>
           <p
             className="text-manga-text-secondary"
             style={{ fontSize: "14px", lineHeight: "21px" }}
           >
-            Uma Meta ajuda a acompanhar o que voc\u00ea j\u00e1 reservou para um objetivo.
-            Voc\u00ea pode cri\u00e1-la agora ou depois.
+            Uma Meta ajuda a acompanhar o que você já reservou para um objetivo.
+            Você pode criá-la agora ou depois.
           </p>
         </div>
       </StepLayout>
@@ -1077,7 +1077,7 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
               type="text"
               value={goal.name}
               onChange={(e) => setGoal((g) => ({ ...g, name: e.target.value }))}
-              placeholder="Ex: Reserva de emerg\u00eancia"
+              placeholder="Ex: Reserva de emergência"
               required
             />
             <TextField
@@ -1131,7 +1131,7 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
             className="text-manga-text-secondary"
             style={{ fontSize: "14px", lineHeight: "21px" }}
           >
-            Voc\u00ea tem {formatCurrency(balanceValue)} dispon\u00edvel.
+            Você tem {formatCurrency(balanceValue)} disponível.
           </p>
           <TextField
             label="Valor da reserva"
@@ -1145,7 +1145,7 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
             }}
             placeholder="R$ 0,00"
             error={reserveError ?? undefined}
-            helperText={`Dispon\u00edvel: ${formatCurrency(balanceValue)}`}
+            helperText={`Disponível: ${formatCurrency(balanceValue)}`}
           />
         </div>
       </StepLayout>
@@ -1165,7 +1165,7 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
         actions={
           <>
             <Button onClick={handleFinish} fullWidth size="large" loading={loading}>
-              Come\u00e7ar a organiza\u00e7\u00e3o
+              Começar a organização
             </Button>
             {finishError && (
               <p style={{ fontSize: "14px", lineHeight: "21px", color: "#7F1D1D", textAlign: "center" }}>
@@ -1185,7 +1185,7 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
               letterSpacing: "-0.48px",
             }}
           >
-            Seu ponto de partida est\u00e1 claro
+            Seu ponto de partida está claro
           </h1>
 
           {/* Figma: 32/600, lh=38.4, ls=-0.64 */}
@@ -1197,7 +1197,7 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
               letterSpacing: "-0.64px",
             }}
           >
-            {displayBalance} dispon\u00edveis
+            {displayBalance} disponíveis
           </p>
 
           {/* Figma: 14/400, lh=21 */}
@@ -1213,8 +1213,8 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
             className="text-manga-text-secondary"
             style={{ fontSize: "14px", lineHeight: "21px" }}
           >
-            Entradas e Sa\u00eddas come\u00e7am em R$ 0. Voc\u00ea pode registrar sua primeira
-            Transa\u00e7\u00e3o quando precisar.
+            Entradas e Saídas começam em R$ 0. Você pode registrar sua primeira
+            Transação quando precisar.
           </p>
         </div>
       </StepLayout>

@@ -111,9 +111,9 @@ export default function LoginPage() {
           />
         </div>
 
-        {/* Titulo — Figma: Inter 32/600, lh=38.4, ls=-0.64, fill=rgb(35,25,56), LEFT */}
+        {/* Titulo — Inter 32/600, lh=38.4, ls=-0.64, centralizado */}
         <h1
-          className="font-semibold text-manga-text-primary text-left"
+          className="font-semibold text-manga-text-primary text-center"
           style={{
             fontSize: "32px",
             lineHeight: "38.4px",
@@ -125,9 +125,9 @@ export default function LoginPage() {
           com mais clareza.
         </h1>
 
-        {/* Subtitulo — Figma: Inter 16/400, lh=24, fill=rgb(90,82,105), LEFT */}
+        {/* Subtitulo — Inter 16/400, lh=24, centralizado */}
         <p
-          className="text-manga-text-secondary text-left"
+          className="text-manga-text-secondary text-center"
           style={{
             marginTop: "36px",
             fontSize: "16px",
@@ -294,7 +294,7 @@ export default function LoginPage() {
           Ainda não tem conta?{" "}
           <Link
             href="/onboarding"
-            className="text-manga-text-brand font-medium"
+            className="text-manga-text-link font-medium"
           >
             Criar conta
           </Link>

@@ -80,7 +80,7 @@ export default function LoginPage() {
    * Figma: 360×800, node 158:1550
    *
    * Layout (posicoes absolutas do Figma):
-   *   Logo:       y=136, centralizado, 100×112
+   *   Logo:       y=136, centralizado, wordmark 180×41
    *   Titulo:     y=320, x=24, 312×76,  Inter 32/600/38.4/-0.64
    *   Subtitulo:  y=432, x=24, 312×48,  Inter 16/400/24
    *   Criar btn:  y=632, x=24, 312×48
@@ -100,20 +100,20 @@ export default function LoginPage() {
         {/* Spacer superior — empurra logo+texto para a posicao correta */}
         <div className="flex-1" style={{ minHeight: "136px" }} />
 
-        {/* Logo — centralizado horizontalmente */}
+        {/* Logo — wordmark centralizado horizontalmente */}
         <div className="flex justify-center" style={{ marginBottom: "72px" }}>
           <Image
-            src="/assets/logo-symbol.svg"
+            src="/assets/logo-gradient.svg"
             alt="Manga"
-            width={100}
-            height={112}
+            width={180}
+            height={41}
             priority
           />
         </div>
 
-        {/* Titulo — Figma: Inter 32/600, lh=38.4, ls=-0.64, fill=rgb(35,25,56) */}
+        {/* Titulo — Figma: Inter 32/600, lh=38.4, ls=-0.64, fill=rgb(35,25,56), LEFT */}
         <h1
-          className="font-semibold text-manga-text-primary"
+          className="font-semibold text-manga-text-primary text-left"
           style={{
             fontSize: "32px",
             lineHeight: "38.4px",
@@ -125,9 +125,9 @@ export default function LoginPage() {
           com mais clareza.
         </h1>
 
-        {/* Subtitulo — Figma: Inter 16/400, lh=24, fill=rgb(90,82,105) */}
+        {/* Subtitulo — Figma: Inter 16/400, lh=24, fill=rgb(90,82,105), LEFT */}
         <p
-          className="text-manga-text-secondary"
+          className="text-manga-text-secondary text-left"
           style={{
             marginTop: "36px",
             fontSize: "16px",

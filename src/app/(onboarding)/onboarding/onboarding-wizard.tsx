@@ -253,6 +253,8 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
         setAccountError("E-mail inv\u00e1lido. Verifique e tente novamente.");
       } else if (error.message.includes("rate") || error.message.includes("limit")) {
         setAccountError("Muitas tentativas. Aguarde um momento e tente novamente.");
+      } else if (error.message.includes("Database error") || error.message.includes("database")) {
+        setAccountError("Erro no banco de dados ao criar usu\u00e1rio. Verifique se todas as migrations foram aplicadas no Supabase.");
       } else {
         setAccountError(`Erro ao criar conta: ${error.message}`);
       }
@@ -589,7 +591,7 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
               onChange={(e) => setSignupPassword(e.target.value)}
               required
               minLength={6}
-              placeholder="M\u00ednimo 6 caracteres"
+              placeholder="Mínimo de 6 caracteres"
             />
 
             {accountError && (

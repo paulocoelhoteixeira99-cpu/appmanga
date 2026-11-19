@@ -1,4 +1,38 @@
 /**
+ * Format number as Brazilian currency: R$ 1.234,56
+ */
+export function formatCurrency(value: number): string {
+  return value.toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  });
+}
+
+/**
+ * Parse a Brazilian currency string back to number
+ * Accepts "1.234,56" or "1234.56" or "1234,56"
+ */
+export function parseCurrencyInput(value: string): number {
+  const cleaned = value.replace(/[R$\s.]/g, "").replace(",", ".");
+  const num = parseFloat(cleaned);
+  return isNaN(num) ? 0 : num;
+}
+
+/**
+ * Format input as currency while typing: "1234,56" → "1.234,56"
+ */
+export function formatCurrencyInput(value: string): string {
+  const digits = value.replace(/\D/g, "");
+  if (!digits) return "";
+  const cents = parseInt(digits, 10);
+  const reais = cents / 100;
+  return reais.toLocaleString("pt-BR", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+}
+
+/**
  * Format phone number as (XX) XXXXX-XXXX
  * Accepts any string, strips non-digits, applies mask
  */

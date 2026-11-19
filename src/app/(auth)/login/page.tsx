@@ -66,8 +66,8 @@ export default function LoginPage() {
   if (view === "welcome") {
     return (
       <div className="min-h-screen bg-manga-background-default flex flex-col px-6">
-        {/* Logo — upper area */}
-        <div className="flex-1 flex flex-col justify-center items-center pt-16">
+        {/* Logo — upper area, vertically centered in top portion */}
+        <div className="flex items-center justify-center" style={{ paddingTop: "136px", paddingBottom: "72px" }}>
           <Image
             src="/assets/logo-gradient.svg"
             alt="Manga"
@@ -78,18 +78,25 @@ export default function LoginPage() {
         </div>
 
         {/* Text — left-aligned */}
-        <div className="mb-auto">
-          <h1 className="text-[28px] font-bold text-manga-text-primary leading-tight mb-4">
-            Seu dinheiro,{"\n"}com mais clareza.
-          </h1>
-          <p className="text-base text-manga-text-secondary leading-relaxed">
-            Organize seus registros e acompanhe o que esta disponivel para suas
-            escolhas.
-          </p>
-        </div>
+        <h1
+          className="text-[32px] font-semibold text-manga-text-primary"
+          style={{ lineHeight: "38.4px", letterSpacing: "-0.64px" }}
+        >
+          Seu dinheiro,{"\n"}com mais clareza.
+        </h1>
+        <p
+          className="text-base text-manga-text-secondary"
+          style={{ marginTop: "36px", lineHeight: "24px" }}
+        >
+          Organize seus registros e acompanhe o que esta disponivel para suas
+          escolhas.
+        </p>
+
+        {/* Spacer — pushes buttons to bottom */}
+        <div className="flex-1" />
 
         {/* Buttons — pinned to bottom */}
-        <div className="space-y-3 pb-8 pt-10">
+        <div className="flex flex-col" style={{ gap: "16px", paddingBottom: "56px" }}>
           <Link href="/onboarding">
             <Button fullWidth size="large">
               Criar conta
@@ -111,15 +118,16 @@ export default function LoginPage() {
   // ========== E03 · Login ==========
   return (
     <div className="min-h-screen bg-manga-background-default flex flex-col px-6">
-      {/* Back button — top left */}
-      <div className="pt-3">
+      {/* Back button — top left, y=32 x=16 in Figma (px-6=24, so -ml-2 to get 16) */}
+      <div style={{ paddingTop: "32px" }}>
         <button
           type="button"
           onClick={() => {
             setView("welcome");
             setError(null);
           }}
-          className="p-2 -ml-2 text-manga-text-secondary hover:text-manga-text-primary transition-colors"
+          className="flex items-center justify-center text-manga-text-secondary hover:text-manga-text-primary transition-colors"
+          style={{ width: "40px", height: "40px", marginLeft: "-8px" }}
           aria-label="Voltar"
         >
           <ArrowBackIcon />
@@ -127,12 +135,15 @@ export default function LoginPage() {
       </div>
 
       {/* Content — top-aligned */}
-      <div className="w-full max-w-[328px] mx-auto pt-4">
-        <h1 className="text-[28px] font-bold text-manga-text-primary mb-8">
+      <div style={{ paddingTop: "40px" }}>
+        <h1
+          className="text-[32px] font-semibold text-manga-text-primary"
+          style={{ lineHeight: "38.4px", letterSpacing: "-0.64px" }}
+        >
           Entrar no Manga
         </h1>
 
-        <form onSubmit={handleLogin} className="space-y-4">
+        <div style={{ marginTop: "32px" }} className="flex flex-col" >
           <TextField
             label="E-mail"
             type="email"
@@ -142,42 +153,50 @@ export default function LoginPage() {
             placeholder="Seu e-mail"
           />
 
-          <TextField
-            label="Senha"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            placeholder="Sua senha"
-          />
+          <div style={{ marginTop: "16px" }}>
+            <TextField
+              label="Senha"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              placeholder="Sua senha"
+            />
+          </div>
 
-          {error && <p className="text-error-500 text-sm">{error}</p>}
+          {error && <p className="text-error-500 text-sm mt-2">{error}</p>}
 
-          <Button type="submit" loading={loading} fullWidth size="large">
-            Entrar
-          </Button>
-        </form>
-
-        <div className="my-6 flex items-center gap-4">
-          <div className="flex-1 h-px bg-manga-background-subtle" />
-          <span className="text-sm text-manga-text-secondary">ou</span>
-          <div className="flex-1 h-px bg-manga-background-subtle" />
+          <div style={{ marginTop: "16px" }}>
+            <Button type="submit" loading={loading} fullWidth size="large" onClick={handleLogin}>
+              Entrar
+            </Button>
+          </div>
         </div>
 
-        <Button
-          variant="secondary"
-          fullWidth
-          size="large"
-          onClick={handleGoogleLogin}
-          leadingIcon={<GoogleIcon />}
+        {/* "ou" separator — simple centered text, no lines */}
+        <p
+          className="text-sm text-manga-text-secondary text-center"
+          style={{ marginTop: "32px", lineHeight: "21px" }}
         >
-          Continuar com Google
-        </Button>
+          ou
+        </p>
+
+        <div style={{ marginTop: "16px" }}>
+          <Button
+            variant="secondary"
+            fullWidth
+            size="large"
+            onClick={handleGoogleLogin}
+            leadingIcon={<GoogleIcon />}
+          >
+            Continuar com Google
+          </Button>
+        </div>
       </div>
 
       {/* Footer — pinned to bottom */}
-      <div className="mt-auto pb-8 pt-6 text-center">
-        <p className="text-sm text-manga-text-secondary">
+      <div className="mt-auto text-center" style={{ paddingBottom: "56px", paddingTop: "24px" }}>
+        <p className="text-sm text-manga-text-secondary" style={{ lineHeight: "21px" }}>
           Ainda nao tem conta?{" "}
           <Link href="/onboarding" className="text-manga-text-brand font-medium">
             Criar conta

@@ -1,7 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Comfortaa } from "next/font/google";
 import "./globals.css";
-
+import "@matsborges/manga-design-system/button.css";
+import "@matsborges/manga-design-system/text-field.css";
+import "@matsborges/manga-design-system/text-area.css";
+import "@matsborges/manga-design-system/product.css";
 
 const inter = Inter({
   subsets: ["latin"],

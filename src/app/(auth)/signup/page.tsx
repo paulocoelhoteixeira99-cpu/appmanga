@@ -10,6 +10,8 @@ import {
   cpfToDigits,
   isValidCpf,
 } from "@/lib/utils/masks";
+import { Button } from "@matsborges/manga-design-system/button";
+import { TextField } from "@matsborges/manga-design-system/text-field";
 
 export default function SignupPage() {
   const [firstName, setFirstName] = useState("");
@@ -140,77 +142,56 @@ export default function SignupPage() {
         </div>
 
         <form onSubmit={handleSignup} className="space-y-4">
-          <div>
-            <label className="block text-sm font-semibold text-neutral-900 mb-1">Primeiro nome</label>
-            <input
-              type="text"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-              required
-              placeholder="Como podemos te chamar?"
-              className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
-            />
-          </div>
+          <TextField
+            label="Primeiro nome"
+            type="text"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+            required
+            placeholder="Como podemos te chamar?"
+          />
 
-          <div>
-            <label className="block text-sm font-semibold text-neutral-900 mb-1">E-mail</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              placeholder="seu@email.com"
-              className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
-            />
-          </div>
+          <TextField
+            label="E-mail"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            placeholder="seu@email.com"
+          />
 
-          <div>
-            <label className="block text-sm font-semibold text-neutral-900 mb-1">WhatsApp</label>
-            <input
-              type="tel"
-              value={phone}
-              onChange={(e) => setPhone(formatPhone(e.target.value))}
-              required
-              placeholder="(11) 99999-9999"
-              className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
-            />
-          </div>
+          <TextField
+            label="WhatsApp"
+            type="tel"
+            value={phone}
+            onChange={(e) => setPhone(formatPhone(e.target.value))}
+            required
+            placeholder="(11) 99999-9999"
+          />
 
-          <div>
-            <label className="block text-sm font-semibold text-neutral-900 mb-1">
-              CPF <span className="text-neutral-400 font-normal">(opcional)</span>
-            </label>
-            <input
-              type="text"
-              value={cpf}
-              onChange={(e) => setCpf(formatCpf(e.target.value))}
-              placeholder="000.000.000-00"
-              className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
-            />
-          </div>
+          <TextField
+            label="CPF (opcional)"
+            type="text"
+            value={cpf}
+            onChange={(e) => setCpf(formatCpf(e.target.value))}
+            placeholder="000.000.000-00"
+          />
 
-          <div>
-            <label className="block text-sm font-semibold text-neutral-900 mb-1">Senha</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              minLength={6}
-              placeholder="Minimo 6 caracteres"
-              className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
-            />
-          </div>
+          <TextField
+            label="Senha"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            minLength={6}
+            placeholder="Minimo 6 caracteres"
+          />
 
           {error && <p className="text-error-500 text-sm">{error}</p>}
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full rounded-lg bg-primary-500 px-4 py-2 text-sm font-semibold text-white hover:bg-primary-600 disabled:opacity-50"
-          >
-            {loading ? "Criando..." : "Criar conta"}
-          </button>
+          <Button type="submit" loading={loading} fullWidth>
+            Criar conta
+          </Button>
         </form>
 
         <p className="text-center text-sm text-neutral-600 mt-6">

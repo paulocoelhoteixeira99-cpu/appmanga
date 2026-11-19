@@ -8,7 +8,7 @@ Essencia de marca: Orientacao. Arquetipo: Companion + Caregiver.
 
 ## Stack
 - **Frontend:** Next.js 15 (App Router) + TypeScript + Tailwind CSS 4
-- **UI:** shadcn/ui
+- **UI/DS:** `@matsborges/manga-design-system@0.1.0` (GitHub Packages, mantida pelo Mateus)
 - **Backend/DB:** Supabase (Postgres + Auth + Storage + Edge Functions)
 - **Hospedagem:** Vercel (Hobby em dev; Pro obrigatorio em producao com cobranca)
 - **WhatsApp:** WhatsApp Cloud API oficial (Meta) — via principal de entrada de dados
@@ -38,36 +38,33 @@ Essencia de marca: Orientacao. Arquetipo: Companion + Caregiver.
 - Branch principal: main
 
 ## Comandos uteis
-- `npm install` - Instalar dependencias
+- `npm install` - Instalar dependencias (requer NODE_AUTH_TOKEN para GitHub Packages)
 - `npm test` - Rodar testes
 - `npm run dev` - Rodar em modo desenvolvimento
 
-## Design System
-- **Referencia tecnica:** `docs/DESIGN-SYSTEM.md` — tokens, componentes, hierarquia tipografica, divergencias
-- **Figma:** file key `wpGrZPa3pUk4W3JMfMc2k1` (Manga — Foundations & DS) — consulta via MCP, somente leitura, NUNCA editar
+## Design System — `@matsborges/manga-design-system`
+- **Pacote:** `@matsborges/manga-design-system@0.1.0` via GitHub Packages (privado)
+- **Repo:** https://github.com/matsborges/manga-design-system
+- **Figma:** file key `wpGrZPa3pUk4W3JMfMc2k1` (Manga — Foundations & DS) — somente leitura, NUNCA editar
 - **Referencia de marca:** `docs/BRAND-IDENTITY.md` — cores, tipografia, tom de voz
-- **Tokens de cor:** definidos em `src/app/globals.css` (bloco `@theme`)
-- **Variaveis Figma:** 2 colecoes — Primitives (cores, spacing, radius, opacity, border) e Semantic Colors (surface, text, border, field, action, feedback, chip, overlay)
-- Antes de implementar qualquer tela ou componente, SEMPRE:
-  1. Consultar `docs/DESIGN-SYSTEM.md` para tokens e padroes existentes
-  2. Consultar o Figma via MCP (`create_session` com fileKey `wpGrZPa3pUk4W3JMfMc2k1`, depois `get_metadata`/`search_design_system`/`get_design_context`)
-  3. Verificar se ja existe componente React reutilizavel em `src/components/`
-  4. Reutilizar componentes e tokens existentes — NUNCA criar duplicatas
-  5. Se um componente necessario nao existir, informar a lacuna e aguardar aprovacao
-- NAO criar novos padroes visuais (cores, fontes, espacamentos, componentes) sem aprovacao
+- **Autenticacao:** `.npmrc` na raiz aponta `@matsborges` para `npm.pkg.github.com`; variavel `NODE_AUTH_TOKEN` necessaria no ambiente local e na Vercel
+- **Tokens:** fornecidos pela biblioteca via `tokens.css` e `tailwind.css` — NAO definir tokens manualmente no globals.css
+- **Utilitarios Tailwind:** prefixo `manga-`, ex: `bg-manga-background-default`, `text-manga-text-primary`, `p-manga-4`
+
+### Como usar componentes
+1. Importar CSS do componente em `layout.tsx`: `import "@matsborges/manga-design-system/button.css"`
+2. Importar o componente no arquivo: `import { Button } from "@matsborges/manga-design-system/button"`
+3. Cada componente tem export e CSS proprios — consultar `package.json` exports da biblioteca
+4. Componentes de produto: `import { GoalCard } from "@matsborges/manga-design-system/product"` + `product.css`
+
+### Regras
+- NAO criar componentes UI neste repo — usar a biblioteca
+- NAO definir tokens de cor manualmente — tokens vem da biblioteca
+- NAO criar novos padroes visuais (cores, fontes, espacamentos) sem aprovacao
 - NAO tomar decisoes de design independentes — seguir o Figma e as especificacoes
 - NAO recriar logotipos ou elementos de marca com CSS — usar assets oficiais
+- Para atualizar a biblioteca: `npm install --save-exact @matsborges/manga-design-system@<nova-versao>`
 - Em caso de conflito, prioridade: especificacoes de produto > Design System > handoff > arquitetura existente > boas praticas
-
-## Regras de Tokens (obrigatorio)
-- NUNCA usar cores do Tailwind que nao estao no DS (ex: `blue-*`, `gray-*`, `slate-*`, `zinc-*`)
-- NUNCA usar `bg-white` hardcoded — usar `bg-[var(--color-surface-default)]`
-- NUNCA usar `disabled:opacity-50` — usar cores semanticas de disabled (`text-neutral-400`, `bg-neutral-200`)
-- NUNCA usar sombras inline (`shadow-[...]`) quando existe token (`shadow-sm`, `shadow-md`, `shadow-lg`)
-- Focus ring SEMPRE `ring-primary-500 ring-offset-2` (nunca `ring-blue-*`)
-- Texto secundario SEMPRE `text-neutral-600` (nunca 500 ou 700 para secondary)
-- Font weight para labels/headings SEMPRE `font-semibold` (600), nunca `font-medium` ou `font-bold`
-- Consultar `globals.css` antes de usar qualquer cor — se nao tem token, nao usar
 
 ## Regras
 - Nunca commitar arquivos .env

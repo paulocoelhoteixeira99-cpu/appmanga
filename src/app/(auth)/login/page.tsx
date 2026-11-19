@@ -14,10 +14,22 @@ type View = "welcome" | "login";
 function GoogleIcon() {
   return (
     <svg width="20" height="20" viewBox="0 0 48 48">
-      <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
-      <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
-      <path fill="#FBBC05" d="M10.53 28.59a14.5 14.5 0 0 1 0-9.18l-7.98-6.19a24.0 24.0 0 0 0 0 21.56l7.98-6.19z"/>
-      <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+      <path
+        fill="#EA4335"
+        d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"
+      />
+      <path
+        fill="#4285F4"
+        d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"
+      />
+      <path
+        fill="#FBBC05"
+        d="M10.53 28.59a14.5 14.5 0 0 1 0-9.18l-7.98-6.19a24.0 24.0 0 0 0 0 21.56l7.98-6.19z"
+      />
+      <path
+        fill="#34A853"
+        d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"
+      />
     </svg>
   );
 }
@@ -62,12 +74,34 @@ export default function LoginPage() {
     }
   }
 
-  // ========== E02 · Boas-vindas ==========
+  /*
+   * =============================================
+   * E02 · Boas-vindas
+   * Figma: 360×800, node 158:1550
+   *
+   * Layout (posicoes absolutas do Figma):
+   *   Logo:       y=136, centralizado, 100×112
+   *   Titulo:     y=320, x=24, 312×76,  Inter 32/600/38.4/-0.64
+   *   Subtitulo:  y=432, x=24, 312×48,  Inter 16/400/24
+   *   Criar btn:  y=632, x=24, 312×48
+   *   Entrar btn: y=696, x=24, 312×48
+   *
+   * Gaps calculados:
+   *   top→logo=136, logo→titulo=72, titulo→sub=36
+   *   sub→btn1=152(flex), btn1→btn2=16, btn2→bottom=56
+   * =============================================
+   */
   if (view === "welcome") {
     return (
-      <div className="min-h-screen bg-manga-background-default flex flex-col px-6">
-        {/* Logo — upper area, vertically centered in top portion */}
-        <div className="flex items-center justify-center" style={{ paddingTop: "136px", paddingBottom: "72px" }}>
+      <div
+        className="bg-manga-background-default flex flex-col"
+        style={{ minHeight: "100dvh", padding: "0 24px" }}
+      >
+        {/* Spacer superior — empurra logo+texto para a posicao correta */}
+        <div className="flex-1" style={{ minHeight: "136px" }} />
+
+        {/* Logo — centralizado horizontalmente */}
+        <div className="flex justify-center" style={{ marginBottom: "72px" }}>
           <Image
             src="/assets/logo-symbol.svg"
             alt="Manga"
@@ -77,26 +111,41 @@ export default function LoginPage() {
           />
         </div>
 
-        {/* Text — left-aligned */}
+        {/* Titulo — Figma: Inter 32/600, lh=38.4, ls=-0.64, fill=rgb(35,25,56) */}
         <h1
-          className="text-[32px] font-semibold text-manga-text-primary"
-          style={{ lineHeight: "38.4px", letterSpacing: "-0.64px" }}
+          className="font-semibold text-manga-text-primary"
+          style={{
+            fontSize: "32px",
+            lineHeight: "38.4px",
+            letterSpacing: "-0.64px",
+          }}
         >
-          Seu dinheiro,<br />com mais clareza.
+          Seu dinheiro,
+          <br />
+          com mais clareza.
         </h1>
+
+        {/* Subtitulo — Figma: Inter 16/400, lh=24, fill=rgb(90,82,105) */}
         <p
-          className="text-base text-manga-text-secondary"
-          style={{ marginTop: "36px", lineHeight: "24px" }}
+          className="text-manga-text-secondary"
+          style={{
+            marginTop: "36px",
+            fontSize: "16px",
+            lineHeight: "24px",
+          }}
         >
           Organize seus registros e acompanhe o que está disponível para suas
           escolhas.
         </p>
 
-        {/* Spacer — pushes buttons to bottom */}
-        <div className="flex-1" />
+        {/* Spacer inferior — empurra botoes para o rodape */}
+        <div className="flex-1" style={{ minHeight: "40px" }} />
 
-        {/* Buttons — pinned to bottom */}
-        <div className="flex flex-col" style={{ gap: "16px", paddingBottom: "56px" }}>
+        {/* Botoes — gap=16px, padding-bottom=56px */}
+        <div
+          className="flex flex-col"
+          style={{ gap: "16px", paddingBottom: "56px" }}
+        >
           <Link href="/onboarding">
             <Button fullWidth size="large">
               Criar conta
@@ -115,35 +164,70 @@ export default function LoginPage() {
     );
   }
 
-  // ========== E03 · Login ==========
+  /*
+   * =============================================
+   * E03 · Login
+   * Figma: 360×800, node 158:1559
+   *
+   * Layout:
+   *   Back btn:  pos=(16,32) 40×40, icon 24×24, fill=rgb(35,26,56)
+   *   Content:   pos=(24,112) VERTICAL gap=32
+   *     Titulo:  312×38, Inter 32/600/38.4/-0.64
+   *     Creds:   VERTICAL gap=16 (Email 69 + Senha 69 + Btn 48)
+   *     Google:  VERTICAL gap=16 ("ou" 21 center + Btn 48)
+   *   Footer:    pos=(24,696) 312×48, text center, Inter 14/400/21
+   *
+   * Gaps:
+   *   top→back=32, back(72)→content=40 (total 112)
+   *   titulo→creds=32, email→senha=16, senha→btn=16
+   *   creds→google=32, ou→btn=16
+   *   footer at bottom, pb=56
+   * =============================================
+   */
   return (
-    <div className="min-h-screen bg-manga-background-default flex flex-col px-6">
-      {/* Back button — top left, y=32 x=16 in Figma (px-6=24, so -ml-2 to get 16) */}
-      <div style={{ paddingTop: "32px" }}>
+    <div
+      className="bg-manga-background-default flex flex-col"
+      style={{ minHeight: "100dvh", padding: "0 24px" }}
+    >
+      {/* Back button — Figma: pos=(16,32) 40×40 */}
+      <div style={{ paddingTop: "32px", marginLeft: "-8px" }}>
         <button
           type="button"
           onClick={() => {
             setView("welcome");
             setError(null);
           }}
-          className="flex items-center justify-center text-manga-text-secondary hover:text-manga-text-primary transition-colors"
-          style={{ width: "40px", height: "40px", marginLeft: "-8px" }}
+          className="flex items-center justify-center text-manga-text-primary"
+          style={{ width: "40px", height: "40px" }}
           aria-label="Voltar"
         >
           <ArrowBackIcon />
         </button>
       </div>
 
-      {/* Content — top-aligned */}
-      <div style={{ paddingTop: "40px" }}>
+      {/* Content — Figma: pos=(24,112), VERTICAL, gap=32 */}
+      <div
+        className="flex flex-col"
+        style={{ paddingTop: "40px", gap: "32px" }}
+      >
+        {/* Titulo — Figma: Inter 32/600, lh=38.4, ls=-0.64 */}
         <h1
-          className="text-[32px] font-semibold text-manga-text-primary"
-          style={{ lineHeight: "38.4px", letterSpacing: "-0.64px" }}
+          className="font-semibold text-manga-text-primary"
+          style={{
+            fontSize: "32px",
+            lineHeight: "38.4px",
+            letterSpacing: "-0.64px",
+          }}
         >
           Entrar no Manga
         </h1>
 
-        <form onSubmit={handleLogin} style={{ marginTop: "32px" }} className="flex flex-col">
+        {/* Credenciais — Figma: VERTICAL gap=16 */}
+        <form
+          onSubmit={handleLogin}
+          className="flex flex-col"
+          style={{ gap: "16px" }}
+        >
           <TextField
             label="E-mail"
             type="email"
@@ -153,35 +237,39 @@ export default function LoginPage() {
             placeholder="Seu e-mail"
           />
 
-          <div style={{ marginTop: "16px" }}>
-            <TextField
-              label="Senha"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              placeholder="Sua senha"
-            />
-          </div>
+          <TextField
+            label="Senha"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            placeholder="Sua senha"
+          />
 
-          {error && <p className="text-error-500 text-sm mt-2">{error}</p>}
+          {error && (
+            <p
+              className="text-manga-text-primary"
+              style={{ fontSize: "14px", lineHeight: "21px", color: "#7F1D1D" }}
+            >
+              {error}
+            </p>
+          )}
 
-          <div style={{ marginTop: "16px" }}>
-            <Button type="submit" loading={loading} fullWidth size="large">
-              Entrar
-            </Button>
-          </div>
+          <Button type="submit" loading={loading} fullWidth size="large">
+            Entrar
+          </Button>
         </form>
 
-        {/* "ou" separator — simple centered text, no lines */}
-        <p
-          className="text-sm text-manga-text-secondary text-center"
-          style={{ marginTop: "32px", lineHeight: "21px" }}
-        >
-          ou
-        </p>
+        {/* Acesso com Google — Figma: VERTICAL gap=16 */}
+        <div className="flex flex-col" style={{ gap: "16px" }}>
+          {/* "ou" — Figma: Inter 14/400, lh=21, center, fill=rgb(90,82,105) */}
+          <p
+            className="text-manga-text-secondary text-center"
+            style={{ fontSize: "14px", lineHeight: "21px" }}
+          >
+            ou
+          </p>
 
-        <div style={{ marginTop: "16px" }}>
           <Button
             variant="secondary"
             fullWidth
@@ -194,11 +282,20 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* Footer — pinned to bottom */}
-      <div className="mt-auto text-center" style={{ paddingBottom: "56px", paddingTop: "24px" }}>
-        <p className="text-sm text-manga-text-secondary" style={{ lineHeight: "21px" }}>
+      {/* Footer — Figma: pos=(24,696) 312×48, text center, Inter 14/400/21 */}
+      <div
+        className="mt-auto flex items-center justify-center"
+        style={{ height: "48px", marginBottom: "56px" }}
+      >
+        <p
+          className="text-manga-text-secondary text-center"
+          style={{ fontSize: "14px", lineHeight: "21px" }}
+        >
           Ainda não tem conta?{" "}
-          <Link href="/onboarding" className="text-manga-text-brand font-medium">
+          <Link
+            href="/onboarding"
+            className="text-manga-text-brand font-medium"
+          >
             Criar conta
           </Link>
         </p>

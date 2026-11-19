@@ -66,6 +66,20 @@ Essencia de marca: Orientacao. Arquetipo: Companion + Caregiver.
 - Para atualizar a biblioteca: `npm install --save-exact @matsborges/manga-design-system@<nova-versao>`
 - Em caso de conflito, prioridade: especificacoes de produto > Design System > handoff > arquitetura existente > boas praticas
 
+## Regra Figma-first (OBRIGATORIO)
+NUNCA implementar uma tela sem antes consultar o Figma via API REST. Checklist:
+1. Buscar o node-id do frame (`GET /v1/files/<key>?depth=2`)
+2. Extrair valores EXATOS do node (`GET /v1/files/<key>/nodes?ids=<id>`): fontSize, fontWeight, lineHeight, letterSpacing, posicoes x/y, width, height, gaps, padding, fills, radius
+3. Baixar screenshot (`GET /v1/images/<key>?ids=<id>&format=png&scale=2`) para referencia visual
+4. Exportar assets SVG do Figma (`GET /v1/images/<key>?ids=<id>&format=svg`) — NUNCA extrair paths manualmente de SVGs existentes
+5. Usar os valores reais no codigo — NUNCA chutar/estimar/aproximar valores
+6. Apos implementar, comparar visualmente o resultado com o screenshot do Figma
+
+### Figma — Acesso via API REST
+- **Token:** salvo em `~/.claude/settings.json` → `mcpServers.figma.env.FIGMA_API_KEY`
+- **NAO depender do plugin MCP do Figma** — ele frequentemente nao carrega. Usar `curl` via Bash.
+- **Arquivos:** DS = `wpGrZPa3pUk4W3JMfMc2k1` | Product = `rUsqhiOWcO53esORZaedhg`
+
 ## Regras
 - Nunca commitar arquivos .env
 - Sempre rodar testes antes de fazer push

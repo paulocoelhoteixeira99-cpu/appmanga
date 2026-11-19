@@ -2,22 +2,18 @@
 
 import { useState, useCallback, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
+import Link from "next/link";
 import { Button } from "@matsborges/manga-design-system/button";
 import { TextField } from "@matsborges/manga-design-system/text-field";
 import { ProgressBar } from "@matsborges/manga-design-system/progress-bar";
-import { CategoryItem } from "@matsborges/manga-design-system/product";
+import { InputChip } from "@matsborges/manga-design-system/chip";
 import { GoalIdentity } from "@matsborges/manga-design-system/product";
+import { ProductIcon } from "@matsborges/manga-design-system/product";
 import { ArrowBackIcon, CheckCircleIcon } from "@matsborges/manga-design-system/icons";
 import {
   formatCurrencyInput,
   parseCurrencyInput,
   formatCurrency,
-  formatPhone,
-  phoneToDigits,
-  formatCpf,
-  cpfToDigits,
-  isValidCpf,
 } from "@/lib/utils/masks";
 import { createClient } from "@/lib/supabase/client";
 
@@ -32,10 +28,10 @@ type Step =
   | "categories"
   | "limits"
   | "goal"
+  | "goal-create"
   | "reserve"
   | "recognition";
 
-// Steps that count toward the progress bar (excludes account, account-verify, recognition)
 const PROGRESS_STEPS: Step[] = [
   "identification",
   "intro",
@@ -66,8 +62,6 @@ const STORAGE_KEY = "manga_onboarding_draft";
 type OnboardingDraft = {
   currentStep: Step;
   firstName: string;
-  phone: string;
-  cpf: string;
   balanceInput: string;
   categories: CategoryDraft[];
   skippedCategories: boolean;
@@ -103,17 +97,14 @@ function clearDraft() {
   }
 }
 
-// --- Suggested categories ---
+// --- Figma C01: 5 default categories ---
 
 const SUGGESTED_CATEGORIES: CategoryDraft[] = [
+  { id: "alimentacao", name: "Alimenta\u00e7\u00e3o", icon: "restaurant", selected: true, limit: "" },
   { id: "moradia", name: "Moradia", icon: "home", selected: true, limit: "" },
-  { id: "alimentacao", name: "Alimentacao", icon: "restaurant", selected: true, limit: "" },
   { id: "transporte", name: "Transporte", icon: "directions-car", selected: true, limit: "" },
-  { id: "saude", name: "Saude", icon: "favorite", selected: false, limit: "" },
-  { id: "educacao", name: "Educacao", icon: "school", selected: false, limit: "" },
-  { id: "lazer", name: "Lazer", icon: "beach-access", selected: false, limit: "" },
-  { id: "compras", name: "Compras", icon: "redeem", selected: false, limit: "" },
-  { id: "servicos", name: "Servicos", icon: "business-center", selected: false, limit: "" },
+  { id: "lazer", name: "Lazer", icon: "beach-access", selected: true, limit: "" },
+  { id: "saude", name: "Sa\u00fade", icon: "favorite", selected: true, limit: "" },
 ];
 
 // --- Google icon ---
@@ -144,8 +135,6 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
 
   // Identification step
   const [firstName, setFirstName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [cpf, setCpf] = useState("");
   const [identError, setIdentError] = useState<string | null>(null);
 
   // Balance step
@@ -171,17 +160,13 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
   useEffect(() => {
     const draft = loadDraft();
     if (draft) {
-      // Only restore if the saved step is at or after the server-determined startStep
-      // (don't go back to "account" if server says "identification")
-      const allSteps: Step[] = ["account", "account-verify", "identification", "intro", "balance", "categories", "limits", "goal", "reserve", "recognition"];
+      const allSteps: Step[] = ["account", "account-verify", "identification", "intro", "balance", "categories", "limits", "goal", "goal-create", "reserve", "recognition"];
       const startIdx = allSteps.indexOf(startStep);
       const savedIdx = allSteps.indexOf(draft.currentStep);
       if (savedIdx >= startIdx) {
         setCurrentStep(draft.currentStep);
       }
       setFirstName(draft.firstName || "");
-      setPhone(draft.phone || "");
-      setCpf(draft.cpf || "");
       setBalanceInput(draft.balanceInput || "");
       setCategories(draft.categories || SUGGESTED_CATEGORIES);
       setSkippedCategories(draft.skippedCategories || false);
@@ -200,8 +185,6 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
     saveDraft({
       currentStep,
       firstName,
-      phone,
-      cpf,
       balanceInput,
       categories,
       skippedCategories,
@@ -210,7 +193,7 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
       reserveInput,
       signupEmail,
     });
-  }, [currentStep, firstName, phone, cpf, balanceInput, categories, skippedCategories, goal, skippedGoal, reserveInput, signupEmail]);
+  }, [currentStep, firstName, balanceInput, categories, skippedCategories, goal, skippedGoal, reserveInput, signupEmail]);
 
   // Derived values
   const balanceValue = parseCurrencyInput(balanceInput);
@@ -233,13 +216,13 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
       categories: () => "balance",
       limits: () => "categories",
       goal: () => skippedCategories ? "categories" : "limits",
-      reserve: () => "goal",
+      "goal-create": () => "goal",
+      reserve: () => "goal-create",
       recognition: () => (skippedGoal ? "goal" : "reserve"),
     };
     const getPrev = backMap[currentStep];
     if (getPrev) {
       const prev = getPrev();
-      // Don't go back to account if already authenticated
       if (prev === "account" && startStep !== "account") return;
       goTo(prev);
     }
@@ -253,7 +236,7 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
     setAccountError(null);
 
     const supabase = createClient();
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email: signupEmail,
       password: signupPassword,
       options: {
@@ -262,8 +245,32 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
     });
 
     if (error) {
-      setAccountError(error.message);
+      if (error.message.includes("already registered")) {
+        setAccountError("Este e-mail j\u00e1 est\u00e1 cadastrado. Tente entrar.");
+      } else if (error.message.includes("password") || error.message.includes("Password")) {
+        setAccountError("A senha deve ter pelo menos 6 caracteres.");
+      } else if (error.message.includes("valid") || error.message.includes("email")) {
+        setAccountError("E-mail inv\u00e1lido. Verifique e tente novamente.");
+      } else if (error.message.includes("rate") || error.message.includes("limit")) {
+        setAccountError("Muitas tentativas. Aguarde um momento e tente novamente.");
+      } else {
+        setAccountError(`Erro ao criar conta: ${error.message}`);
+      }
       setLoading(false);
+      return;
+    }
+
+    // Detect duplicate email (Supabase returns user with empty identities)
+    if (data.user && (!data.user.identities || data.user.identities.length === 0)) {
+      setAccountError("Este e-mail j\u00e1 possui uma conta. Tente entrar.");
+      setLoading(false);
+      return;
+    }
+
+    // Check if user is auto-confirmed (session exists immediately)
+    if (data.session) {
+      setLoading(false);
+      goTo("identification");
     } else {
       setLoading(false);
       goTo("account-verify");
@@ -289,16 +296,6 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
       setIdentError("Como podemos te chamar?");
       return;
     }
-    const phoneDigits = phoneToDigits(phone);
-    if (phoneDigits.length !== 11) {
-      setIdentError("Telefone deve ter 11 digitos (DDD + numero).");
-      return;
-    }
-    const cpfDigits = cpfToDigits(cpf);
-    if (cpfDigits && !isValidCpf(cpfDigits)) {
-      setIdentError("CPF invalido.");
-      return;
-    }
 
     setLoading(true);
     setIdentError(null);
@@ -313,24 +310,13 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
         return;
       }
 
-      // Salvar dados pessoais no profile
       const { error } = await supabase
         .from("profiles")
-        .update({
-          first_name: trimmedName,
-          phone: phoneDigits,
-          cpf: cpfDigits || null,
-        })
+        .update({ first_name: trimmedName })
         .eq("id", user.id);
 
       if (error) {
-        if (error.message.includes("profiles_phone_unique")) {
-          setIdentError("Este WhatsApp ja esta vinculado a outra conta.");
-        } else if (error.message.includes("idx_profiles_cpf_unique")) {
-          setIdentError("Este CPF ja esta vinculado a outra conta.");
-        } else {
-          setIdentError("Erro ao salvar. Tente novamente.");
-        }
+        setIdentError("Erro ao salvar. Tente novamente.");
         setLoading(false);
         return;
       }
@@ -349,21 +335,17 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
       return;
     }
     if (balanceValue < 0) {
-      setBalanceError("O saldo nao pode ser negativo.");
+      setBalanceError("O saldo n\u00e3o pode ser negativo.");
       return;
     }
     setBalanceError(null);
     goTo("categories");
   }
 
-  function handleCategoriesContinue() {
+  function handleCategoriesAccept() {
     setSkippedCategories(false);
-    if (selectedCategories.length === 0) {
-      setSkippedCategories(true);
-      goTo("goal");
-    } else {
-      goTo("limits");
-    }
+    setCategories(SUGGESTED_CATEGORIES);
+    goTo("limits");
   }
 
   function handleCategoriesSkip() {
@@ -372,23 +354,33 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
     goTo("goal");
   }
 
-  function handleGoalContinue() {
-    setSkippedGoal(false);
-    goTo("reserve");
-  }
-
   function handleGoalSkip() {
     setSkippedGoal(true);
     goTo("recognition");
   }
 
+  function handleGoalCreate() {
+    setSkippedGoal(false);
+    goTo("goal-create");
+  }
+
+  function handleGoalFormContinue() {
+    goTo("reserve");
+  }
+
   function handleReserveContinue() {
     if (reserveValue > balanceValue) {
-      setReserveError("A reserva nao pode ser maior que o saldo disponivel.");
+      setReserveError("A reserva n\u00e3o pode ser maior que o saldo dispon\u00edvel.");
       return;
     }
     setReserveError(null);
     goTo("recognition");
+  }
+
+  function setCategoryLimit(id: string, limit: string) {
+    setCategories((prev) =>
+      prev.map((c) => (c.id === id ? { ...c, limit } : c))
+    );
   }
 
   async function handleFinish() {
@@ -470,111 +462,125 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
     }
   }
 
-  function toggleCategory(id: string) {
-    setCategories((prev) =>
-      prev.map((c) => (c.id === id ? { ...c, selected: !c.selected } : c))
-    );
-  }
-
-  function setCategoryLimit(id: string, limit: string) {
-    setCategories((prev) =>
-      prev.map((c) => (c.id === id ? { ...c, limit } : c))
-    );
-  }
-
-  // --- Layout components (Figma structure: safe-top 24 + header 64 + content flex + actions + safe-bottom 24) ---
+  // =========================================================
+  // Figma layout: safe-top(24) + header(64) + content + actions + safe-bottom(24)
+  // =========================================================
 
   function StepLayout({
     children,
     actions,
-    showHeader = true,
   }: {
     children: React.ReactNode;
     actions?: React.ReactNode;
-    showHeader?: boolean;
   }) {
     return (
-      <div className="flex flex-col min-h-screen">
-        {/* Safe area top */}
-        <div className="h-6 shrink-0" />
+      <div
+        className="flex flex-col bg-manga-background-default"
+        style={{ minHeight: "100dvh" }}
+      >
+        {/* Safe area top — Figma: 24px */}
+        <div className="shrink-0" style={{ height: "24px" }} />
 
-        {/* Header */}
-        {showHeader && showProgress && (
-          <div className="h-16 shrink-0 flex flex-col justify-center px-6">
-            <div className="flex items-center gap-3 mb-2">
-              <button
-                type="button"
-                onClick={goBack}
-                className="p-1 -ml-1 text-manga-text-secondary hover:text-manga-text-primary transition-colors"
-                aria-label="Voltar"
-              >
-                <ArrowBackIcon />
-              </button>
-              <span className="text-sm text-manga-text-secondary">
-                {progressIndex + 1} de {PROGRESS_STEPS.length}
-              </span>
+        {/* Header — Figma: h=64, padL=16, padR=16, gap=12 */}
+        {showProgress && (
+          <div
+            className="shrink-0 flex items-center"
+            style={{ height: "64px", padding: "0 16px", gap: "12px" }}
+          >
+            <button
+              type="button"
+              onClick={goBack}
+              className="flex items-center justify-center text-manga-text-primary"
+              style={{ width: "44px", height: "44px", borderRadius: "4px" }}
+              aria-label="Voltar"
+            >
+              <ArrowBackIcon />
+            </button>
+            <div className="flex-1">
+              <ProgressBar
+                value={progressIndex + 1}
+                max={PROGRESS_STEPS.length}
+                label="Progresso do onboarding"
+                height={8}
+              />
             </div>
-            <ProgressBar
-              value={progressIndex + 1}
-              max={PROGRESS_STEPS.length}
-              label="Progresso do onboarding"
-              height={4}
-            />
           </div>
         )}
 
-        {/* Scrollable content */}
-        <div className="flex-1 overflow-y-auto px-6 py-6">{children}</div>
+        {/* Scrollable content — Figma: pad=16 all sides */}
+        <div className="flex-1 overflow-y-auto" style={{ padding: "16px" }}>
+          {children}
+        </div>
 
-        {/* Actions — fixed at bottom */}
+        {/* Actions — Figma: padL=16, padT=4, padR=16, padB=4, gap=8 */}
         {actions && (
-          <div className="shrink-0 px-6 pb-2">
+          <div
+            className="shrink-0 flex flex-col"
+            style={{ padding: "4px 16px", gap: "8px" }}
+          >
             {actions}
           </div>
         )}
 
-        {/* Safe area bottom */}
-        <div className="h-6 shrink-0" />
+        {/* Safe area bottom — Figma: 24px */}
+        <div className="shrink-0" style={{ height: "24px" }} />
       </div>
     );
   }
 
-  // --- Steps ---
+  // =========================================================
+  // Account creation — no Figma equivalent, follows E03 Login pattern
+  // =========================================================
 
   function renderAccount() {
     return (
-      <div className="flex flex-col min-h-screen px-6">
-        <div className="h-6 shrink-0" />
-        <div className="pt-4">
+      <div
+        className="bg-manga-background-default flex flex-col"
+        style={{ minHeight: "100dvh", padding: "0 24px" }}
+      >
+        {/* Back — Figma E03: pos=(16,32) 40x40 */}
+        <div style={{ paddingTop: "32px", marginLeft: "-8px" }}>
           <button
             type="button"
             onClick={() => router.push("/login")}
-            className="p-2 -ml-2 text-manga-text-secondary hover:text-manga-text-primary transition-colors"
+            className="flex items-center justify-center text-manga-text-primary"
+            style={{ width: "40px", height: "40px" }}
             aria-label="Voltar"
           >
             <ArrowBackIcon />
           </button>
         </div>
 
-        <div className="flex-1 pt-4">
-          <div className="flex justify-center mb-6">
-            <Image src="/assets/logo-gradient.svg" alt="Manga" width={60} height={67} priority />
-          </div>
-          <h1 className="text-[28px] font-bold text-manga-text-primary mb-2 text-center">
+        {/* Content — follows E03 pattern: pos=(24,112), gap=32 */}
+        <div
+          className="flex flex-col"
+          style={{ paddingTop: "40px", gap: "32px" }}
+        >
+          {/* Title — Figma: 32/600, lh=38.4, ls=-0.64 */}
+          <h1
+            className="font-semibold text-manga-text-primary"
+            style={{
+              fontSize: "32px",
+              lineHeight: "38.4px",
+              letterSpacing: "-0.64px",
+            }}
+          >
             Criar sua conta
           </h1>
-          <p className="text-manga-text-secondary mb-8 text-center">
-            Preencha para comecar.
-          </p>
 
-          <form onSubmit={handleAccountCreate} className="space-y-4">
+          {/* Form — gap=16 */}
+          <form
+            onSubmit={handleAccountCreate}
+            className="flex flex-col"
+            style={{ gap: "16px" }}
+          >
             <TextField
               label="E-mail"
               type="email"
               value={signupEmail}
               onChange={(e) => setSignupEmail(e.target.value)}
               required
-              placeholder="seu@email.com"
+              placeholder="Seu e-mail"
             />
             <TextField
               label="Senha"
@@ -583,56 +589,83 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
               onChange={(e) => setSignupPassword(e.target.value)}
               required
               minLength={6}
-              placeholder="Minimo 6 caracteres"
+              placeholder="M\u00ednimo 6 caracteres"
             />
 
-            {accountError && <p className="text-error-500 text-sm">{accountError}</p>}
+            {accountError && (
+              <p
+                className="text-manga-text-primary"
+                style={{ fontSize: "14px", lineHeight: "21px", color: "#7F1D1D" }}
+              >
+                {accountError}
+              </p>
+            )}
 
             <Button type="submit" loading={loading} fullWidth size="large">
               Criar conta
             </Button>
           </form>
 
-          <div className="my-6 flex items-center gap-4">
-            <div className="flex-1 h-px bg-manga-background-subtle" />
-            <span className="text-sm text-manga-text-secondary">ou</span>
-            <div className="flex-1 h-px bg-manga-background-subtle" />
+          {/* Google — gap=16 */}
+          <div className="flex flex-col" style={{ gap: "16px" }}>
+            <p
+              className="text-manga-text-secondary text-center"
+              style={{ fontSize: "14px", lineHeight: "21px" }}
+            >
+              ou
+            </p>
+            <Button
+              variant="secondary"
+              fullWidth
+              size="large"
+              onClick={handleGoogleSignup}
+              leadingIcon={<GoogleIcon />}
+            >
+              Continuar com Google
+            </Button>
           </div>
-
-          <Button
-            variant="secondary"
-            fullWidth
-            size="large"
-            onClick={handleGoogleSignup}
-            leadingIcon={<GoogleIcon />}
-          >
-            Continuar com Google
-          </Button>
         </div>
 
-        <div className="mt-auto pb-8 pt-6 text-center">
-          <p className="text-sm text-manga-text-secondary">
-            Ja tem conta?{" "}
-            <a href="/login" className="text-manga-text-brand font-medium">
+        {/* Footer — Figma E03: pos=(24,696), h=48 */}
+        <div
+          className="mt-auto flex items-center justify-center"
+          style={{ height: "48px", marginBottom: "56px" }}
+        >
+          <p
+            className="text-manga-text-secondary text-center"
+            style={{ fontSize: "14px", lineHeight: "21px" }}
+          >
+            J\u00e1 tem conta?{" "}
+            <Link href="/login" className="text-manga-text-brand font-medium">
               Entrar
-            </a>
+            </Link>
           </p>
         </div>
       </div>
     );
   }
 
+  // =========================================================
+  // Account verify — email confirmation
+  // =========================================================
+
   function renderAccountVerify() {
     return (
-      <div className="flex flex-col min-h-screen items-center justify-center px-6 text-center">
+      <div className="flex flex-col bg-manga-background-default items-center justify-center px-6 text-center" style={{ minHeight: "100dvh" }}>
         <div className="mb-6 text-manga-text-brand">
           <CheckCircleIcon />
         </div>
-        <h1 className="text-xl font-bold text-manga-text-primary mb-3">
+        <h1
+          className="font-semibold text-manga-text-primary"
+          style={{ fontSize: "20px", lineHeight: "24px", marginBottom: "12px" }}
+        >
           Verifique seu e-mail
         </h1>
-        <p className="text-manga-text-secondary mb-8 max-w-xs">
-          Enviamos um link de confirmacao para{" "}
+        <p
+          className="text-manga-text-secondary max-w-xs"
+          style={{ fontSize: "14px", lineHeight: "21px", marginBottom: "32px" }}
+        >
+          Enviamos um link de confirma\u00e7\u00e3o para{" "}
           <strong className="text-manga-text-primary">{signupEmail}</strong>.
           Clique no link para ativar sua conta e continuar.
         </p>
@@ -642,6 +675,11 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
       </div>
     );
   }
+
+  // =========================================================
+  // 01 · Conta — Figma: "Como podemos chamar voce?"
+  // Title: 20/600, lh=24, ls=-0.4 | Content gap=12
+  // =========================================================
 
   function renderIdentification() {
     return (
@@ -653,20 +691,25 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
             size="large"
             loading={loading}
           >
-            Continuar
+            Pr\u00f3ximo
           </Button>
         }
       >
-        <h1 className="text-xl font-bold text-manga-text-primary mb-2">
-          Como podemos te chamar?
-        </h1>
-        <p className="text-manga-text-secondary mb-6">
-          Precisamos de alguns dados para personalizar sua experiencia.
-        </p>
+        <div className="flex flex-col" style={{ gap: "12px" }}>
+          {/* Figma: 20/600, lh=24, ls=-0.4 */}
+          <h1
+            className="font-semibold text-manga-text-primary"
+            style={{
+              fontSize: "20px",
+              lineHeight: "24px",
+              letterSpacing: "-0.4px",
+            }}
+          >
+            Como podemos chamar voc\u00ea?
+          </h1>
 
-        <div className="space-y-4">
           <TextField
-            label="Primeiro nome"
+            label="Nome"
             type="text"
             value={firstName}
             onChange={(e) => {
@@ -676,312 +719,503 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
             required
             placeholder="Seu nome"
           />
-          <TextField
-            label="WhatsApp"
-            type="tel"
-            value={phone}
-            onChange={(e) => {
-              setPhone(formatPhone(e.target.value));
-              setIdentError(null);
-            }}
-            required
-            placeholder="(11) 99999-9999"
-            helperText="Usado para registrar gastos por mensagem."
-          />
-          <TextField
-            label="CPF (opcional)"
-            type="text"
-            value={cpf}
-            onChange={(e) => {
-              setCpf(formatCpf(e.target.value));
-              setIdentError(null);
-            }}
-            placeholder="000.000.000-00"
-          />
         </div>
 
-        {identError && <p className="text-error-500 text-sm mt-4">{identError}</p>}
+        {identError && (
+          <p
+            style={{ fontSize: "14px", lineHeight: "21px", color: "#7F1D1D", marginTop: "16px" }}
+          >
+            {identError}
+          </p>
+        )}
       </StepLayout>
     );
   }
+
+  // =========================================================
+  // 02 · Introducao financeira — Figma exact
+  // Title: 24/600, lh=28.8, ls=-0.48 | Content gap=20
+  // =========================================================
 
   function renderIntro() {
     return (
       <StepLayout
         actions={
           <Button onClick={() => goTo("balance")} fullWidth size="large">
-            Continuar
+            Informar Saldo Inicial
           </Button>
         }
       >
-        <div className="flex flex-col items-center text-center pt-8">
-          <Image src="/assets/logo-gradient.svg" alt="Manga" width={80} height={90} priority />
-          <h1 className="text-xl font-bold text-manga-text-primary mt-8 mb-3">
-            Vamos configurar seu Manga
+        <div className="flex flex-col" style={{ gap: "20px" }}>
+          {/* Figma: 24/600, lh=28.8, ls=-0.48 */}
+          <h1
+            className="font-semibold text-manga-text-primary"
+            style={{
+              fontSize: "24px",
+              lineHeight: "28.8px",
+              letterSpacing: "-0.48px",
+            }}
+          >
+            Vamos entender seu ponto de partida
           </h1>
-          <p className="text-manga-text-secondary max-w-xs">
-            Algumas perguntas rapidas para o Manga te ajudar melhor. Leva menos
-            de 2 minutos.
+
+          {/* Figma: 16/400, lh=24 */}
+          <p
+            className="text-manga-text-secondary"
+            style={{ fontSize: "16px", lineHeight: "24px" }}
+          >
+            Primeiro, informe quanto voc\u00ea tem dispon\u00edvel hoje. Depois, voc\u00ea pode
+            organizar Categorias e criar uma Meta.
+          </p>
+
+          {/* Figma: 14/400, lh=21 */}
+          <p
+            className="text-manga-text-secondary"
+            style={{ fontSize: "14px", lineHeight: "21px" }}
+          >
+            O Manga acompanha seus registros. Voc\u00ea escolhe o que organizar agora
+            e o que deixar para depois.
           </p>
         </div>
       </StepLayout>
     );
   }
 
+  // =========================================================
+  // 03 · Saldo Inicial — Figma exact
+  // Title: 24/600 | Field: "Saldo Inicial" | Button: "Confirmar Saldo Inicial"
+  // =========================================================
+
   function renderBalance() {
     return (
       <StepLayout
         actions={
           <Button onClick={handleBalanceContinue} fullWidth size="large">
-            Continuar
+            Confirmar Saldo Inicial
           </Button>
         }
       >
-        <h1 className="text-xl font-bold text-manga-text-primary mb-2">
-          Qual seu saldo disponivel hoje?
-        </h1>
-        <p className="text-manga-text-secondary mb-6">
-          Pode ser aproximado. R$ 0 tambem vale.
-        </p>
-        <TextField
-          label="Saldo disponivel"
-          type="text"
-          inputMode="numeric"
-          value={balanceInput ? `R$ ${balanceInput}` : ""}
-          onChange={(e) => {
-            const raw = e.target.value.replace(/^R\$\s?/, "");
-            setBalanceInput(formatCurrencyInput(raw));
-            setBalanceError(null);
-          }}
-          placeholder="R$ 0,00"
-          error={balanceError ?? undefined}
-          helperText="Quanto voce tem disponivel agora, fora metas e reservas."
-        />
+        <div className="flex flex-col" style={{ gap: "20px" }}>
+          {/* Figma: 24/600, lh=28.8, ls=-0.48 */}
+          <h1
+            className="font-semibold text-manga-text-primary"
+            style={{
+              fontSize: "24px",
+              lineHeight: "28.8px",
+              letterSpacing: "-0.48px",
+            }}
+          >
+            Quanto voc\u00ea tem dispon\u00edvel hoje?
+          </h1>
+
+          <TextField
+            label="Saldo Inicial"
+            type="text"
+            inputMode="numeric"
+            value={balanceInput ? `R$ ${balanceInput}` : ""}
+            onChange={(e) => {
+              const raw = e.target.value.replace(/^R\$\s?/, "");
+              setBalanceInput(formatCurrencyInput(raw));
+              setBalanceError(null);
+            }}
+            placeholder="R$ 0,00"
+            required
+            error={balanceError ?? undefined}
+          />
+
+          {/* Figma: 14/400, lh=21 */}
+          <p
+            className="text-manga-text-secondary"
+            style={{ fontSize: "14px", lineHeight: "21px" }}
+          >
+            Esse \u00e9 seu ponto de partida no Manga. A partir dele, acompanhamos o
+            que entra, o que sai e o que voc\u00ea reserva para Metas.
+          </p>
+
+          {/* Figma: 12/400, lh=18 */}
+          <p
+            className="text-manga-text-secondary"
+            style={{ fontSize: "12px", lineHeight: "18px" }}
+          >
+            Saldo Inicial n\u00e3o conta como Entrada.
+          </p>
+        </div>
       </StepLayout>
     );
   }
+
+  // =========================================================
+  // C01 · Categorias sugeridas — Figma exact
+  // Chips in gray card, "Personalizar categorias" link
+  // =========================================================
 
   function renderCategories() {
     return (
       <StepLayout
         actions={
-          <div className="space-y-3">
-            <Button onClick={handleCategoriesContinue} fullWidth size="large">
-              Continuar{selectedCategories.length > 0 && ` (${selectedCategories.length})`}
+          <>
+            <Button onClick={handleCategoriesAccept} fullWidth size="large">
+              Usar estas categorias
             </Button>
             <Button onClick={handleCategoriesSkip} variant="tertiary" fullWidth size="large">
-              Pular por enquanto
+              Configurar depois
             </Button>
-          </div>
+          </>
         }
       >
-        <h1 className="text-xl font-bold text-manga-text-primary mb-2">
-          Categorias ajudam a organizar seus gastos
-        </h1>
-        <p className="text-manga-text-secondary mb-6">
-          Sugerimos algumas para comecar. Voce pode alterar depois.
-        </p>
-        <div className="space-y-1">
-          {categories.map((cat) => (
-            <CategoryItem
-              key={cat.id}
-              title={cat.name}
-              mode="selection"
-              name="categories"
-              value={cat.id}
-              checked={cat.selected}
-              onChange={() => toggleCategory(cat.id)}
-            />
-          ))}
+        <div className="flex flex-col" style={{ gap: "24px" }}>
+          {/* Title + subtitle — Figma gap=12 */}
+          <div className="flex flex-col" style={{ gap: "12px" }}>
+            <h1
+              className="font-semibold text-manga-text-primary"
+              style={{
+                fontSize: "24px",
+                lineHeight: "28.8px",
+                letterSpacing: "-0.48px",
+              }}
+            >
+              Suas categorias j\u00e1 est\u00e3o prontas!
+            </h1>
+            <p
+              className="text-manga-text-secondary"
+              style={{ fontSize: "14px", lineHeight: "21px" }}
+            >
+              Comece com uma organiza\u00e7\u00e3o simples e personalize quando quiser.
+            </p>
+          </div>
+
+          {/* Figma: Card with chips — fill=rgb(241,240,243), radius=16, pad=16, gap=16 */}
+          <div
+            style={{
+              backgroundColor: "rgb(241,240,243)",
+              borderRadius: "16px",
+              padding: "16px",
+              display: "flex",
+              flexDirection: "column",
+              gap: "16px",
+            }}
+          >
+            {/* Chips — flex wrap, gap=8 */}
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
+              {SUGGESTED_CATEGORIES.map((cat) => (
+                <InputChip
+                  key={cat.id}
+                  label={cat.name}
+                  leadingIcon={
+                    <ProductIcon
+                      name={cat.icon as import("@matsborges/manga-design-system/product").ProductIconName}
+                      className="w-5 h-5"
+                    />
+                  }
+                />
+              ))}
+            </div>
+
+            {/* "Personalizar categorias" link — Figma: 14/600, chevron */}
+            <button
+              type="button"
+              className="flex items-center justify-between w-full text-manga-text-primary"
+              style={{
+                height: "48px",
+                fontSize: "14px",
+                fontWeight: 600,
+                lineHeight: "21px",
+              }}
+            >
+              <span>Personalizar categorias</span>
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </button>
+          </div>
+
+          {/* Helper — Figma: 14/400, lh=21 */}
+          <p
+            className="text-manga-text-secondary"
+            style={{ fontSize: "14px", lineHeight: "21px" }}
+          >
+            Esta etapa \u00e9 opcional. Voc\u00ea pode ajustar suas categorias depois.
+          </p>
         </div>
       </StepLayout>
     );
   }
+
+  // =========================================================
+  // Limits — no Figma hi-fi, follows onboarding pattern
+  // =========================================================
 
   function renderLimits() {
     return (
       <StepLayout
         actions={
-          <div className="space-y-3">
+          <>
             <Button onClick={() => goTo("goal")} fullWidth size="large">
               Continuar
             </Button>
-            <Button onClick={() => goTo("goal")} variant="tertiary" fullWidth size="large">
+            <Button onClick={() => goTo("goal")} variant="secondary" fullWidth size="large">
               Pular por enquanto
             </Button>
-          </div>
+          </>
         }
       >
-        <h1 className="text-xl font-bold text-manga-text-primary mb-2">
-          Defina limites mensais
-        </h1>
-        <p className="text-manga-text-secondary mb-6">
-          Opcional. Ajuda o Manga a te avisar quando estiver perto do teto.
-        </p>
-        <div className="space-y-4">
-          {selectedCategories.map((cat) => (
-            <TextField
-              key={cat.id}
-              label={cat.name}
-              type="text"
-              inputMode="numeric"
-              value={cat.limit ? `R$ ${cat.limit}` : ""}
-              onChange={(e) => {
-                const raw = e.target.value.replace(/^R\$\s?/, "");
-                setCategoryLimit(cat.id, formatCurrencyInput(raw));
-              }}
-              placeholder="Sem limite"
-            />
-          ))}
+        <div className="flex flex-col" style={{ gap: "20px" }}>
+          <h1
+            className="font-semibold text-manga-text-primary"
+            style={{
+              fontSize: "24px",
+              lineHeight: "28.8px",
+              letterSpacing: "-0.48px",
+            }}
+          >
+            Defina limites mensais
+          </h1>
+          <p
+            className="text-manga-text-secondary"
+            style={{ fontSize: "14px", lineHeight: "21px" }}
+          >
+            Opcional. Ajuda o Manga a te avisar quando estiver perto do teto.
+          </p>
+          <div className="flex flex-col" style={{ gap: "16px" }}>
+            {selectedCategories.map((cat) => (
+              <TextField
+                key={cat.id}
+                label={cat.name}
+                type="text"
+                inputMode="numeric"
+                value={cat.limit ? `R$ ${cat.limit}` : ""}
+                onChange={(e) => {
+                  const raw = e.target.value.replace(/^R\$\s?/, "");
+                  setCategoryLimit(cat.id, formatCurrencyInput(raw));
+                }}
+                placeholder="Sem limite"
+              />
+            ))}
+          </div>
         </div>
       </StepLayout>
     );
   }
 
+  // =========================================================
+  // 10 · Oferta da primeira Meta — Figma exact
+  // Title: 24/600 | Body: 14/400 | 2 buttons
+  // =========================================================
+
   function renderGoal() {
-    const hasGoalData = goal.name.trim() && goal.target;
     return (
       <StepLayout
         actions={
-          <div className="space-y-3">
-            <Button onClick={handleGoalContinue} fullWidth size="large" disabled={!hasGoalData}>
-              Criar meta
+          <>
+            <Button onClick={handleGoalCreate} fullWidth size="large">
+              Criar minha primeira Meta
             </Button>
-            <Button onClick={handleGoalSkip} variant="tertiary" fullWidth size="large">
+            <Button onClick={handleGoalSkip} variant="secondary" fullWidth size="large">
               Pular por enquanto
             </Button>
-          </div>
+          </>
         }
       >
-        <h1 className="text-xl font-bold text-manga-text-primary mb-2">
-          Que tal criar sua primeira meta?
-        </h1>
-        <p className="text-manga-text-secondary mb-6">
-          Uma meta ajuda a separar dinheiro com proposito.
-        </p>
-        <div className="flex justify-center mb-6">
-          <GoalIdentity name={goal.name || "Meta"} size={72} color="orange" />
-        </div>
-        <div className="space-y-4">
-          <TextField
-            label="Nome da meta"
-            type="text"
-            value={goal.name}
-            onChange={(e) => setGoal((g) => ({ ...g, name: e.target.value }))}
-            placeholder="Ex: Reserva de emergencia"
-          />
-          <TextField
-            label="Valor objetivo"
-            type="text"
-            inputMode="numeric"
-            value={goal.target ? `R$ ${goal.target}` : ""}
-            onChange={(e) => {
-              const raw = e.target.value.replace(/^R\$\s?/, "");
-              setGoal((g) => ({ ...g, target: formatCurrencyInput(raw) }));
+        <div className="flex flex-col" style={{ gap: "12px" }}>
+          <h1
+            className="font-semibold text-manga-text-primary"
+            style={{
+              fontSize: "24px",
+              lineHeight: "28.8px",
+              letterSpacing: "-0.48px",
             }}
-            placeholder="R$ 0,00"
-          />
+          >
+            Existe algo para o qual voc\u00ea quer guardar dinheiro?
+          </h1>
+          <p
+            className="text-manga-text-secondary"
+            style={{ fontSize: "14px", lineHeight: "21px" }}
+          >
+            Uma Meta ajuda a acompanhar o que voc\u00ea j\u00e1 reservou para um objetivo.
+            Voc\u00ea pode cri\u00e1-la agora ou depois.
+          </p>
         </div>
       </StepLayout>
     );
   }
+
+  // =========================================================
+  // Goal create form — follows onboarding pattern
+  // =========================================================
+
+  function renderGoalCreate() {
+    const hasGoalData = goal.name.trim() && goal.target;
+    return (
+      <StepLayout
+        actions={
+          <Button onClick={handleGoalFormContinue} fullWidth size="large" disabled={!hasGoalData}>
+            Criar Meta
+          </Button>
+        }
+      >
+        <div className="flex flex-col" style={{ gap: "20px" }}>
+          <h1
+            className="font-semibold text-manga-text-primary"
+            style={{
+              fontSize: "24px",
+              lineHeight: "28.8px",
+              letterSpacing: "-0.48px",
+            }}
+          >
+            Criar sua primeira Meta
+          </h1>
+
+          <div className="flex justify-center">
+            <GoalIdentity name={goal.name || "Meta"} size={72} color="orange" />
+          </div>
+
+          <div className="flex flex-col" style={{ gap: "16px" }}>
+            <TextField
+              label="Nome da meta"
+              type="text"
+              value={goal.name}
+              onChange={(e) => setGoal((g) => ({ ...g, name: e.target.value }))}
+              placeholder="Ex: Reserva de emerg\u00eancia"
+              required
+            />
+            <TextField
+              label="Valor objetivo"
+              type="text"
+              inputMode="numeric"
+              value={goal.target ? `R$ ${goal.target}` : ""}
+              onChange={(e) => {
+                const raw = e.target.value.replace(/^R\$\s?/, "");
+                setGoal((g) => ({ ...g, target: formatCurrencyInput(raw) }));
+              }}
+              placeholder="R$ 0,00"
+              required
+            />
+          </div>
+        </div>
+      </StepLayout>
+    );
+  }
+
+  // =========================================================
+  // Reserve — follows onboarding pattern
+  // =========================================================
 
   function renderReserve() {
     return (
       <StepLayout
         actions={
-          <div className="space-y-3">
+          <>
             <Button onClick={handleReserveContinue} fullWidth size="large" disabled={!reserveInput}>
               Reservar
             </Button>
-            <Button onClick={() => goTo("recognition")} variant="tertiary" fullWidth size="large">
+            <Button onClick={() => goTo("recognition")} variant="secondary" fullWidth size="large">
               Pular por enquanto
             </Button>
-          </div>
+          </>
         }
       >
-        <h1 className="text-xl font-bold text-manga-text-primary mb-2">
-          Reservar para &quot;{goal.name}&quot;?
-        </h1>
-        <p className="text-manga-text-secondary mb-6">
-          Voce tem {formatCurrency(balanceValue)} disponivel.
-        </p>
-        <TextField
-          label="Valor da reserva"
-          type="text"
-          inputMode="numeric"
-          value={reserveInput ? `R$ ${reserveInput}` : ""}
-          onChange={(e) => {
-            const raw = e.target.value.replace(/^R\$\s?/, "");
-            setReserveInput(formatCurrencyInput(raw));
-            setReserveError(null);
-          }}
-          placeholder="R$ 0,00"
-          error={reserveError ?? undefined}
-          helperText={`Disponivel: ${formatCurrency(balanceValue)}`}
-        />
+        <div className="flex flex-col" style={{ gap: "20px" }}>
+          <h1
+            className="font-semibold text-manga-text-primary"
+            style={{
+              fontSize: "24px",
+              lineHeight: "28.8px",
+              letterSpacing: "-0.48px",
+            }}
+          >
+            Reservar para &quot;{goal.name}&quot;?
+          </h1>
+          <p
+            className="text-manga-text-secondary"
+            style={{ fontSize: "14px", lineHeight: "21px" }}
+          >
+            Voc\u00ea tem {formatCurrency(balanceValue)} dispon\u00edvel.
+          </p>
+          <TextField
+            label="Valor da reserva"
+            type="text"
+            inputMode="numeric"
+            value={reserveInput ? `R$ ${reserveInput}` : ""}
+            onChange={(e) => {
+              const raw = e.target.value.replace(/^R\$\s?/, "");
+              setReserveInput(formatCurrencyInput(raw));
+              setReserveError(null);
+            }}
+            placeholder="R$ 0,00"
+            error={reserveError ?? undefined}
+            helperText={`Dispon\u00edvel: ${formatCurrency(balanceValue)}`}
+          />
+        </div>
       </StepLayout>
     );
   }
 
+  // =========================================================
+  // 17 · Reconhecimento basico — Figma exact
+  // Title: 24/600 | Balance: 32/600 | Detail: 14/400
+  // =========================================================
+
   function renderRecognition() {
-    const hasGoal = !skippedGoal && goal.name.trim();
-    const hasReserve = reserveValue > 0;
-    const hasCategories = !skippedCategories && selectedCategories.length > 0;
+    const displayBalance = formatCurrency(balanceValue).replace(",00", "");
 
     return (
-      <div className="flex flex-col min-h-screen items-center justify-center px-6 text-center">
-        <div className="mb-6 text-manga-text-brand">
-          <CheckCircleIcon />
-        </div>
-        <h1 className="text-2xl font-bold text-manga-text-primary mb-3">
-          Tudo pronto!
-        </h1>
-        <p className="text-manga-text-secondary mb-8 max-w-xs">
-          O Manga ja esta pronto para te ajudar a cuidar do seu dinheiro.
-        </p>
+      <StepLayout
+        actions={
+          <>
+            <Button onClick={handleFinish} fullWidth size="large" loading={loading}>
+              Come\u00e7ar a organiza\u00e7\u00e3o
+            </Button>
+            {finishError && (
+              <p style={{ fontSize: "14px", lineHeight: "21px", color: "#7F1D1D", textAlign: "center" }}>
+                {finishError}
+              </p>
+            )}
+          </>
+        }
+      >
+        <div className="flex flex-col" style={{ gap: "12px" }}>
+          {/* Figma: 24/600, lh=28.8, ls=-0.48 */}
+          <h1
+            className="font-semibold text-manga-text-primary"
+            style={{
+              fontSize: "24px",
+              lineHeight: "28.8px",
+              letterSpacing: "-0.48px",
+            }}
+          >
+            Seu ponto de partida est\u00e1 claro
+          </h1>
 
-        <div className="w-full max-w-xs space-y-3 mb-10 text-left">
-          <div className="flex items-center gap-3 text-sm">
-            <span className="text-manga-text-brand">&#10003;</span>
-            <span className="text-manga-text-primary">
-              Saldo inicial: {formatCurrency(balanceValue)}
-            </span>
-          </div>
-          {hasCategories && (
-            <div className="flex items-center gap-3 text-sm">
-              <span className="text-manga-text-brand">&#10003;</span>
-              <span className="text-manga-text-primary">
-                {selectedCategories.length} categoria{selectedCategories.length > 1 ? "s" : ""} configurada{selectedCategories.length > 1 ? "s" : ""}
-              </span>
-            </div>
-          )}
-          {hasGoal && (
-            <div className="flex items-center gap-3 text-sm">
-              <span className="text-manga-text-brand">&#10003;</span>
-              <span className="text-manga-text-primary">
-                Meta &quot;{goal.name}&quot; ({formatCurrency(goalTarget)})
-              </span>
-            </div>
-          )}
-          {hasReserve && (
-            <div className="flex items-center gap-3 text-sm">
-              <span className="text-manga-text-brand">&#10003;</span>
-              <span className="text-manga-text-primary">
-                {formatCurrency(reserveValue)} reservado
-              </span>
-            </div>
-          )}
-        </div>
+          {/* Figma: 32/600, lh=38.4, ls=-0.64 */}
+          <p
+            className="font-semibold text-manga-text-primary"
+            style={{
+              fontSize: "32px",
+              lineHeight: "38.4px",
+              letterSpacing: "-0.64px",
+            }}
+          >
+            {displayBalance} dispon\u00edveis
+          </p>
 
-        {finishError && <p className="text-error-500 text-sm mb-4">{finishError}</p>}
+          {/* Figma: 14/400, lh=21 */}
+          <p
+            className="text-manga-text-secondary"
+            style={{ fontSize: "14px", lineHeight: "21px" }}
+          >
+            Saldo Inicial: {formatCurrency(balanceValue)}
+          </p>
 
-        <div className="w-full max-w-xs">
-          <Button onClick={handleFinish} fullWidth size="large" loading={loading}>
-            Ir para o Manga
-          </Button>
+          {/* Figma: 14/400, lh=21 */}
+          <p
+            className="text-manga-text-secondary"
+            style={{ fontSize: "14px", lineHeight: "21px" }}
+          >
+            Entradas e Sa\u00eddas come\u00e7am em R$ 0. Voc\u00ea pode registrar sua primeira
+            Transa\u00e7\u00e3o quando precisar.
+          </p>
         </div>
-      </div>
+      </StepLayout>
     );
   }
 
@@ -996,6 +1230,7 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
     categories: renderCategories,
     limits: renderLimits,
     goal: renderGoal,
+    "goal-create": renderGoalCreate,
     reserve: renderReserve,
     recognition: renderRecognition,
   };

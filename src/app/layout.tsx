@@ -16,6 +16,7 @@ import "@matsborges/manga-design-system/spinner.css";
 import "@matsborges/manga-design-system/checkbox.css";
 import "@matsborges/manga-design-system/badge.css";
 import "@matsborges/manga-design-system/divider.css";
+import "@matsborges/manga-design-system/chip.css";
 
 const inter = Inter({
   subsets: ["latin"],

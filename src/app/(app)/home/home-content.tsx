@@ -2,15 +2,17 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { BalanceCard } from "@matsborges/manga-design-system/balance-card";
 import { FinancialCard } from "@matsborges/manga-design-system/financial-card";
 import { GoalCard } from "@matsborges/manga-design-system/goal-card";
-import { MangaInsights } from "@matsborges/manga-design-system/manga-insights";
+import { CategoryItem } from "@matsborges/manga-design-system/category-item";
 import { EmptyState } from "@matsborges/manga-design-system/empty-state";
-import { Divider } from "@matsborges/manga-design-system/divider";
+import { ProductIcon } from "@matsborges/manga-design-system/product";
+import { Button } from "@matsborges/manga-design-system/button";
+import { ArrowForwardIcon } from "@matsborges/manga-design-system/icons";
 import { formatCurrency } from "@/lib/utils/masks";
 import type { GoalIconName } from "@matsborges/manga-design-system/product";
 import type { GoalColor } from "@matsborges/manga-design-system/product";
+import type { ProductIconName } from "@matsborges/manga-design-system/product";
 
 type GoalData = {
   id: string;
@@ -22,12 +24,13 @@ type GoalData = {
   contentType: "initials" | "icon" | "image";
 };
 
-type InsightData = {
-  title: string;
-  description: string;
-  used: number;
-  limit: number;
-} | null;
+type CategorySpendingData = {
+  category_id: string;
+  category_name: string;
+  icon: string | null;
+  monthly_limit: number | null;
+  spent: number;
+};
 
 type HomeContentProps = {
   firstName: string;
@@ -35,14 +38,37 @@ type HomeContentProps = {
   income: number;
   expense: number;
   goals: GoalData[];
-  insight: InsightData;
+  categorySpending: CategorySpendingData[];
 };
 
-function getGreeting(): string {
-  const hour = new Date().getHours();
-  if (hour < 12) return "Bom dia,";
-  if (hour < 18) return "Boa tarde,";
-  return "Boa noite,";
+function getMonthLabel(): string {
+  const now = new Date();
+  const months = [
+    "Janeiro", "Fevereiro", "Mar\u00e7o", "Abril", "Maio", "Junho",
+    "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro",
+  ];
+  return `${months[now.getMonth()]} de ${now.getFullYear()} \u00b7 m\u00eas atual`;
+}
+
+function SettingsIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+      <path
+        d="M10 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M16.167 12.5a1.375 1.375 0 0 0 .275 1.517l.05.05a1.667 1.667 0 1 1-2.359 2.358l-.05-.05a1.375 1.375 0 0 0-1.516-.275 1.375 1.375 0 0 0-.834 1.258v.142a1.667 1.667 0 1 1-3.333 0v-.075a1.375 1.375 0 0 0-.9-1.258 1.375 1.375 0 0 0-1.517.275l-.05.05a1.667 1.667 0 1 1-2.358-2.359l.05-.05A1.375 1.375 0 0 0 3.9 12.567a1.375 1.375 0 0 0-1.258-.834h-.142a1.667 1.667 0 0 1 0-3.333h.075A1.375 1.375 0 0 0 3.833 7.5a1.375 1.375 0 0 0-.275-1.517l-.05-.05A1.667 1.667 0 1 1 5.867 3.575l.05.05A1.375 1.375 0 0 0 7.433 3.9h.067a1.375 1.375 0 0 0 .833-1.258v-.142a1.667 1.667 0 0 1 3.334 0v.075a1.375 1.375 0 0 0 .833 1.258 1.375 1.375 0 0 0 1.517-.275l.05-.05a1.667 1.667 0 1 1 2.358 2.359l-.05.05a1.375 1.375 0 0 0-.275 1.516v.067a1.375 1.375 0 0 0 1.258.833h.142a1.667 1.667 0 0 1 0 3.334h-.075a1.375 1.375 0 0 0-1.258.833Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
 }
 
 export function HomeContent({
@@ -51,164 +77,196 @@ export function HomeContent({
   income,
   expense,
   goals,
-  insight,
+  categorySpending,
 }: HomeContentProps) {
   const [balanceHidden, setBalanceHidden] = useState(false);
 
   return (
-    <div className="flex flex-col min-h-screen">
-      {/* Header */}
-      <header className="px-4 pt-6 pb-4 flex items-center justify-between">
-        <div>
-          <p className="text-sm text-manga-text-secondary">{getGreeting()}</p>
-          <h1 className="text-xl font-bold text-manga-text-primary">
-            {firstName}
-          </h1>
-        </div>
-        <Link
-          href="/profile"
-          className="p-2 rounded-full hover:bg-manga-background-subtle transition-colors"
-          aria-label="Configuracoes"
+    <div className="relative flex flex-col" style={{ minHeight: "100dvh", paddingBottom: "88px" }}>
+      {/* Figma: Orange background — h=215, fill=rgb(238,105,31) with curved bottom */}
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          height: "215px",
+          backgroundColor: "rgb(238,105,31)",
+          borderRadius: "0 0 24px 24px",
+          zIndex: 0,
+        }}
+      />
+
+      {/* Content above orange bg */}
+      <div className="relative" style={{ zIndex: 1 }}>
+        {/* Safe area top — Figma: 24px */}
+        <div style={{ height: "24px" }} />
+
+        {/* Header — Figma: h=90, pad=16, gap=8 */}
+        <header
+          className="flex items-center justify-between"
+          style={{ height: "90px", padding: "16px" }}
         >
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="text-manga-text-secondary"
+          {/* Figma: "Ol\u00e1, [Name] \ud83d\udc4b" — 24/600, lh=28.8, ls=-0.48, white */}
+          <h1
+            className="font-semibold"
+            style={{
+              fontSize: "24px",
+              lineHeight: "28.8px",
+              letterSpacing: "-0.48px",
+              color: "white",
+            }}
           >
-            <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
-            <circle cx="12" cy="12" r="3" />
-          </svg>
-        </Link>
-      </header>
+            Ol\u00e1,
+            <br />
+            {firstName} \ud83d\udc4b
+          </h1>
 
-      {/* Content */}
-      <div className="flex-1 px-4 space-y-6 pb-8">
-        {/* Contexto financeiro */}
-        <section aria-labelledby="financial-context">
-          <h2 id="financial-context" className="sr-only">
-            Contexto financeiro
-          </h2>
+          {/* Settings button — Figma: 40x40, icon fill=rgb(241,240,243) */}
+          <Link
+            href="/profile"
+            className="flex items-center justify-center"
+            style={{
+              width: "40px",
+              height: "40px",
+              borderRadius: "8px",
+              color: "rgb(241,240,243)",
+            }}
+            aria-label="Configura\u00e7\u00f5es"
+          >
+            <SettingsIcon />
+          </Link>
+        </header>
 
-          <BalanceCard
-            title="Disponivel"
+        {/* Scrollable content — Figma: pad=16, gap=12 */}
+        <div
+          className="flex flex-col"
+          style={{ padding: "0 16px 16px", gap: "12px" }}
+        >
+          {/* Financial Card — Figma: "Dispon\u00edvel", balance, Entradas/Sa\u00eddas */}
+          <FinancialCard
+            title="Dispon\u00edvel"
             value={balance}
             hidden={balanceHidden}
-            variant="brand"
-            action={
-              <button
-                type="button"
-                onClick={() => setBalanceHidden((h) => !h)}
-                className="text-xs text-manga-text-secondary underline"
-              >
-                {balanceHidden ? "Mostrar" : "Ocultar"}
-              </button>
-            }
+            layout="summary"
+            metrics={[
+              { label: "Entradas", value: income },
+              { label: "Sa\u00eddas", value: expense },
+            ]}
+            supportingInformation="M\u00eas atual"
           />
 
-          <div className="mt-3">
-            <FinancialCard
-              title="Resumo do mes"
-              layout="summary"
-              hidden={balanceHidden}
-              metrics={[
-                { label: "Entradas", value: income },
-                { label: "Saidas", value: expense },
-              ]}
-            />
-          </div>
-        </section>
+          {/* Date label — Figma: 14/600, lh=21, fill=rgb(90,83,106) */}
+          <p
+            className="text-manga-text-secondary font-semibold"
+            style={{ fontSize: "14px", lineHeight: "21px" }}
+          >
+            {getMonthLabel()}
+          </p>
 
-        <Divider />
-
-        {/* Manga Insights */}
-        {insight && (
-          <>
-            <section aria-labelledby="insights-heading">
-              <h2
-                id="insights-heading"
-                className="text-lg font-semibold text-manga-text-primary mb-3"
-              >
-                Manga Insights
-              </h2>
-              <MangaInsights
-                title={insight.title}
-                description={insight.description}
-                signature="Manga"
-                showIcon
-                showIndicator
-                used={insight.used}
-                limit={insight.limit}
-                showPercentage
-                action={{
-                  label: "Ver categoria",
-                  showArrow: true,
-                }}
-              />
-            </section>
-
-            <Divider />
-          </>
-        )}
-
-        {/* Metas */}
-        <section aria-labelledby="goals-heading">
-          <div className="flex items-center justify-between mb-3">
-            <h2
-              id="goals-heading"
-              className="text-lg font-semibold text-manga-text-primary"
+          {/* Suas Metas section — Figma: title + "Ver todas" */}
+          <section>
+            <div
+              className="flex items-center justify-between"
+              style={{ height: "40px", marginBottom: "12px" }}
             >
-              Suas metas
-            </h2>
-            {goals.length > 0 && (
-              <Link
-                href="/metas"
-                className="text-sm font-medium text-manga-text-brand"
+              <h2
+                className="text-manga-text-secondary font-semibold"
+                style={{ fontSize: "14px", lineHeight: "21px" }}
               >
-                Ver todas
-              </Link>
-            )}
-          </div>
-
-          {goals.length === 0 ? (
-            <EmptyState
-              title="Nenhuma meta ainda"
-              description="Crie sua primeira meta e comece a separar dinheiro com proposito."
-              size="compact"
-              primaryAction={{
-                label: "Criar meta",
-                onClick: () => {
-                  // TODO: navegar para criacao de meta
-                },
-              }}
-            />
-          ) : (
-            <div className="space-y-3">
-              {goals.map((g) => (
-                <GoalCard
-                  key={g.id}
-                  title={g.title}
-                  value={g.value}
-                  target={g.target}
-                  hidden={balanceHidden}
-                  identity={{
-                    color: g.color,
-                    icon: g.icon as GoalIconName | undefined,
-                    content: g.contentType,
-                  }}
-                  supportingInformation={`${formatCurrency(g.target - g.value)} restantes`}
-                  variant="elevated"
-                  href={`/metas/${g.id}`}
-                />
-              ))}
+                Suas Metas
+              </h2>
+              {goals.length > 0 && (
+                <Link href="/metas">
+                  <Button
+                    variant="tertiary"
+                    size="small"
+                    trailingIcon={<ArrowForwardIcon />}
+                  >
+                    Ver todas
+                  </Button>
+                </Link>
+              )}
             </div>
+
+            {goals.length === 0 ? (
+              <EmptyState
+                title="Nenhuma meta ainda"
+                description="Crie sua primeira meta e comece a separar dinheiro com prop\u00f3sito."
+                size="compact"
+              />
+            ) : (
+              <div className="flex flex-col" style={{ gap: "12px" }}>
+                {goals.map((g) => (
+                  <GoalCard
+                    key={g.id}
+                    title={g.title}
+                    value={g.value}
+                    target={g.target}
+                    hidden={balanceHidden}
+                    identity={{
+                      color: g.color,
+                      icon: g.icon as GoalIconName | undefined,
+                      content: g.contentType,
+                    }}
+                    supportingInformation={`Faltam ${formatCurrency(g.target - g.value)}`}
+                    variant="elevated"
+                    href={`/metas/${g.id}`}
+                  />
+                ))}
+              </div>
+            )}
+          </section>
+
+          {/* Categorias section — Figma: title + "Ver todas" + CategoryItems */}
+          {categorySpending.length > 0 && (
+            <section>
+              <div
+                className="flex items-center justify-between"
+                style={{ height: "40px", marginBottom: "12px" }}
+              >
+                <h2
+                  className="text-manga-text-secondary font-semibold"
+                  style={{ fontSize: "14px", lineHeight: "21px" }}
+                >
+                  Categorias
+                </h2>
+                <Link href="/categorias">
+                  <Button
+                    variant="tertiary"
+                    size="small"
+                    trailingIcon={<ArrowForwardIcon />}
+                  >
+                    Ver todas
+                  </Button>
+                </Link>
+              </div>
+
+              <div className="flex flex-col" style={{ gap: "12px" }}>
+                {categorySpending.slice(0, 3).map((cat) => (
+                  <CategoryItem
+                    key={cat.category_id}
+                    title={cat.category_name}
+                    icon={
+                      cat.icon ? (
+                        <ProductIcon
+                          name={cat.icon as ProductIconName}
+                          className="w-6 h-6"
+                        />
+                      ) : undefined
+                    }
+                    showIcon
+                    mode="spending"
+                    spent={cat.spent}
+                    limit={cat.monthly_limit ?? undefined}
+                    hidden={balanceHidden}
+                    variant="surface"
+                  />
+                ))}
+              </div>
+            </section>
           )}
-        </section>
+        </div>
       </div>
     </div>
   );

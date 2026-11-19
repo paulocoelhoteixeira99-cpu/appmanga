@@ -21,13 +21,52 @@ Essencia de marca: Orientacao. Arquetipo: Companion + Caregiver.
 ## Arquitetura core
 - **Entrada de dados:** agente WhatsApp (linguagem natural) + manual no app
 - **Motor de orientacao:** agnostico a renda fixa (calcula com entradas reais, nao salario fixo)
-- **Camada consultiva:** alertas de desvio, sugestoes praticas, comparacao com media propria
+- **Camada consultiva:** Manga Insights (regras, comparacoes, historico; nao necessariamente IA)
+
+## Documentacao de produto (fonte de verdade)
+- `docs/Manga-Product-Blueprint-V1.docx` — **Blueprint V1**: definicao funcional completa do MVP (arquitetura, modelo financeiro, features, fluxos, regras, estados, validacoes, escopo do beta). Fonte de verdade para "o que estamos construindo".
+- `docs/Checkpoint-Manga.md` — **Checkpoint de produto**: historico de decisoes, CHECKs 01-08, racional e discussoes. Fonte de verdade para "como chegamos as decisoes".
+- `docs/Manga-Brand-Product-Foundations.docx` — **Brand & Product Foundations**: personalidade, voz, UX principles, sistema visual, motion, acessibilidade. Fonte de verdade para "como a experiencia deve ser".
+- Quando houver conflito: decisao explicita mais recente prevalece. Blueprint > Checkpoint > Foundations > PRD antigo.
+
+## Modelo financeiro (MVP)
+- **Formula:** `Disponivel = Saldo Inicial + Entradas - Saidas - Reservas em Metas + Retiradas de Metas`
+- Saldo Inicial: posicao inicial, NAO e Entrada nem Transacao. >= R$0 no MVP (negativo proibido). Estabelece marco temporal.
+- Disponivel: dinheiro ainda utilizavel conhecido pelo Manga, NAO saldo bancario. Pode ficar negativo.
+- Transacao: fato financeiro = Entrada (aumenta Disponivel) ou Saida (reduz Disponivel). Valor sempre positivo.
+- Categorias: organizam SOMENTE Saidas. Entradas NAO tem Categoria. Vinculo e opcional.
+- Reserva em Meta: reduz Disponivel, NAO cria Saida. Retirada de Meta: aumenta Disponivel, NAO cria Entrada.
+- Ajuste/Reconciliamento: fora do MVP (backlog).
+
+## Arquitetura de produto (4 destinos + suporte)
+| Destino | Pergunta central |
+|---|---|
+| Home | "O que importa para mim agora?" — Metas > Contexto financeiro > Manga Insights > Nova Transacao |
+| Metas | "Para onde estou levando meu dinheiro?" — M01-M06 + M03.1 |
+| Movimentacoes (naming pendente) | "O que aconteceu com meu dinheiro?" — Disponivel, Entradas, Saidas, historico, busca, filtros |
+| Categorias | "Como estou distribuindo meus gastos?" — C01-C04 |
+| Configuracoes (suporte) | Conta/dados, notificacoes, excluir conta — NAO e deposito de entidades financeiras |
+
+## Onboarding (CHECK 08 — funcionalmente fechado)
+Fluxo: Conta/Acesso -> Nome -> Saldo Inicial [obrigatorio] -> Categorias [opcional] -> Limites [opcional] -> Meta [opcional] -> Reserva [opcional] -> Preparacao -> UAU -> Home
+- Nome: unico, obrigatorio. Idade e renda fora do MVP.
+- Estruturas criadas sao REAIS (categorias, metas, reservas). Features viram fonte de verdade apos onboarding.
+- Reserva: > R$0 e <= Disponivel. Nao cria Entrada/Saida.
+- Regra: "Onboarding coleta; as features correspondentes passam a ser as fontes de verdade e edicao."
+
+## Product Principles
+1. Clareza antes de quantidade — mostrar so o que ajuda a compreender e decidir
+2. Dados devem levar a orientacao — dado > informacao > orientacao
+3. Simples nao significa superficial — progressive disclosure
+4. O usuario mantem o controle — orientar sem decidir por ele
+5. Dinheiro sem julgamento — gastar mais que o planejado e informacao, nao falha moral
+6. "Bloquear o impossivel; orientar o desfavoravel" — bloquear inconsistencias, permitir realidades desfavoraveis com orientacao
 
 ## Estrutura
 ```
 /src          - Codigo fonte principal
 /tests        - Testes
-/docs         - Documentacao (PRD, plano de execucao, brand identity)
+/docs         - Documentacao de produto (Blueprint, Checkpoint, Foundations, PRD, migrations)
 /scripts      - Scripts utilitarios
 ```
 

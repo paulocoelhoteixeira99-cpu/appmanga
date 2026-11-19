@@ -19,27 +19,31 @@ export default async function ProfilePage() {
     .single();
 
   if (!profile) {
-    redirect("/dashboard");
+    redirect("/home");
   }
 
   return (
-    <div className="min-h-screen bg-mango-cream">
-      <header className="border-b border-neutral-200 bg-white">
-        <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
-          <h1 className="text-xl font-bold text-mango-night">Manga</h1>
-          <a
-            href="/dashboard"
-            className="text-sm text-primary-500 hover:text-primary-600 font-medium"
-          >
-            Voltar ao inicio
-          </a>
-        </div>
+    <div className="bg-manga-background-default" style={{ minHeight: "100dvh" }}>
+      <header
+        className="flex items-center justify-between"
+        style={{ padding: "16px" }}
+      >
+        <h1
+          className="font-semibold text-manga-text-primary"
+          style={{ fontSize: "20px", lineHeight: "24px" }}
+        >
+          Meu perfil
+        </h1>
+        <a
+          href="/home"
+          className="text-manga-text-brand font-medium"
+          style={{ fontSize: "14px", lineHeight: "21px" }}
+        >
+          Voltar
+        </a>
       </header>
 
-      <main className="max-w-lg mx-auto px-4 py-8">
-        <h2 className="text-2xl font-semibold text-neutral-900 mb-6">
-          Meu perfil
-        </h2>
+      <main style={{ padding: "0 16px 32px" }}>
         <ProfileForm profile={profile} userEmail={user.email ?? ""} />
       </main>
     </div>

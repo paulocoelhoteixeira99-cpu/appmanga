@@ -187,9 +187,15 @@ export function ProfileForm({
         placeholder="000.000.000-00"
       />
 
-      {error && <p className="text-error-500 text-sm">{error}</p>}
+      {error && (
+        <p style={{ fontSize: "14px", lineHeight: "21px", color: "#B91C1C" }}>
+          {error}
+        </p>
+      )}
       {success && (
-        <p className="text-success-500 text-sm">Perfil atualizado com sucesso!</p>
+        <p style={{ fontSize: "14px", lineHeight: "21px", color: "#15803D" }}>
+          Perfil atualizado com sucesso!
+        </p>
       )}
 
       <Button type="submit" loading={loading} fullWidth>

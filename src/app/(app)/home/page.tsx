@@ -65,27 +65,9 @@ export default async function HomePage() {
   const goals = (goalsResult.data as Goal[]) ?? [];
   const categorySpending = (spendingResult.data as CategorySpending[]) ?? [];
 
-  // Encontrar categoria com maior % de limite gasto para insight
-  const insightCategory = categorySpending
-    .filter((c) => c.monthly_limit && c.monthly_limit > 0 && c.spent > 0)
-    .map((c) => ({
-      ...c,
-      percentage: c.spent / c.monthly_limit!,
-    }))
-    .sort((a, b) => b.percentage - a.percentage)[0];
-
-  const insight = insightCategory
-    ? {
-        title: `Atencao com ${insightCategory.category_name}`,
-        description: `Voce ja gastou ${Math.round(insightCategory.percentage * 100)}% do limite em ${insightCategory.category_name} este mes.`,
-        used: insightCategory.spent,
-        limit: insightCategory.monthly_limit!,
-      }
-    : null;
-
   return (
     <HomeContent
-      firstName={profile.first_name ?? "Voce"}
+      firstName={profile.first_name ?? "Voc\u00ea"}
       balance={balance}
       income={summary.income}
       expense={summary.expense}
@@ -98,7 +80,7 @@ export default async function HomePage() {
         icon: g.icon ?? undefined,
         contentType: g.content_type as "initials" | "icon" | "image",
       }))}
-      insight={insight}
+      categorySpending={categorySpending}
     />
   );
 }

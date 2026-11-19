@@ -120,6 +120,76 @@ function GoogleIcon() {
   );
 }
 
+// --- Step layout (outside component to prevent remount on re-render) ---
+
+function StepLayout({
+  children,
+  actions,
+  showProgress,
+  progressIndex,
+  goBack,
+}: {
+  children: React.ReactNode;
+  actions?: React.ReactNode;
+  showProgress: boolean;
+  progressIndex: number;
+  goBack: () => void;
+}) {
+  return (
+    <div
+      className="flex flex-col bg-manga-background-default"
+      style={{ minHeight: "100dvh" }}
+    >
+      {/* Safe area top — Figma: 24px */}
+      <div className="shrink-0" style={{ height: "24px" }} />
+
+      {/* Header — Figma: h=64, padL=16, padR=16, gap=12 */}
+      {showProgress && (
+        <div
+          className="shrink-0 flex items-center"
+          style={{ height: "64px", padding: "0 16px", gap: "12px" }}
+        >
+          <button
+            type="button"
+            onClick={goBack}
+            className="flex items-center justify-center text-manga-text-primary"
+            style={{ width: "44px", height: "44px", borderRadius: "4px" }}
+            aria-label="Voltar"
+          >
+            <ArrowBackIcon />
+          </button>
+          <div className="flex-1">
+            <ProgressBar
+              value={progressIndex + 1}
+              max={PROGRESS_STEPS.length}
+              label="Progresso do onboarding"
+              height={8}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Scrollable content — Figma: pad=16 all sides */}
+      <div className="flex-1 overflow-y-auto" style={{ padding: "16px" }}>
+        {children}
+      </div>
+
+      {/* Actions — Figma: padL=16, padT=4, padR=16, padB=4, gap=8 */}
+      {actions && (
+        <div
+          className="shrink-0 flex flex-col"
+          style={{ padding: "4px 16px", gap: "8px" }}
+        >
+          {actions}
+        </div>
+      )}
+
+      {/* Safe area bottom — Figma: 24px */}
+      <div className="shrink-0" style={{ height: "24px" }} />
+    </div>
+  );
+}
+
 // --- Main component ---
 
 export function OnboardingWizard({ startStep }: { startStep: Step }) {
@@ -465,72 +535,6 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
   }
 
   // =========================================================
-  // Figma layout: safe-top(24) + header(64) + content + actions + safe-bottom(24)
-  // =========================================================
-
-  function StepLayout({
-    children,
-    actions,
-  }: {
-    children: React.ReactNode;
-    actions?: React.ReactNode;
-  }) {
-    return (
-      <div
-        className="flex flex-col bg-manga-background-default"
-        style={{ minHeight: "100dvh" }}
-      >
-        {/* Safe area top — Figma: 24px */}
-        <div className="shrink-0" style={{ height: "24px" }} />
-
-        {/* Header — Figma: h=64, padL=16, padR=16, gap=12 */}
-        {showProgress && (
-          <div
-            className="shrink-0 flex items-center"
-            style={{ height: "64px", padding: "0 16px", gap: "12px" }}
-          >
-            <button
-              type="button"
-              onClick={goBack}
-              className="flex items-center justify-center text-manga-text-primary"
-              style={{ width: "44px", height: "44px", borderRadius: "4px" }}
-              aria-label="Voltar"
-            >
-              <ArrowBackIcon />
-            </button>
-            <div className="flex-1">
-              <ProgressBar
-                value={progressIndex + 1}
-                max={PROGRESS_STEPS.length}
-                label="Progresso do onboarding"
-                height={8}
-              />
-            </div>
-          </div>
-        )}
-
-        {/* Scrollable content — Figma: pad=16 all sides */}
-        <div className="flex-1 overflow-y-auto" style={{ padding: "16px" }}>
-          {children}
-        </div>
-
-        {/* Actions — Figma: padL=16, padT=4, padR=16, padB=4, gap=8 */}
-        {actions && (
-          <div
-            className="shrink-0 flex flex-col"
-            style={{ padding: "4px 16px", gap: "8px" }}
-          >
-            {actions}
-          </div>
-        )}
-
-        {/* Safe area bottom — Figma: 24px */}
-        <div className="shrink-0" style={{ height: "24px" }} />
-      </div>
-    );
-  }
-
-  // =========================================================
   // Account creation — no Figma equivalent, follows E03 Login pattern
   // =========================================================
 
@@ -686,6 +690,9 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
   function renderIdentification() {
     return (
       <StepLayout
+        showProgress={showProgress}
+        progressIndex={progressIndex}
+        goBack={goBack}
         actions={
           <Button
             onClick={handleIdentificationContinue}
@@ -742,6 +749,9 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
   function renderIntro() {
     return (
       <StepLayout
+        showProgress={showProgress}
+        progressIndex={progressIndex}
+        goBack={goBack}
         actions={
           <Button onClick={() => goTo("balance")} fullWidth size="large">
             Informar Saldo Inicial
@@ -791,6 +801,9 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
   function renderBalance() {
     return (
       <StepLayout
+        showProgress={showProgress}
+        progressIndex={progressIndex}
+        goBack={goBack}
         actions={
           <Button onClick={handleBalanceContinue} fullWidth size="large">
             Confirmar Saldo Inicial
@@ -854,6 +867,9 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
   function renderCategories() {
     return (
       <StepLayout
+        showProgress={showProgress}
+        progressIndex={progressIndex}
+        goBack={goBack}
         actions={
           <>
             <Button onClick={handleCategoriesAccept} fullWidth size="large">
@@ -950,6 +966,9 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
   function renderLimits() {
     return (
       <StepLayout
+        showProgress={showProgress}
+        progressIndex={progressIndex}
+        goBack={goBack}
         actions={
           <>
             <Button onClick={() => goTo("goal")} fullWidth size="large">
@@ -1007,6 +1026,9 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
   function renderGoal() {
     return (
       <StepLayout
+        showProgress={showProgress}
+        progressIndex={progressIndex}
+        goBack={goBack}
         actions={
           <>
             <Button onClick={handleGoalCreate} fullWidth size="large">
@@ -1049,6 +1071,9 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
     const hasGoalData = goal.name.trim() && goal.target;
     return (
       <StepLayout
+        showProgress={showProgress}
+        progressIndex={progressIndex}
+        goBack={goBack}
         actions={
           <Button onClick={handleGoalFormContinue} fullWidth size="large" disabled={!hasGoalData}>
             Criar Meta
@@ -1105,6 +1130,9 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
   function renderReserve() {
     return (
       <StepLayout
+        showProgress={showProgress}
+        progressIndex={progressIndex}
+        goBack={goBack}
         actions={
           <>
             <Button onClick={handleReserveContinue} fullWidth size="large" disabled={!reserveInput}>
@@ -1162,6 +1190,9 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
 
     return (
       <StepLayout
+        showProgress={showProgress}
+        progressIndex={progressIndex}
+        goBack={goBack}
         actions={
           <>
             <Button onClick={handleFinish} fullWidth size="large" loading={loading}>

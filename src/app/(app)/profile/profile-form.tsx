@@ -11,8 +11,6 @@ import {
   isValidCpf,
   maskCpfDisplay,
 } from "@/lib/utils/masks";
-import { Button } from "@/components/ui/button";
-import { TextField } from "@/components/ui/text-field";
 
 interface Profile {
   id: string;
@@ -68,7 +66,6 @@ export function ProfileForm({
       return;
     }
 
-    // If CPF changed, check availability
     if (cpfDigits && cpfDigits !== (profile.cpf || "")) {
       const { data: cpfAvailable, error: cpfRpcError } = await supabase.rpc(
         "is_cpf_available",
@@ -88,7 +85,6 @@ export function ProfileForm({
       }
     }
 
-    // If phone changed, check availability
     if (phoneDigits !== profile.phone) {
       const { data: phoneAvailable, error: rpcError } = await supabase.rpc(
         "is_phone_available",
@@ -108,7 +104,6 @@ export function ProfileForm({
       }
     }
 
-    // Update profiles table
     const { error: updateError } = await supabase
       .from("profiles")
       .update({
@@ -130,7 +125,6 @@ export function ProfileForm({
       return;
     }
 
-    // Sync metadata to Supabase Auth
     const { error: authError } = await supabase.auth.updateUser({
       data: {
         first_name: trimmedName,
@@ -152,58 +146,71 @@ export function ProfileForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <TextField
-        label="E-mail"
-        type="email"
-        value={userEmail}
-        disabled
-        helperText="O e-mail nao pode ser alterado por aqui."
-      />
+      <div>
+        <label className="block text-sm font-semibold text-neutral-900 mb-1">E-mail</label>
+        <input
+          type="email"
+          value={userEmail}
+          disabled
+          className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm bg-neutral-100 text-neutral-500"
+        />
+        <p className="text-xs text-neutral-500 mt-1">O e-mail nao pode ser alterado por aqui.</p>
+      </div>
 
-      <TextField
-        label="Primeiro nome"
-        type="text"
-        value={firstName}
-        onChange={(e) => setFirstName(e.target.value)}
-        required
-      />
+      <div>
+        <label className="block text-sm font-semibold text-neutral-900 mb-1">Primeiro nome</label>
+        <input
+          type="text"
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+          required
+          className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+        />
+      </div>
 
-      <TextField
-        label="WhatsApp"
-        type="tel"
-        value={phone}
-        onChange={(e) => setPhone(formatPhone(e.target.value))}
-        required
-        placeholder="(11) 99999-9999"
-      />
+      <div>
+        <label className="block text-sm font-semibold text-neutral-900 mb-1">WhatsApp</label>
+        <input
+          type="tel"
+          value={phone}
+          onChange={(e) => setPhone(formatPhone(e.target.value))}
+          required
+          placeholder="(11) 99999-9999"
+          className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+        />
+      </div>
 
-      <TextField
-        label={
-          <>
-            CPF{" "}
-            <span className="text-neutral-400 font-normal">(opcional)</span>
-          </>
-        }
-        type="text"
-        value={
-          !showCpf && profile.cpf && cpf === formatCpf(profile.cpf)
-            ? maskCpfDisplay(profile.cpf)
-            : cpf
-        }
-        onFocus={() => setShowCpf(true)}
-        onBlur={() => setShowCpf(false)}
-        onChange={(e) => setCpf(formatCpf(e.target.value))}
-        placeholder="000.000.000-00"
-      />
+      <div>
+        <label className="block text-sm font-semibold text-neutral-900 mb-1">
+          CPF <span className="text-neutral-400 font-normal">(opcional)</span>
+        </label>
+        <input
+          type="text"
+          value={
+            !showCpf && profile.cpf && cpf === formatCpf(profile.cpf)
+              ? maskCpfDisplay(profile.cpf)
+              : cpf
+          }
+          onFocus={() => setShowCpf(true)}
+          onBlur={() => setShowCpf(false)}
+          onChange={(e) => setCpf(formatCpf(e.target.value))}
+          placeholder="000.000.000-00"
+          className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+        />
+      </div>
 
       {error && <p className="text-error-500 text-sm">{error}</p>}
       {success && (
         <p className="text-success-500 text-sm">Perfil atualizado com sucesso!</p>
       )}
 
-      <Button type="submit" loading={loading} className="w-full">
-        Salvar alteracoes
-      </Button>
+      <button
+        type="submit"
+        disabled={loading}
+        className="w-full rounded-lg bg-primary-500 px-4 py-2 text-sm font-semibold text-white hover:bg-primary-600 disabled:opacity-50"
+      >
+        {loading ? "Salvando..." : "Salvar alteracoes"}
+      </button>
     </form>
   );
 }

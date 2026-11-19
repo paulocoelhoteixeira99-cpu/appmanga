@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Comfortaa } from "next/font/google";
 import "./globals.css";
-import { cn } from "@/lib/utils";
+
 
 const inter = Inter({
   subsets: ["latin"],
@@ -41,7 +41,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="pt-BR" className={cn(inter.variable, comfortaa.variable)}>
+    <html lang="pt-BR" className={`${inter.variable} ${comfortaa.variable}`}>
       <body className="font-sans antialiased">{children}</body>
     </html>
   );

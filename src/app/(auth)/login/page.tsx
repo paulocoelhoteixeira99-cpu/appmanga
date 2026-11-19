@@ -69,7 +69,7 @@ export default function LoginPage() {
         {/* Logo — upper area, vertically centered in top portion */}
         <div className="flex items-center justify-center" style={{ paddingTop: "136px", paddingBottom: "72px" }}>
           <Image
-            src="/assets/logo-gradient.svg"
+            src="/assets/logo-symbol.svg"
             alt="Manga"
             width={100}
             height={112}
@@ -82,13 +82,13 @@ export default function LoginPage() {
           className="text-[32px] font-semibold text-manga-text-primary"
           style={{ lineHeight: "38.4px", letterSpacing: "-0.64px" }}
         >
-          Seu dinheiro,{"\n"}com mais clareza.
+          Seu dinheiro,<br />com mais clareza.
         </h1>
         <p
           className="text-base text-manga-text-secondary"
           style={{ marginTop: "36px", lineHeight: "24px" }}
         >
-          Organize seus registros e acompanhe o que esta disponivel para suas
+          Organize seus registros e acompanhe o que está disponível para suas
           escolhas.
         </p>
 
@@ -143,7 +143,7 @@ export default function LoginPage() {
           Entrar no Manga
         </h1>
 
-        <div style={{ marginTop: "32px" }} className="flex flex-col" >
+        <form onSubmit={handleLogin} style={{ marginTop: "32px" }} className="flex flex-col">
           <TextField
             label="E-mail"
             type="email"
@@ -167,11 +167,11 @@ export default function LoginPage() {
           {error && <p className="text-error-500 text-sm mt-2">{error}</p>}
 
           <div style={{ marginTop: "16px" }}>
-            <Button type="submit" loading={loading} fullWidth size="large" onClick={handleLogin}>
+            <Button type="submit" loading={loading} fullWidth size="large">
               Entrar
             </Button>
           </div>
-        </div>
+        </form>
 
         {/* "ou" separator — simple centered text, no lines */}
         <p
@@ -197,7 +197,7 @@ export default function LoginPage() {
       {/* Footer — pinned to bottom */}
       <div className="mt-auto text-center" style={{ paddingBottom: "56px", paddingTop: "24px" }}>
         <p className="text-sm text-manga-text-secondary" style={{ lineHeight: "21px" }}>
-          Ainda nao tem conta?{" "}
+          Ainda não tem conta?{" "}
           <Link href="/onboarding" className="text-manga-text-brand font-medium">
             Criar conta
           </Link>

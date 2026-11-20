@@ -67,7 +67,7 @@ export default async function HomePage() {
 
   return (
     <HomeContent
-      firstName={profile.first_name ?? "Voc\u00ea"}
+      firstName={profile.first_name ?? "Você"}
       balance={balance}
       income={summary.income}
       expense={summary.expense}

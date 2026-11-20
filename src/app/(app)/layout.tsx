@@ -7,11 +7,11 @@ import { ProductIcon } from "@matsborges/manga-design-system/product";
 import { AddIcon } from "@matsborges/manga-design-system/icons";
 import type { BottomNavigationEntry } from "@matsborges/manga-design-system/bottom-navigation";
 
-// Figma Home: Bottom Navigation — In\u00edcio, Metas, Transa\u00e7\u00f5es, Categorias
+// Figma Home: Bottom Navigation — Início, Metas, Transações, Categorias
 const NAV_ITEMS: BottomNavigationEntry[] = [
   {
     id: "home",
-    label: "In\u00edcio",
+    label: "Início",
     icon: <ProductIcon name="home" className="w-6 h-6" />,
     href: "/home",
   },
@@ -23,7 +23,7 @@ const NAV_ITEMS: BottomNavigationEntry[] = [
   },
   {
     id: "transacoes",
-    label: "Transa\u00e7\u00f5es",
+    label: "Transações",
     icon: <ProductIcon name="account-balance-wallet" className="w-6 h-6" />,
     href: "/transacoes",
   },
@@ -56,14 +56,14 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             style={{ right: "16px", bottom: "80px" }}
           >
             <FAB
-              aria-label="Nova transa\u00e7\u00e3o"
+              aria-label="Nova transação"
               icon={<AddIcon />}
               onClick={() => {
                 // TODO: abrir fluxo de nova transacao
               }}
             />
           </div>
-          <BottomNavigation label="Navega\u00e7\u00e3o principal" items={items} />
+          <BottomNavigation label="Navegação principal" items={items} />
         </div>
       </div>
     </div>

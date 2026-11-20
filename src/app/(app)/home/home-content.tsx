@@ -44,10 +44,10 @@ type HomeContentProps = {
 function getMonthLabel(): string {
   const now = new Date();
   const months = [
-    "Janeiro", "Fevereiro", "Mar\u00e7o", "Abril", "Maio", "Junho",
+    "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
     "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro",
   ];
-  return `${months[now.getMonth()]} de ${now.getFullYear()} \u00b7 m\u00eas atual`;
+  return `${months[now.getMonth()]} de ${now.getFullYear()} · mês atual`;
 }
 
 function SettingsIcon() {
@@ -107,7 +107,7 @@ export function HomeContent({
           className="flex items-center justify-between"
           style={{ height: "90px", padding: "16px" }}
         >
-          {/* Figma: "Ol\u00e1, [Name] \ud83d\udc4b" — 24/600, lh=28.8, ls=-0.48, white */}
+          {/* Figma: "Olá, [Name] 👋" — 24/600, lh=28.8, ls=-0.48, white */}
           <h1
             className="font-semibold"
             style={{
@@ -117,9 +117,9 @@ export function HomeContent({
               color: "white",
             }}
           >
-            Ol\u00e1,
+            Olá,
             <br />
-            {firstName} \ud83d\udc4b
+            {firstName} 👋
           </h1>
 
           {/* Settings button — Figma: 40x40, icon fill=rgb(241,240,243) */}
@@ -132,7 +132,7 @@ export function HomeContent({
               borderRadius: "8px",
               color: "rgb(241,240,243)",
             }}
-            aria-label="Configura\u00e7\u00f5es"
+            aria-label="Configurações"
           >
             <SettingsIcon />
           </Link>
@@ -143,17 +143,17 @@ export function HomeContent({
           className="flex flex-col"
           style={{ padding: "0 16px 16px", gap: "12px" }}
         >
-          {/* Financial Card — Figma: "Dispon\u00edvel", balance, Entradas/Sa\u00eddas */}
+          {/* Financial Card — Figma: "Disponível", balance, Entradas/Saídas */}
           <FinancialCard
-            title="Dispon\u00edvel"
+            title="Disponível"
             value={balance}
             hidden={balanceHidden}
             layout="summary"
             metrics={[
               { label: "Entradas", value: income },
-              { label: "Sa\u00eddas", value: expense },
+              { label: "Saídas", value: expense },
             ]}
-            supportingInformation="M\u00eas atual"
+            supportingInformation="Mês atual"
           />
 
           {/* Date label — Figma: 14/600, lh=21, fill=rgb(90,83,106) */}
@@ -192,7 +192,7 @@ export function HomeContent({
             {goals.length === 0 ? (
               <EmptyState
                 title="Nenhuma meta ainda"
-                description="Crie sua primeira meta e comece a separar dinheiro com prop\u00f3sito."
+                description="Crie sua primeira meta e comece a separar dinheiro com propósito."
                 size="compact"
               />
             ) : (

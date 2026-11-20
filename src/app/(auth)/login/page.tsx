@@ -80,14 +80,14 @@ export default function LoginPage() {
    * Figma: 360×800, node 158:1550
    *
    * Layout (posicoes absolutas do Figma):
-   *   Logo:       y=136, centralizado, símbolo 100×112, gap=72
+   *   Logo:       y=136, centralizado, logomarca 188×43, gap=141
    *   Titulo:     y=320, x=24, 312×76,  Inter 32/600/38.4/-0.64
    *   Subtitulo:  y=432, x=24, 312×48,  Inter 16/400/24
    *   Criar btn:  y=632, x=24, 312×48
    *   Entrar btn: y=696, x=24, 312×48
    *
    * Gaps calculados:
-   *   top→logo=136, logo→titulo=72 (símbolo 112px), titulo→sub=36
+   *   top→logo=136, logo→titulo=141 (logomarca 43px), titulo→sub=36
    *   sub→btn1=152(flex), btn1→btn2=16, btn2→bottom=56
    * =============================================
    */
@@ -100,13 +100,13 @@ export default function LoginPage() {
         {/* Spacer superior — empurra logo+texto para a posicao correta */}
         <div className="flex-1" style={{ minHeight: "136px" }} />
 
-        {/* Logo — símbolo centralizado, Figma: 100×112 at y=136, gap=72px até título */}
-        <div className="flex justify-center" style={{ marginBottom: "72px" }}>
+        {/* Logo — logomarca centralizada, Figma: 188×43 at y=136, gap=141px até título */}
+        <div className="flex justify-center" style={{ marginBottom: "141px" }}>
           <Image
-            src="/assets/logo-symbol.svg"
+            src="/assets/logo-gradient.svg"
             alt="Manga"
-            width={100}
-            height={112}
+            width={188}
+            height={43}
             priority
           />
         </div>

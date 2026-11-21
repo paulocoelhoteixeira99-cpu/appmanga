@@ -6,7 +6,7 @@ import Link from "next/link";
 import { Button } from "@matsborges/manga-design-system/button";
 import { TextField } from "@matsborges/manga-design-system/text-field";
 import { ProgressBar } from "@matsborges/manga-design-system/progress-bar";
-import { InputChip, FilterChip } from "@matsborges/manga-design-system/chip";
+import { InputChip } from "@matsborges/manga-design-system/chip";
 import { GoalIdentity, GoalCard, GoalPersonalizationSheet, ProductIcon } from "@matsborges/manga-design-system/product";
 import type { GoalIdentityValue, GoalColor } from "@matsborges/manga-design-system/product";
 import { ArrowBackIcon, CheckCircleIcon } from "@matsborges/manga-design-system/icons";
@@ -26,6 +26,8 @@ type Step =
   | "intro"
   | "balance"
   | "categories"
+  | "customize-categories"
+  | "add-category"
   | "limits"
   | "goal"
   | "goal-create"
@@ -48,6 +50,7 @@ type CategoryDraft = {
   id: string;
   name: string;
   icon: string;
+  color: GoalColor;
   selected: boolean;
   limit: string;
 };
@@ -106,11 +109,11 @@ function clearDraft() {
 // --- Figma C01: 5 default categories ---
 
 const SUGGESTED_CATEGORIES: CategoryDraft[] = [
-  { id: "alimentacao", name: "Alimentação", icon: "restaurant", selected: true, limit: "" },
-  { id: "moradia", name: "Moradia", icon: "home", selected: true, limit: "" },
-  { id: "transporte", name: "Transporte", icon: "directions-car", selected: true, limit: "" },
-  { id: "lazer", name: "Lazer", icon: "beach-access", selected: true, limit: "" },
-  { id: "saude", name: "Saúde", icon: "favorite", selected: true, limit: "" },
+  { id: "alimentacao", name: "Alimentação", icon: "restaurant", color: "orange", selected: true, limit: "" },
+  { id: "moradia", name: "Moradia", icon: "home", color: "blue", selected: true, limit: "" },
+  { id: "transporte", name: "Transporte", icon: "directions-car", color: "green", selected: true, limit: "" },
+  { id: "lazer", name: "Lazer", icon: "beach-access", color: "purple", selected: true, limit: "" },
+  { id: "saude", name: "Saúde", icon: "favorite", color: "pink", selected: true, limit: "" },
 ];
 
 // --- Google icon ---
@@ -220,7 +223,12 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
   // Categories step
   const [categories, setCategories] = useState<CategoryDraft[]>(SUGGESTED_CATEGORIES);
   const [skippedCategories, setSkippedCategories] = useState(false);
-  const [showCustomizeCategories, setShowCustomizeCategories] = useState(false);
+  const [editingCategoryIndex, setEditingCategoryIndex] = useState<number | null>(null);
+  const [newCatName, setNewCatName] = useState("");
+  const [newCatIcon, setNewCatIcon] = useState("star");
+  const [newCatColor, setNewCatColor] = useState<GoalColor>("orange");
+  const [newCatLimit, setNewCatLimit] = useState("");
+  const [catPersonalizationOpen, setCatPersonalizationOpen] = useState(false);
 
   // Goal step
   const [goal, setGoal] = useState<GoalDraft>({ name: "", target: "", deadline: "", color: "orange", icon: "star", contentType: "initials" });
@@ -238,7 +246,7 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
   useEffect(() => {
     const draft = loadDraft();
     if (draft) {
-      const allSteps: Step[] = ["account", "account-verify", "identification", "intro", "balance", "categories", "limits", "goal", "goal-create", "goal-created", "reserve", "reserve-confirmed", "recognition"];
+      const allSteps: Step[] = ["account", "account-verify", "identification", "intro", "balance", "categories", "customize-categories", "add-category", "limits", "goal", "goal-create", "goal-created", "reserve", "reserve-confirmed", "recognition"];
       const startIdx = allSteps.indexOf(startStep);
       const savedIdx = allSteps.indexOf(draft.currentStep);
       if (savedIdx >= startIdx) {
@@ -292,6 +300,8 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
       intro: () => "identification",
       balance: () => "intro",
       categories: () => "balance",
+      "customize-categories": () => "categories",
+      "add-category": () => "customize-categories",
       limits: () => "categories",
       goal: () => skippedCategories ? "categories" : "limits",
       "goal-create": () => "goal",
@@ -422,12 +432,6 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
     }
     setBalanceError(null);
     goTo("categories");
-  }
-
-  function toggleCategory(id: string) {
-    setCategories((prev) =>
-      prev.map((c) => (c.id === id ? { ...c, selected: !c.selected } : c))
-    );
   }
 
   function handleCategoriesAccept() {
@@ -934,39 +938,24 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
           >
             {/* Chips — flex wrap, gap=8 */}
             <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
-              {categories.map((cat) =>
-                showCustomizeCategories ? (
-                  <FilterChip
-                    key={cat.id}
-                    label={cat.name}
-                    selected={cat.selected}
-                    onSelectedChange={() => toggleCategory(cat.id)}
-                    leadingIcon={
-                      <ProductIcon
-                        name={cat.icon as import("@matsborges/manga-design-system/product").ProductIconName}
-                        className="w-5 h-5"
-                      />
-                    }
-                  />
-                ) : (
-                  <InputChip
-                    key={cat.id}
-                    label={cat.name}
-                    leadingIcon={
-                      <ProductIcon
-                        name={cat.icon as import("@matsborges/manga-design-system/product").ProductIconName}
-                        className="w-5 h-5"
-                      />
-                    }
-                  />
-                )
-              )}
+              {categories.map((cat) => (
+                <InputChip
+                  key={cat.id}
+                  label={cat.name}
+                  leadingIcon={
+                    <ProductIcon
+                      name={cat.icon as import("@matsborges/manga-design-system/product").ProductIconName}
+                      className="w-5 h-5"
+                    />
+                  }
+                />
+              ))}
             </div>
 
             {/* "Personalizar categorias" link — Figma: 14/600, chevron */}
             <button
               type="button"
-              onClick={() => setShowCustomizeCategories(!showCustomizeCategories)}
+              onClick={() => goTo("customize-categories")}
               className="flex items-center justify-between w-full text-manga-text-primary"
               style={{
                 height: "48px",
@@ -975,9 +964,8 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
                 lineHeight: "21px",
               }}
             >
-              <span>{showCustomizeCategories ? "Conclu\u00eddo" : "Personalizar categorias"}</span>
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
-                style={{ transform: showCustomizeCategories ? "rotate(90deg)" : "none", transition: "transform 0.2s" }}>
+              <span>Personalizar categorias</span>
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                 <path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </button>
@@ -991,6 +979,317 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
             Esta etapa é opcional. Você pode ajustar suas categorias depois.
           </p>
         </div>
+      </StepLayout>
+    );
+  }
+
+  // =========================================================
+  // C02 · Personalizar categorias — Figma exact
+  // Title: 24/600/28.8 | Row: 64px, r=8, fill=rgb(241,240,243)
+  // =========================================================
+
+  function removeCategory(index: number) {
+    setCategories((prev) => prev.filter((_, i) => i !== index));
+  }
+
+  function startAddCategory() {
+    setEditingCategoryIndex(null);
+    setNewCatName("");
+    setNewCatIcon("star");
+    setNewCatColor("orange");
+    setNewCatLimit("");
+    goTo("add-category");
+  }
+
+  function startEditCategory(index: number) {
+    const cat = categories[index];
+    setEditingCategoryIndex(index);
+    setNewCatName(cat.name);
+    setNewCatIcon(cat.icon);
+    setNewCatColor(cat.color);
+    setNewCatLimit(cat.limit);
+    goTo("add-category");
+  }
+
+  function handleAddCategorySave() {
+    const trimmed = newCatName.trim();
+    if (!trimmed) return;
+
+    if (editingCategoryIndex !== null) {
+      setCategories((prev) =>
+        prev.map((c, i) =>
+          i === editingCategoryIndex
+            ? { ...c, name: trimmed, icon: newCatIcon, color: newCatColor, limit: newCatLimit }
+            : c
+        )
+      );
+    } else {
+      const newId = `custom-${Date.now()}`;
+      setCategories((prev) => [
+        ...prev,
+        { id: newId, name: trimmed, icon: newCatIcon, color: newCatColor, selected: true, limit: newCatLimit },
+      ]);
+    }
+    goTo("customize-categories");
+  }
+
+  function handleSaveCustomizedCategories() {
+    setCategories((prev) => prev.map((c) => ({ ...c, selected: true })));
+    setSkippedCategories(false);
+    goTo("limits");
+  }
+
+  function renderCustomizeCategories() {
+    return (
+      <StepLayout
+        showProgress={showProgress}
+        progressIndex={progressIndex}
+        goBack={goBack}
+        actions={
+          <Button onClick={handleSaveCustomizedCategories} fullWidth size="large">
+            Salvar categorias
+          </Button>
+        }
+      >
+        <div className="flex flex-col" style={{ gap: "24px" }}>
+          {/* Figma: Título e contexto — gap=12 */}
+          <div className="flex flex-col" style={{ gap: "12px" }}>
+            <h1
+              className="font-semibold text-manga-text-primary"
+              style={{
+                fontSize: "24px",
+                lineHeight: "28.8px",
+                letterSpacing: "-0.48px",
+              }}
+            >
+              Organize do seu jeito
+            </h1>
+            <p
+              className="text-manga-text-secondary"
+              style={{ fontSize: "14px", lineHeight: "21px" }}
+            >
+              Ajuste suas categorias agora ou quando quiser.
+            </p>
+          </div>
+
+          {/* Figma: Categorias lista — gap=8 */}
+          <div className="flex flex-col" style={{ gap: "8px" }}>
+            {categories.map((cat, index) => (
+              <div
+                key={cat.id}
+                className="flex items-center"
+                style={{
+                  height: "64px",
+                  gap: "12px",
+                  padding: "8px 16px",
+                  backgroundColor: "rgb(241,240,243)",
+                  borderRadius: "8px",
+                }}
+              >
+                {/* Figma: ProductIcon 24x24 */}
+                <ProductIcon
+                  name={cat.icon as import("@matsborges/manga-design-system/product").ProductIconName}
+                  className="w-6 h-6"
+                />
+
+                {/* Figma: Name — 16/600/24 */}
+                <span
+                  className="flex-1 font-semibold text-manga-text-primary"
+                  style={{ fontSize: "16px", lineHeight: "24px" }}
+                >
+                  {cat.name}
+                </span>
+
+                {/* Figma: Edit icon (orange) — 48x48 hit area, icon 24x24 */}
+                <button
+                  type="button"
+                  onClick={() => startEditCategory(index)}
+                  className="flex items-center justify-center"
+                  style={{ width: "48px", height: "48px" }}
+                  aria-label={`Editar ${cat.name}`}
+                >
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path
+                      d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"
+                      fill="rgb(238,105,31)"
+                    />
+                  </svg>
+                </button>
+
+                {/* Figma: Delete icon (dark) — 48x48 hit area, icon 24x24 */}
+                <button
+                  type="button"
+                  onClick={() => removeCategory(index)}
+                  className="flex items-center justify-center"
+                  style={{ width: "48px", height: "48px" }}
+                  aria-label={`Remover ${cat.name}`}
+                >
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path
+                      d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"
+                      fill="rgb(35,26,56)"
+                    />
+                  </svg>
+                </button>
+              </div>
+            ))}
+          </div>
+
+          {/* Figma: Adicionar categoria — 48px, gap=8, orange text */}
+          <button
+            type="button"
+            onClick={startAddCategory}
+            className="flex items-center justify-center"
+            style={{
+              height: "48px",
+              gap: "8px",
+              borderRadius: "8px",
+            }}
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z" fill="rgb(238,105,31)" />
+            </svg>
+            <span
+              className="font-semibold"
+              style={{ fontSize: "16px", lineHeight: "24px", color: "rgb(238,105,31)" }}
+            >
+              Adicionar categoria
+            </span>
+          </button>
+        </div>
+      </StepLayout>
+    );
+  }
+
+  // =========================================================
+  // C05 · Adicionar/Editar categoria — Figma exact
+  // Title: 24/600/28.8 | Personalization + Name + Limit
+  // =========================================================
+
+  function renderAddCategory() {
+    const isEditing = editingCategoryIndex !== null;
+    const catIdentityValue: GoalIdentityValue = {
+      content: "icon" as const,
+      icon: newCatIcon as import("@matsborges/manga-design-system/product").GoalIconName,
+      color: newCatColor,
+    };
+
+    return (
+      <StepLayout
+        showProgress={showProgress}
+        progressIndex={progressIndex}
+        goBack={goBack}
+        actions={
+          <>
+            <Button
+              onClick={handleAddCategorySave}
+              fullWidth
+              size="large"
+              disabled={!newCatName.trim()}
+            >
+              {isEditing ? "Salvar categoria" : "Adicionar categoria"}
+            </Button>
+            <Button
+              onClick={() => goTo("customize-categories")}
+              variant="tertiary"
+              fullWidth
+              size="large"
+            >
+              Cancelar
+            </Button>
+          </>
+        }
+      >
+        <div className="flex flex-col" style={{ gap: "24px" }}>
+          {/* Figma: Título e contexto — gap=12 */}
+          <div className="flex flex-col" style={{ gap: "12px" }}>
+            <h1
+              className="font-semibold text-manga-text-primary"
+              style={{
+                fontSize: "24px",
+                lineHeight: "28.8px",
+                letterSpacing: "-0.48px",
+              }}
+            >
+              {isEditing ? "Editar categoria" : "Adicionar categoria"}
+            </h1>
+            <p
+              className="text-manga-text-secondary"
+              style={{ fontSize: "14px", lineHeight: "21px" }}
+            >
+              Escolha um nome para sua categoria.
+            </p>
+          </div>
+
+          {/* Figma: Personalize sua categoria — gap=12, h=80 */}
+          <button
+            type="button"
+            onClick={() => setCatPersonalizationOpen(true)}
+            className="flex items-center w-full text-left"
+            style={{ gap: "12px", padding: "4px 0" }}
+          >
+            <GoalIdentity
+              name={newCatName || "Cat"}
+              size={72}
+              {...catIdentityValue}
+            />
+            <div className="flex-1 flex flex-col" style={{ gap: "4px" }}>
+              <span
+                className="font-semibold text-manga-text-primary"
+                style={{ fontSize: "16px", lineHeight: "20px" }}
+              >
+                Personalize sua categoria
+              </span>
+              <span
+                className="text-manga-text-secondary"
+                style={{ fontSize: "14px", lineHeight: "20px" }}
+              >
+                Escolha um ícone e uma cor
+              </span>
+            </div>
+            <span
+              className="text-manga-text-secondary"
+              style={{ fontSize: "24px", lineHeight: "29px" }}
+            >
+              ›
+            </span>
+          </button>
+
+          {/* Figma: Fields — gap=20 */}
+          <div className="flex flex-col" style={{ gap: "20px" }}>
+            <TextField
+              label="Nome da categoria"
+              type="text"
+              value={newCatName}
+              onChange={(e) => setNewCatName(e.target.value)}
+              placeholder="Ex.: Saúde"
+              required
+            />
+            <TextField
+              label="Limite de gasto mensal"
+              type="text"
+              inputMode="numeric"
+              value={newCatLimit ? `R$ ${newCatLimit}` : ""}
+              onChange={(e) => {
+                const raw = e.target.value.replace(/^R\$\s?/, "");
+                setNewCatLimit(formatCurrencyInput(raw));
+              }}
+              placeholder="Sem limite"
+            />
+          </div>
+        </div>
+
+        {/* GoalPersonalizationSheet for category icon+color */}
+        <GoalPersonalizationSheet
+          open={catPersonalizationOpen}
+          onOpenChange={setCatPersonalizationOpen}
+          name={newCatName || "Cat"}
+          value={catIdentityValue}
+          onApply={(val) => {
+            setNewCatIcon(val.icon || "star");
+            setNewCatColor(val.color);
+          }}
+        />
       </StepLayout>
     );
   }
@@ -1608,6 +1907,8 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
     intro: renderIntro,
     balance: renderBalance,
     categories: renderCategories,
+    "customize-categories": renderCustomizeCategories,
+    "add-category": renderAddCategory,
     limits: renderLimits,
     goal: renderGoal,
     "goal-create": renderGoalCreate,

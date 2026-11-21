@@ -7,8 +7,8 @@ import { Button } from "@matsborges/manga-design-system/button";
 import { TextField } from "@matsborges/manga-design-system/text-field";
 import { ProgressBar } from "@matsborges/manga-design-system/progress-bar";
 import { InputChip } from "@matsborges/manga-design-system/chip";
-import { GoalIdentity } from "@matsborges/manga-design-system/product";
-import { ProductIcon } from "@matsborges/manga-design-system/product";
+import { GoalIdentity, GoalCard, GoalPersonalizationSheet, ProductIcon } from "@matsborges/manga-design-system/product";
+import type { GoalIdentityValue, GoalColor } from "@matsborges/manga-design-system/product";
 import { ArrowBackIcon, CheckCircleIcon } from "@matsborges/manga-design-system/icons";
 import {
   formatCurrencyInput,
@@ -29,7 +29,9 @@ type Step =
   | "limits"
   | "goal"
   | "goal-create"
+  | "goal-created"
   | "reserve"
+  | "reserve-confirmed"
   | "recognition";
 
 const PROGRESS_STEPS: Step[] = [
@@ -53,6 +55,10 @@ type CategoryDraft = {
 type GoalDraft = {
   name: string;
   target: string;
+  deadline: string;
+  color: GoalColor;
+  icon: string;
+  contentType: "initials" | "icon" | "image";
 };
 
 // --- localStorage persistence ---
@@ -216,8 +222,9 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
   const [skippedCategories, setSkippedCategories] = useState(false);
 
   // Goal step
-  const [goal, setGoal] = useState<GoalDraft>({ name: "", target: "" });
+  const [goal, setGoal] = useState<GoalDraft>({ name: "", target: "", deadline: "", color: "orange", icon: "star", contentType: "initials" });
   const [skippedGoal, setSkippedGoal] = useState(false);
+  const [personalizationOpen, setPersonalizationOpen] = useState(false);
 
   // Reserve step
   const [reserveInput, setReserveInput] = useState("");
@@ -230,7 +237,7 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
   useEffect(() => {
     const draft = loadDraft();
     if (draft) {
-      const allSteps: Step[] = ["account", "account-verify", "identification", "intro", "balance", "categories", "limits", "goal", "goal-create", "reserve", "recognition"];
+      const allSteps: Step[] = ["account", "account-verify", "identification", "intro", "balance", "categories", "limits", "goal", "goal-create", "goal-created", "reserve", "reserve-confirmed", "recognition"];
       const startIdx = allSteps.indexOf(startStep);
       const savedIdx = allSteps.indexOf(draft.currentStep);
       if (savedIdx >= startIdx) {
@@ -240,7 +247,7 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
       setBalanceInput(draft.balanceInput || "");
       setCategories(draft.categories || SUGGESTED_CATEGORIES);
       setSkippedCategories(draft.skippedCategories || false);
-      setGoal(draft.goal || { name: "", target: "" });
+      setGoal(draft.goal || { name: "", target: "", deadline: "", color: "orange", icon: "star", contentType: "initials" });
       setSkippedGoal(draft.skippedGoal || false);
       setReserveInput(draft.reserveInput || "");
       setSignupEmail(draft.signupEmail || "");
@@ -287,8 +294,10 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
       limits: () => "categories",
       goal: () => skippedCategories ? "categories" : "limits",
       "goal-create": () => "goal",
-      reserve: () => "goal-create",
-      recognition: () => (skippedGoal ? "goal" : "reserve"),
+      "goal-created": () => "goal-create",
+      reserve: () => "goal-created",
+      "reserve-confirmed": () => "reserve",
+      recognition: () => (skippedGoal ? "goal" : "reserve-confirmed"),
     };
     const getPrev = backMap[currentStep];
     if (getPrev) {
@@ -437,7 +446,7 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
   }
 
   function handleGoalFormContinue() {
-    goTo("reserve");
+    goTo("goal-created");
   }
 
   function handleReserveContinue() {
@@ -445,8 +454,12 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
       setReserveError("A reserva não pode ser maior que o saldo disponível.");
       return;
     }
+    if (reserveValue <= 0) {
+      setReserveError("Informe um valor positivo.");
+      return;
+    }
     setReserveError(null);
-    goTo("recognition");
+    goTo("reserve-confirmed");
   }
 
   function setCategoryLimit(id: string, limit: string) {
@@ -490,9 +503,9 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
             user_id: user.id,
             name: goal.name.trim(),
             target: goalTarget,
-            color: "orange",
-            icon: "star",
-            content_type: "icon",
+            color: goal.color,
+            icon: goal.icon,
+            content_type: goal.contentType,
           })
           .select("id")
           .single();
@@ -1064,11 +1077,19 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
   }
 
   // =========================================================
-  // Goal create form — follows onboarding pattern
+  // Goal create form — Figma: ONB — Meta — Criar (Personalização)
+  // Title: 24/600 lh=32 | Subtitle: 14/400 lh=20 | gap=20
   // =========================================================
 
   function renderGoalCreate() {
     const hasGoalData = goal.name.trim() && goal.target;
+
+    const identityValue: GoalIdentityValue = {
+      content: goal.contentType,
+      icon: goal.icon as import("@matsborges/manga-design-system/product").GoalIconName,
+      color: goal.color,
+    };
+
     return (
       <StepLayout
         showProgress={showProgress}
@@ -1076,29 +1097,65 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
         goBack={goBack}
         actions={
           <Button onClick={handleGoalFormContinue} fullWidth size="large" disabled={!hasGoalData}>
-            Criar Meta
+            Criar minha Meta
           </Button>
         }
       >
         <div className="flex flex-col" style={{ gap: "20px" }}>
-          <h1
-            className="font-semibold text-manga-text-primary"
-            style={{
-              fontSize: "24px",
-              lineHeight: "28.8px",
-              letterSpacing: "-0.48px",
-            }}
-          >
-            Criar sua primeira Meta
-          </h1>
-
-          <div className="flex justify-center">
-            <GoalIdentity name={goal.name || "Meta"} size={72} color="orange" />
+          {/* Figma: Título e contexto — gap=8 */}
+          <div className="flex flex-col" style={{ gap: "8px" }}>
+            <h1
+              className="font-semibold text-manga-text-primary"
+              style={{ fontSize: "24px", lineHeight: "32px" }}
+            >
+              Um plano começa com uma Meta.
+            </h1>
+            <p
+              className="text-manga-text-secondary"
+              style={{ fontSize: "14px", lineHeight: "20px" }}
+            >
+              Dê um nome ao que você quer realizar. Você decide quando começar a reservar.
+            </p>
           </div>
 
-          <div className="flex flex-col" style={{ gap: "16px" }}>
+          {/* Figma: Personalize sua Meta — gap=12, padY=4, h=80 */}
+          <button
+            type="button"
+            onClick={() => setPersonalizationOpen(true)}
+            className="flex items-center w-full text-left"
+            style={{ gap: "12px", padding: "4px 0" }}
+          >
+            <GoalIdentity
+              name={goal.name || "Meta"}
+              size={72}
+              {...identityValue}
+            />
+            <div className="flex-1 flex flex-col" style={{ gap: "4px" }}>
+              <span
+                className="font-semibold text-manga-text-primary"
+                style={{ fontSize: "16px", lineHeight: "20px" }}
+              >
+                Personalize sua Meta
+              </span>
+              <span
+                className="text-manga-text-secondary"
+                style={{ fontSize: "14px", lineHeight: "20px" }}
+              >
+                Escolha um ícone e uma cor
+              </span>
+            </div>
+            <span
+              className="text-manga-text-secondary"
+              style={{ fontSize: "24px", lineHeight: "29px" }}
+            >
+              ›
+            </span>
+          </button>
+
+          {/* Figma: Formulário / Meta — gap=20 */}
+          <div className="flex flex-col" style={{ gap: "20px" }}>
             <TextField
-              label="Nome da meta"
+              label="Nome da Meta"
               type="text"
               value={goal.name}
               onChange={(e) => setGoal((g) => ({ ...g, name: e.target.value }))}
@@ -1117,6 +1174,115 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
               placeholder="R$ 0,00"
               required
             />
+            <TextField
+              label="Prazo (opcional)"
+              type="text"
+              value={goal.deadline}
+              onChange={(e) => setGoal((g) => ({ ...g, deadline: e.target.value }))}
+              placeholder="Não definido"
+            />
+          </div>
+
+          {/* Figma: Helper — 14/400 lh=20 */}
+          <p
+            className="text-manga-text-secondary"
+            style={{ fontSize: "14px", lineHeight: "20px" }}
+          >
+            Criar a Meta não reserva dinheiro. Você pode dar esse passo depois.
+          </p>
+        </div>
+
+        {/* GoalPersonalizationSheet (bottom sheet) */}
+        <GoalPersonalizationSheet
+          open={personalizationOpen}
+          onOpenChange={setPersonalizationOpen}
+          name={goal.name || "Meta"}
+          value={identityValue}
+          onApply={(val) => {
+            setGoal((g) => ({
+              ...g,
+              color: val.color,
+              icon: val.icon || "star",
+              contentType: val.content,
+            }));
+          }}
+        />
+      </StepLayout>
+    );
+  }
+
+  // =========================================================
+  // Goal created — Figma: ONB — Meta — Criada
+  // GoalIdentity 72px centered | tagline 12/600 | title 24/600 center
+  // GoalCard | Primary + Tertiary
+  // =========================================================
+
+  function renderGoalCreated() {
+    return (
+      <StepLayout
+        showProgress={showProgress}
+        progressIndex={progressIndex}
+        goBack={goBack}
+        actions={
+          <>
+            <Button onClick={() => goTo("reserve")} fullWidth size="large">
+              Reservar meu primeiro valor
+            </Button>
+            <Button onClick={handleGoalSkip} variant="tertiary" fullWidth size="large">
+              Agora não
+            </Button>
+          </>
+        }
+      >
+        <div className="flex flex-col items-center" style={{ gap: "20px" }}>
+          {/* Figma: Conquista / Meta criada — gap=12, centered */}
+          <div className="flex flex-col items-center" style={{ gap: "12px" }}>
+            <GoalIdentity
+              name={goal.name || "Meta"}
+              size={72}
+              content={goal.contentType}
+              icon={goal.icon as import("@matsborges/manga-design-system/product").GoalIconName}
+              color={goal.color}
+            />
+            {/* Figma: 12/600 lh=16, orange, centered */}
+            <p
+              className="font-semibold text-center"
+              style={{ fontSize: "12px", lineHeight: "16px", color: "rgb(238,105,31)" }}
+            >
+              UM PLANO, NOVAS POSSIBILIDADES
+            </p>
+          </div>
+
+          {/* Figma: Mensagem de conquista — gap=8, centered */}
+          <div className="flex flex-col items-center" style={{ gap: "8px" }}>
+            <h1
+              className="font-semibold text-manga-text-primary text-center"
+              style={{ fontSize: "24px", lineHeight: "32px" }}
+            >
+              Sua meta ganhou vida!
+            </h1>
+            <p
+              className="text-manga-text-secondary text-center"
+              style={{ fontSize: "14px", lineHeight: "20px" }}
+            >
+              Você deu o primeiro passo para transformar seus planos em realidade.
+            </p>
+          </div>
+
+          {/* Figma: GoalCard */}
+          <div className="w-full">
+            <GoalCard
+              title={goal.name || "Meta"}
+              value={0}
+              target={goalTarget}
+              identity={{
+                content: goal.contentType,
+                icon: goal.icon as import("@matsborges/manga-design-system/product").GoalIconName,
+                color: goal.color,
+              }}
+              status="Ativa"
+              supportingInformation={goal.deadline || "Prazo não definido"}
+            />
           </div>
         </div>
       </StepLayout>
@@ -1124,10 +1290,13 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
   }
 
   // =========================================================
-  // Reserve — follows onboarding pattern
+  // Reserve — Figma: ONB — Meta — Reservar
+  // Title: 24/600 lh=32 | Card resumo | Disponível | Field | Helper dinâmico
   // =========================================================
 
   function renderReserve() {
+    const remaining = balanceValue - reserveValue;
+
     return (
       <StepLayout
         showProgress={showProgress}
@@ -1136,33 +1305,81 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
         actions={
           <>
             <Button onClick={handleReserveContinue} fullWidth size="large" disabled={!reserveInput}>
-              Reservar
+              Confirmar Reserva
             </Button>
-            <Button onClick={() => goTo("recognition")} variant="secondary" fullWidth size="large">
-              Pular por enquanto
+            <Button onClick={() => goTo("recognition")} variant="tertiary" fullWidth size="large">
+              Voltar sem reservar
             </Button>
           </>
         }
       >
         <div className="flex flex-col" style={{ gap: "20px" }}>
-          <h1
-            className="font-semibold text-manga-text-primary"
+          {/* Figma: Título e contexto — gap=8 */}
+          <div className="flex flex-col" style={{ gap: "8px" }}>
+            <h1
+              className="font-semibold text-manga-text-primary"
+              style={{ fontSize: "24px", lineHeight: "32px" }}
+            >
+              Seu primeiro valor{"\n"}para {goal.name}
+            </h1>
+            <p
+              className="text-manga-text-secondary"
+              style={{ fontSize: "14px", lineHeight: "20px" }}
+            >
+              Reserve o que fizer sentido para você agora.
+            </p>
+          </div>
+
+          {/* Figma: Resumo da Meta — gap=8, pad=16, r=12, fill=rgb(241,240,243) */}
+          <div
             style={{
-              fontSize: "24px",
-              lineHeight: "28.8px",
-              letterSpacing: "-0.48px",
+              backgroundColor: "rgb(241,240,243)",
+              borderRadius: "12px",
+              padding: "16px",
+              display: "flex",
+              flexDirection: "column",
+              gap: "8px",
             }}
           >
-            Reservar para &quot;{goal.name}&quot;?
-          </h1>
-          <p
-            className="text-manga-text-secondary"
-            style={{ fontSize: "14px", lineHeight: "21px" }}
-          >
-            Você tem {formatCurrency(balanceValue)} disponível.
-          </p>
+            <p
+              className="font-semibold text-manga-text-primary"
+              style={{ fontSize: "20px", lineHeight: "28px" }}
+            >
+              {goal.name}
+            </p>
+            <p
+              className="text-manga-text-secondary"
+              style={{ fontSize: "14px", lineHeight: "20px" }}
+            >
+              Objetivo: {formatCurrency(goalTarget)}
+            </p>
+            <p
+              className="text-manga-text-secondary"
+              style={{ fontSize: "14px", lineHeight: "20px" }}
+            >
+              Já reservado: R$ 0,00
+            </p>
+          </div>
+
+          {/* Figma: Disponível para reservar — gap=4 */}
+          <div className="flex flex-col" style={{ gap: "4px" }}>
+            <p
+              className="text-manga-text-secondary"
+              style={{ fontSize: "14px", lineHeight: "20px" }}
+            >
+              Disponível para reservar
+            </p>
+            <p
+              className="font-semibold text-manga-text-primary"
+              style={{ fontSize: "24px", lineHeight: "32px" }}
+            >
+              {formatCurrency(balanceValue)}
+            </p>
+          </div>
+
+          {/* Figma: Field / Valor da Reserva */}
           <TextField
-            label="Valor da reserva"
+            label="Valor da Reserva"
             type="text"
             inputMode="numeric"
             value={reserveInput ? `R$ ${reserveInput}` : ""}
@@ -1172,9 +1389,116 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
               setReserveError(null);
             }}
             placeholder="R$ 0,00"
+            required
             error={reserveError ?? undefined}
-            helperText={`Disponível: ${formatCurrency(balanceValue)}`}
           />
+
+          {/* Figma: Helper dinâmico — 14/400 lh=20 */}
+          {reserveValue > 0 && reserveValue <= balanceValue && (
+            <p
+              className="text-manga-text-secondary"
+              style={{ fontSize: "14px", lineHeight: "20px" }}
+            >
+              Após reservar, ficam {formatCurrency(remaining)} disponíveis.
+              Esse valor será separado para sua Meta e não conta como uma Saída.
+            </p>
+          )}
+        </div>
+      </StepLayout>
+    );
+  }
+
+  // =========================================================
+  // Reserve confirmed — Figma: ONB — Meta — Reserva realizada
+  // Check icon (green) | tagline 12/600 | title 24/600 center
+  // GoalCard | summary green | Primary
+  // =========================================================
+
+  function renderReserveConfirmed() {
+    const remaining = balanceValue - reserveValue;
+
+    return (
+      <StepLayout
+        showProgress={showProgress}
+        progressIndex={progressIndex}
+        goBack={goBack}
+        actions={
+          <Button onClick={() => goTo("recognition")} fullWidth size="large">
+            Continuar
+          </Button>
+        }
+      >
+        <div className="flex flex-col items-center" style={{ gap: "20px" }}>
+          {/* Figma: Conquista / Primeira Reserva — gap=12 */}
+          <div className="flex flex-col items-center" style={{ gap: "12px" }}>
+            {/* Figma: Símbolo de conquista — 80x80, r=40, fill=rgb(239,250,240) */}
+            <div
+              className="flex items-center justify-center"
+              style={{
+                width: "80px",
+                height: "80px",
+                borderRadius: "40px",
+                backgroundColor: "rgb(239,250,240)",
+              }}
+            >
+              <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                <path
+                  d="M14 20.5L18.5 25L26 16"
+                  stroke="rgb(15,83,37)"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
+            {/* Figma: 12/600 lh=16, green, centered */}
+            <p
+              className="font-semibold text-center"
+              style={{ fontSize: "12px", lineHeight: "16px", color: "rgb(15,83,37)" }}
+            >
+              PRIMEIRA RESERVA CONFIRMADA
+            </p>
+          </div>
+
+          {/* Figma: Mensagem de conquista — gap=8, centered */}
+          <div className="flex flex-col items-center" style={{ gap: "8px" }}>
+            <h1
+              className="font-semibold text-manga-text-primary text-center"
+              style={{ fontSize: "24px", lineHeight: "32px" }}
+            >
+              Sua {goal.name.toLowerCase()} está começando a sair do papel!
+            </h1>
+            <p
+              className="text-manga-text-secondary text-center"
+              style={{ fontSize: "14px", lineHeight: "20px" }}
+            >
+              Você fez sua primeira reserva e começou a construir seu objetivo.
+            </p>
+          </div>
+
+          {/* Figma: GoalCard with updated values */}
+          <div className="w-full">
+            <GoalCard
+              title={goal.name || "Meta"}
+              value={reserveValue}
+              target={goalTarget}
+              identity={{
+                content: goal.contentType,
+                icon: goal.icon as import("@matsborges/manga-design-system/product").GoalIconName,
+                color: goal.color,
+              }}
+              status="Ativa"
+              supportingInformation={goal.deadline || "Prazo não definido"}
+            />
+          </div>
+
+          {/* Figma: Summary — 14/600 lh=20, green, centered */}
+          <p
+            className="font-semibold text-center"
+            style={{ fontSize: "14px", lineHeight: "20px", color: "rgb(15,83,37)" }}
+          >
+            {formatCurrency(reserveValue)} reservados · {formatCurrency(remaining)} disponíveis
+          </p>
         </div>
       </StepLayout>
     );
@@ -1264,7 +1588,9 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
     limits: renderLimits,
     goal: renderGoal,
     "goal-create": renderGoalCreate,
+    "goal-created": renderGoalCreated,
     reserve: renderReserve,
+    "reserve-confirmed": renderReserveConfirmed,
     recognition: renderRecognition,
   };
 

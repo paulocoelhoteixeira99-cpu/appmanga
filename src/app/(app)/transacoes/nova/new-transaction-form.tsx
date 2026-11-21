@@ -36,7 +36,7 @@ export function NewTransactionForm({
       return;
     }
     if (!description.trim()) {
-      setError("Informe uma descri\u00e7\u00e3o.");
+      setError("Informe uma descrição.");
       return;
     }
 
@@ -97,7 +97,7 @@ export function NewTransactionForm({
           className="font-semibold text-manga-text-primary"
           style={{ fontSize: "20px", lineHeight: "24px" }}
         >
-          Nova Transa\u00e7\u00e3o
+          Nova Transação
         </h1>
       </div>
 
@@ -129,7 +129,7 @@ export function NewTransactionForm({
                     type === "expense" ? "white" : "rgb(35,25,56)",
                 }}
               >
-                Sa\u00edda
+                Saída
               </button>
               <button
                 type="button"
@@ -171,7 +171,7 @@ export function NewTransactionForm({
 
             {/* Description */}
             <TextField
-              label="Descri\u00e7\u00e3o"
+              label="Descrição"
               type="text"
               required
               value={description}
@@ -181,7 +181,7 @@ export function NewTransactionForm({
               }}
               placeholder={
                 type === "expense"
-                  ? "Com o que voc\u00ea gastou?"
+                  ? "Com o que você gastou?"
                   : "De onde veio?"
               }
             />
@@ -238,7 +238,7 @@ export function NewTransactionForm({
         {/* Actions */}
         <div className="shrink-0" style={{ padding: "8px 16px 24px" }}>
           <Button type="submit" fullWidth size="large" loading={loading}>
-            Registrar {type === "expense" ? "Sa\u00edda" : "Entrada"}
+            Registrar {type === "expense" ? "Saída" : "Entrada"}
           </Button>
         </div>
       </form>

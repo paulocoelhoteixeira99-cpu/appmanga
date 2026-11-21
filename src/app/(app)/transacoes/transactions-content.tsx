@@ -70,7 +70,7 @@ export function TransactionsContent({
   const filterButtons: { key: Filter; label: string }[] = [
     { key: "all", label: "Todas" },
     { key: "income", label: "Entradas" },
-    { key: "expense", label: "Sa\u00eddas" },
+    { key: "expense", label: "Saídas" },
   ];
 
   return (
@@ -92,16 +92,16 @@ export function TransactionsContent({
             className="font-semibold text-manga-text-primary"
             style={{ fontSize: "24px", lineHeight: "28.8px" }}
           >
-            Transa\u00e7\u00f5es
+            Transações
           </h1>
         </div>
 
         {/* Summary */}
         <FinancialSummary
-          title="Movimenta\u00e7\u00f5es"
+          title="Movimentações"
           income={income}
           expense={expense}
-          period="M\u00eas atual"
+          period="Mês atual"
           mode="simple"
           variant="embedded"
         />
@@ -134,8 +134,8 @@ export function TransactionsContent({
         {/* Transaction list */}
         {filtered.length === 0 ? (
           <EmptyState
-            title="Sem transa\u00e7\u00f5es"
-            description="Seu hist\u00f3rico come\u00e7a aqui. Registre sua primeira transa\u00e7\u00e3o."
+            title="Sem transações"
+            description="Seu histórico começa aqui. Registre sua primeira transação."
             size="compact"
           />
         ) : (

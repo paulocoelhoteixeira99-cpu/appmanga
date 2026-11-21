@@ -83,7 +83,7 @@ export function TransactionDetail({
       return;
     }
     if (!description.trim()) {
-      setError("Informe uma descri\u00e7\u00e3o.");
+      setError("Informe uma descrição.");
       return;
     }
 
@@ -133,7 +133,7 @@ export function TransactionDetail({
   }
 
   const typeLabel =
-    transaction.type === "income" ? "Entrada" : "Sa\u00edda";
+    transaction.type === "income" ? "Entrada" : "Saída";
   const formattedDate = new Date(
     transaction.date + "T12:00:00"
   ).toLocaleDateString("pt-BR", {
@@ -167,7 +167,7 @@ export function TransactionDetail({
             className="font-semibold text-manga-text-primary"
             style={{ fontSize: "20px", lineHeight: "24px" }}
           >
-            {editing ? "Editar Transa\u00e7\u00e3o" : "Transa\u00e7\u00e3o"}
+            {editing ? "Editar Transação" : "Transação"}
           </h1>
         </div>
         {!editing && (
@@ -217,7 +217,7 @@ export function TransactionDetail({
                         : "rgb(35,25,56)",
                   }}
                 >
-                  Sa\u00edda
+                  Saída
                 </button>
                 <button
                   type="button"
@@ -259,7 +259,7 @@ export function TransactionDetail({
               />
 
               <TextField
-                label="Descri\u00e7\u00e3o"
+                label="Descrição"
                 type="text"
                 required
                 value={description}
@@ -329,7 +329,7 @@ export function TransactionDetail({
               loading={saving}
               onClick={handleSave}
             >
-              Salvar altera\u00e7\u00f5es
+              Salvar alterações
             </Button>
             <Button
               fullWidth
@@ -398,7 +398,7 @@ export function TransactionDetail({
                 style={{ gap: "16px" }}
               >
                 <DetailRow
-                  label="Descri\u00e7\u00e3o"
+                  label="Descrição"
                   value={transaction.description}
                 />
                 <DetailRow label="Data" value={formattedDate} />
@@ -422,7 +422,7 @@ export function TransactionDetail({
               variant="destructive"
               onClick={() => setShowDeleteDialog(true)}
             >
-              Excluir transa\u00e7\u00e3o
+              Excluir transação
             </Button>
           </div>
         </div>
@@ -432,8 +432,8 @@ export function TransactionDetail({
       <Dialog
         open={showDeleteDialog}
         onOpenChange={setShowDeleteDialog}
-        title="Excluir transa\u00e7\u00e3o?"
-        description="Essa a\u00e7\u00e3o n\u00e3o pode ser desfeita. O valor ser\u00e1 removido do seu hist\u00f3rico."
+        title="Excluir transação?"
+        description="Essa ação não pode ser desfeita. O valor será removido do seu histórico."
         variant="destructive"
         footer={
           <div className="flex" style={{ gap: "8px" }}>
@@ -458,8 +458,8 @@ export function TransactionDetail({
       <Dialog
         open={showTypeDialog}
         onOpenChange={setShowTypeDialog}
-        title="Alterar tipo da transa\u00e7\u00e3o?"
-        description={`A transa\u00e7\u00e3o ser\u00e1 alterada de ${typeLabel} para ${pendingType === "income" ? "Entrada" : "Sa\u00edda"}. Isso afeta o c\u00e1lculo do seu dispon\u00edvel.`}
+        title="Alterar tipo da transação?"
+        description={`A transação será alterada de ${typeLabel} para ${pendingType === "income" ? "Entrada" : "Saída"}. Isso afeta o cálculo do seu disponível.`}
         variant="confirmation"
         footer={
           <div className="flex" style={{ gap: "8px" }}>

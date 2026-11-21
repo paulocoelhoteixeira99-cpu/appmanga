@@ -95,7 +95,7 @@ export function GoalDetail({
       moveType === "reserve" &&
       amount > availableBalance
     ) {
-      setMoveError("Valor maior que o dispon\u00edvel.");
+      setMoveError("Valor maior que o disponível.");
       return;
     }
     if (
@@ -255,8 +255,8 @@ export function GoalDetail({
             status={isCompleted ? "completed" : undefined}
             supportingInformation={
               isCompleted
-                ? "Meta conclu\u00edda!"
-                : `${percentage}% do objetivo \u2022 Faltam ${formatCurrency(goal.target - goal.current_value)}`
+                ? "Meta concluída!"
+                : `${percentage}% do objetivo • Faltam ${formatCurrency(goal.target - goal.current_value)}`
             }
             variant="elevated"
           />
@@ -294,12 +294,12 @@ export function GoalDetail({
                 marginBottom: "12px",
               }}
             >
-              Hist\u00f3rico
+              Histórico
             </h2>
             {movements.length === 0 ? (
               <EmptyState
-                title="Sem movimenta\u00e7\u00f5es"
-                description="Reserve ou retire valores para ver o hist\u00f3rico aqui."
+                title="Sem movimentações"
+                description="Reserve ou retire valores para ver o histórico aqui."
                 size="compact"
               />
             ) : (
@@ -354,7 +354,7 @@ export function GoalDetail({
         }
         description={
           moveType === "reserve"
-            ? `Dispon\u00edvel: ${formatCurrency(availableBalance)}`
+            ? `Disponível: ${formatCurrency(availableBalance)}`
             : `Reservado: ${formatCurrency(goal.current_value)}`
         }
       >
@@ -439,7 +439,7 @@ export function GoalDetail({
                 marginBottom: "8px",
               }}
             >
-              Personaliza\u00e7\u00e3o
+              Personalização
             </p>
             <button
               type="button"
@@ -458,7 +458,7 @@ export function GoalDetail({
                 className="text-manga-text-secondary"
                 style={{ fontSize: "14px" }}
               >
-                Alterar \u00edcone e cor
+                Alterar ícone e cor
               </span>
             </button>
           </div>
@@ -469,7 +469,7 @@ export function GoalDetail({
             loading={editSaving}
             onClick={handleEditSave}
           >
-            Salvar altera\u00e7\u00f5es
+            Salvar alterações
           </Button>
         </div>
       </Drawer>
@@ -493,8 +493,8 @@ export function GoalDetail({
         title="Excluir meta?"
         description={
           goal.current_value > 0
-            ? `O valor de ${formatCurrency(goal.current_value)} reservado ser\u00e1 devolvido ao seu dispon\u00edvel.`
-            : "Essa a\u00e7\u00e3o n\u00e3o pode ser desfeita."
+            ? `O valor de ${formatCurrency(goal.current_value)} reservado será devolvido ao seu disponível.`
+            : "Essa ação não pode ser desfeita."
         }
         variant="destructive"
         footer={

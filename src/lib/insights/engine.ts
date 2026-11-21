@@ -33,7 +33,7 @@ export function computeInsights(data: {
         id: `cat-over-${cat.name}`,
         priority: "P1",
         title: `${cat.name} acima do planejado`,
-        description: `Voc\u00ea ultrapassou o limite planejado para esta categoria.`,
+        description: `Você ultrapassou o limite planejado para esta categoria.`,
         used: cat.spent,
         limit: cat.limit,
         action: { label: "Ver categoria", href: "/categorias" },
@@ -51,8 +51,8 @@ export function computeInsights(data: {
       insights.push({
         id: `cat-attention-${cat.name}`,
         priority: "P2",
-        title: `${cat.name} pr\u00f3ximo do planejado`,
-        description: `Aten\u00e7\u00e3o: voc\u00ea j\u00e1 usou ${Math.round((cat.spent / cat.limit) * 100)}% do planejado.`,
+        title: `${cat.name} próximo do planejado`,
+        description: `Atenção: você já usou ${Math.round((cat.spent / cat.limit) * 100)}% do planejado.`,
         used: cat.spent,
         limit: cat.limit,
         action: { label: "Ver categoria", href: "/categorias" },
@@ -83,9 +83,9 @@ export function computeInsights(data: {
     insights.push({
       id: "positive-balance",
       priority: "P3",
-      title: "Suas contas est\u00e3o no azul",
+      title: "Suas contas estão no azul",
       description:
-        "Suas entradas superam as sa\u00eddas este m\u00eas. Continue assim!",
+        "Suas entradas superam as saídas este mês. Continue assim!",
     });
   }
 
@@ -94,10 +94,10 @@ export function computeInsights(data: {
     insights.push({
       id: "negative-balance",
       priority: "P1",
-      title: "Dispon\u00edvel negativo",
+      title: "Disponível negativo",
       description:
-        "Suas sa\u00eddas e reservas superaram suas entradas. Revise seus gastos.",
-      action: { label: "Ver transa\u00e7\u00f5es", href: "/transacoes" },
+        "Suas saídas e reservas superaram suas entradas. Revise seus gastos.",
+      action: { label: "Ver transações", href: "/transacoes" },
     });
   }
 

@@ -21,7 +21,7 @@ function getMonthLabel(): string {
   const months = [
     "Janeiro",
     "Fevereiro",
-    "Mar\u00e7o",
+    "Março",
     "Abril",
     "Maio",
     "Junho",
@@ -71,16 +71,16 @@ export function CategoriesContent({
               marginTop: "4px",
             }}
           >
-            {getMonthLabel()} \u2022{" "}
-            {formatCurrency(totalSpent)} em sa\u00eddas
+            {getMonthLabel()} •{" "}
+            {formatCurrency(totalSpent)} em saídas
           </p>
         </div>
 
         {/* Category list */}
         {categories.length === 0 ? (
           <EmptyState
-            title="O que voc\u00ea gostaria de acompanhar?"
-            description="Crie categorias para organizar suas sa\u00eddas e acompanhar seus gastos."
+            title="O que você gostaria de acompanhar?"
+            description="Crie categorias para organizar suas saídas e acompanhar seus gastos."
             size="compact"
           />
         ) : (

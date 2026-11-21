@@ -46,7 +46,7 @@ function getStatusText(
       color: "rgb(185,28,28)",
     };
   if (pct >= 80)
-    return { text: "Aten\u00e7\u00e3o", color: "rgb(180,83,9)" };
+    return { text: "Atenção", color: "rgb(180,83,9)" };
   return {
     text: "Dentro do planejado",
     color: "rgb(15,83,37)",
@@ -201,12 +201,12 @@ export function CategoryDetail({
               marginBottom: "12px",
             }}
           >
-            Gastos do m\u00eas
+            Gastos do mês
           </h2>
           {transactions.length === 0 ? (
             <EmptyState
               title="Sem gastos nesta categoria"
-              description="Os gastos registrados com esta categoria aparecer\u00e3o aqui."
+              description="Os gastos registrados com esta categoria aparecerão aqui."
               size="compact"
             />
           ) : (

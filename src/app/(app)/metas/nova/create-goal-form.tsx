@@ -141,7 +141,7 @@ export function CreateGoalForm() {
                 color: "rgb(238,105,31)",
               }}
             >
-              Personalizar \u00edcone e cor
+              Personalizar ícone e cor
             </button>
 
             <TextField
@@ -153,7 +153,7 @@ export function CreateGoalForm() {
                 setName(e.target.value);
                 setError(null);
               }}
-              placeholder="Ex: Viagem, Reserva de emerg\u00eancia..."
+              placeholder="Ex: Viagem, Reserva de emergência..."
             />
 
             <TextField
@@ -185,7 +185,7 @@ export function CreateGoalForm() {
                     textTransform: "uppercase",
                   }}
                 >
-                  Pr\u00e9via
+                  Prévia
                 </p>
                 <GoalCard
                   title={name}

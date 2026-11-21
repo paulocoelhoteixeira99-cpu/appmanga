@@ -55,19 +55,19 @@ export function SettingsContent({
   async function handleSave() {
     const trimmedName = name.trim();
     if (!trimmedName) {
-      setError("Nome \u00e9 obrigat\u00f3rio.");
+      setError("Nome é obrigatório.");
       return;
     }
 
     const phoneDigits = phoneToDigits(phone);
     if (phoneDigits && phoneDigits.length !== 11) {
-      setError("Telefone deve ter 11 d\u00edgitos (DDD + n\u00famero).");
+      setError("Telefone deve ter 11 dígitos (DDD + número).");
       return;
     }
 
     const cpfDigits = cpfToDigits(cpf);
     if (cpfDigits && !isValidCpf(cpfDigits)) {
-      setError("CPF inv\u00e1lido.");
+      setError("CPF inválido.");
       return;
     }
 
@@ -93,7 +93,7 @@ export function SettingsContent({
       }
       if (!phoneAvailable) {
         setError(
-          "Este n\u00famero de WhatsApp j\u00e1 est\u00e1 vinculado a outra conta."
+          "Este número de WhatsApp já está vinculado a outra conta."
         );
         setSaving(false);
         return;
@@ -113,7 +113,7 @@ export function SettingsContent({
       }
       if (!cpfAvailable) {
         setError(
-          "Este CPF j\u00e1 est\u00e1 vinculado a outra conta."
+          "Este CPF já está vinculado a outra conta."
         );
         setSaving(false);
         return;
@@ -132,13 +132,13 @@ export function SettingsContent({
     if (updateError) {
       if (updateError.message.includes("profiles_phone_unique")) {
         setError(
-          "Este n\u00famero de WhatsApp j\u00e1 est\u00e1 vinculado a outra conta."
+          "Este número de WhatsApp já está vinculado a outra conta."
         );
       } else if (
         updateError.message.includes("idx_profiles_cpf_unique")
       ) {
         setError(
-          "Este CPF j\u00e1 est\u00e1 vinculado a outra conta."
+          "Este CPF já está vinculado a outra conta."
         );
       } else {
         setError("Erro ao salvar. Tente novamente.");
@@ -189,7 +189,7 @@ export function SettingsContent({
           className="font-semibold text-manga-text-primary"
           style={{ fontSize: "20px", lineHeight: "24px" }}
         >
-          Configura\u00e7\u00f5es
+          Configurações
         </h1>
       </div>
 
@@ -237,7 +237,7 @@ export function SettingsContent({
               value={email}
               readOnly
               disabled
-              helperText="O e-mail n\u00e3o pode ser alterado por aqui."
+              helperText="O e-mail não pode ser alterado por aqui."
             />
 
             <TextField
@@ -301,7 +301,7 @@ export function SettingsContent({
               loading={saving}
               onClick={handleSave}
             >
-              Salvar altera\u00e7\u00f5es
+              Salvar alterações
             </Button>
           </div>
         </section>
@@ -364,7 +364,7 @@ export function SettingsContent({
           if (!open) setDeleteConfirm("");
         }}
         title="Excluir conta?"
-        description='Essa a\u00e7\u00e3o \u00e9 irrevers\u00edvel. Todos os seus dados ser\u00e3o apagados. Digite "EXCLUIR" para confirmar.'
+        description='Essa ação é irreversível. Todos os seus dados serão apagados. Digite "EXCLUIR" para confirmar.'
         variant="destructive"
         footer={
           <div className="flex" style={{ gap: "8px" }}>

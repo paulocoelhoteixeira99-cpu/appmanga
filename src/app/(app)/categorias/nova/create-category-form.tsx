@@ -68,7 +68,7 @@ export function CreateCategoryForm() {
 
     if (insertError) {
       if (insertError.code === "23505") {
-        setError("J\u00e1 existe uma categoria com esse nome.");
+        setError("Já existe uma categoria com esse nome.");
       } else {
         setError("Erro ao criar categoria. Tente novamente.");
       }
@@ -130,7 +130,7 @@ export function CreateCategoryForm() {
                 setName(e.target.value);
                 setError(null);
               }}
-              placeholder="Ex: Alimenta\u00e7\u00e3o, Transporte..."
+              placeholder="Ex: Alimentação, Transporte..."
             />
 
             {/* Icon selector */}
@@ -143,7 +143,7 @@ export function CreateCategoryForm() {
                   marginBottom: "8px",
                 }}
               >
-                \u00cdcone
+                Ícone
               </p>
               <div
                 className="grid"
@@ -195,7 +195,7 @@ export function CreateCategoryForm() {
                 setLimitInput(formatCurrencyInput(raw));
               }}
               placeholder="Sem limite"
-              helperText="Voc\u00ea receber\u00e1 alertas ao se aproximar do limite."
+              helperText="Você receberá alertas ao se aproximar do limite."
             />
 
             {error && (

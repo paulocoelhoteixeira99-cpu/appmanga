@@ -76,7 +76,7 @@ export function GoalsContent({
         {activeGoals.length === 0 && completedGoals.length === 0 ? (
           <EmptyState
             title="Transforme um objetivo em um plano"
-            description="Crie sua primeira meta e comece a separar dinheiro com prop\u00f3sito."
+            description="Crie sua primeira meta e comece a separar dinheiro com propósito."
             size="compact"
           />
         ) : (
@@ -119,7 +119,7 @@ export function GoalsContent({
                 padding: "8px 0",
               }}
             >
-              Metas conclu\u00eddas ({completedGoals.length}){" "}
+              Metas concluídas ({completedGoals.length}){" "}
               {showCompleted ? "\u25B2" : "\u25BC"}
             </button>
             {showCompleted && (
@@ -142,7 +142,7 @@ export function GoalsContent({
                         | "image",
                     }}
                     status="completed"
-                    supportingInformation="Meta conclu\u00edda"
+                    supportingInformation="Meta concluída"
                     variant="elevated"
                     href={`/metas/${g.id}`}
                   />

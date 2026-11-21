@@ -6,7 +6,7 @@ import Link from "next/link";
 import { Button } from "@matsborges/manga-design-system/button";
 import { TextField } from "@matsborges/manga-design-system/text-field";
 import { ProgressBar } from "@matsborges/manga-design-system/progress-bar";
-import { InputChip } from "@matsborges/manga-design-system/chip";
+import { InputChip, FilterChip } from "@matsborges/manga-design-system/chip";
 import { GoalIdentity, GoalCard, GoalPersonalizationSheet, ProductIcon } from "@matsborges/manga-design-system/product";
 import type { GoalIdentityValue, GoalColor } from "@matsborges/manga-design-system/product";
 import { ArrowBackIcon, CheckCircleIcon } from "@matsborges/manga-design-system/icons";
@@ -220,6 +220,7 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
   // Categories step
   const [categories, setCategories] = useState<CategoryDraft[]>(SUGGESTED_CATEGORIES);
   const [skippedCategories, setSkippedCategories] = useState(false);
+  const [showCustomizeCategories, setShowCustomizeCategories] = useState(false);
 
   // Goal step
   const [goal, setGoal] = useState<GoalDraft>({ name: "", target: "", deadline: "", color: "orange", icon: "star", contentType: "initials" });
@@ -423,9 +424,14 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
     goTo("categories");
   }
 
+  function toggleCategory(id: string) {
+    setCategories((prev) =>
+      prev.map((c) => (c.id === id ? { ...c, selected: !c.selected } : c))
+    );
+  }
+
   function handleCategoriesAccept() {
     setSkippedCategories(false);
-    setCategories(SUGGESTED_CATEGORIES);
     goTo("limits");
   }
 
@@ -928,23 +934,39 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
           >
             {/* Chips — flex wrap, gap=8 */}
             <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
-              {SUGGESTED_CATEGORIES.map((cat) => (
-                <InputChip
-                  key={cat.id}
-                  label={cat.name}
-                  leadingIcon={
-                    <ProductIcon
-                      name={cat.icon as import("@matsborges/manga-design-system/product").ProductIconName}
-                      className="w-5 h-5"
-                    />
-                  }
-                />
-              ))}
+              {categories.map((cat) =>
+                showCustomizeCategories ? (
+                  <FilterChip
+                    key={cat.id}
+                    label={cat.name}
+                    selected={cat.selected}
+                    onSelectedChange={() => toggleCategory(cat.id)}
+                    leadingIcon={
+                      <ProductIcon
+                        name={cat.icon as import("@matsborges/manga-design-system/product").ProductIconName}
+                        className="w-5 h-5"
+                      />
+                    }
+                  />
+                ) : (
+                  <InputChip
+                    key={cat.id}
+                    label={cat.name}
+                    leadingIcon={
+                      <ProductIcon
+                        name={cat.icon as import("@matsborges/manga-design-system/product").ProductIconName}
+                        className="w-5 h-5"
+                      />
+                    }
+                  />
+                )
+              )}
             </div>
 
             {/* "Personalizar categorias" link — Figma: 14/600, chevron */}
             <button
               type="button"
+              onClick={() => setShowCustomizeCategories(!showCustomizeCategories)}
               className="flex items-center justify-between w-full text-manga-text-primary"
               style={{
                 height: "48px",
@@ -953,8 +975,9 @@ export function OnboardingWizard({ startStep }: { startStep: Step }) {
                 lineHeight: "21px",
               }}
             >
-              <span>Personalizar categorias</span>
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <span>{showCustomizeCategories ? "Conclu\u00eddo" : "Personalizar categorias"}</span>
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                style={{ transform: showCustomizeCategories ? "rotate(90deg)" : "none", transition: "transform 0.2s" }}>
                 <path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </button>

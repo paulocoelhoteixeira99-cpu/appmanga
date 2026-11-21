@@ -1,13 +1,32 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { BottomNavigation } from "@matsborges/manga-design-system/bottom-navigation";
 import { FAB } from "@matsborges/manga-design-system/fab";
 import { ProductIcon } from "@matsborges/manga-design-system/product";
 import { AddIcon } from "@matsborges/manga-design-system/icons";
 import type { BottomNavigationEntry } from "@matsborges/manga-design-system/bottom-navigation";
 
+// Figma: flag icon (Metas) — extracted from Figma component 157:66
+function FlagIcon({ className }: { className?: string }) {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className={className}>
+      <path d="M7 14V20C7 20.2833 6.90417 20.5208 6.7125 20.7125C6.52083 20.9042 6.28333 21 6 21C5.71667 21 5.47917 20.9042 5.2875 20.7125C5.09583 20.5208 5 20.2833 5 20V5C5 4.71667 5.09583 4.47917 5.2875 4.2875C5.47917 4.09583 5.71667 4 6 4H13.175C13.4083 4 13.6167 4.075 13.8 4.225C13.9833 4.375 14.1 4.56667 14.15 4.8L14.4 6H19C19.2833 6 19.5208 6.09583 19.7125 6.2875C19.9042 6.47917 20 6.71667 20 7V15C20 15.2833 19.9042 15.5208 19.7125 15.7125C19.5208 15.9042 19.2833 16 19 16H13.825C13.5917 16 13.3833 15.925 13.2 15.775C13.0167 15.625 12.9 15.4333 12.85 15.2L12.6 14H7ZM14.65 14H18V8H13.575C13.3417 8 13.1333 7.925 12.95 7.775C12.7667 7.625 12.65 7.43333 12.6 7.2L12.35 6H7V12H13.425C13.6583 12 13.8667 12.075 14.05 12.225C14.2333 12.375 14.35 12.5667 14.4 12.8L14.65 14Z" fill="currentColor"/>
+    </svg>
+  );
+}
+
+// Figma: receipt-long icon (Transações) — extracted from Figma component 157:59
+function ReceiptLongIcon({ className }: { className?: string }) {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className={className}>
+      <path d="M6 22C5.16667 22 4.45833 21.7083 3.875 21.125C3.29167 20.5417 3 19.8333 3 19V17C3 16.7167 3.09583 16.4792 3.2875 16.2875C3.47917 16.0958 3.71667 16 4 16H6V2.6C6 2.48333 6.05 2.40417 6.15 2.3625C6.25 2.32083 6.34167 2.34167 6.425 2.425L7.15 3.15C7.25 3.25 7.36667 3.3 7.5 3.3C7.63333 3.3 7.75 3.25 7.85 3.15L8.65 2.35C8.75 2.25 8.86667 2.2 9 2.2C9.13333 2.2 9.25 2.25 9.35 2.35L10.15 3.15C10.25 3.25 10.3667 3.3 10.5 3.3C10.6333 3.3 10.75 3.25 10.85 3.15L11.65 2.35C11.75 2.25 11.8667 2.2 12 2.2C12.1333 2.2 12.25 2.25 12.35 2.35L13.15 3.15C13.25 3.25 13.3667 3.3 13.5 3.3C13.6333 3.3 13.75 3.25 13.85 3.15L14.65 2.35C14.75 2.25 14.8667 2.2 15 2.2C15.1333 2.2 15.25 2.25 15.35 2.35L16.15 3.15C16.25 3.25 16.3667 3.3 16.5 3.3C16.6333 3.3 16.75 3.25 16.85 3.15L17.65 2.35C17.75 2.25 17.8667 2.2 18 2.2C18.1333 2.2 18.25 2.25 18.35 2.35L19.15 3.15C19.25 3.25 19.3667 3.3 19.5 3.3C19.6333 3.3 19.75 3.25 19.85 3.15L20.575 2.425C20.6583 2.34167 20.75 2.32083 20.85 2.3625C20.95 2.40417 21 2.48333 21 2.6V19C21 19.8333 20.7083 20.5417 20.125 21.125C19.5417 21.7083 18.8333 22 18 22H6ZM18 20C18.2833 20 18.5208 19.9042 18.7125 19.7125C18.9042 19.5208 19 19.2833 19 19V5H8V16H16C16.2833 16 16.5208 16.0958 16.7125 16.2875C16.9042 16.4792 17 16.7167 17 17V19C17 19.2833 17.0958 19.5208 17.2875 19.7125C17.4792 19.9042 17.7167 20 18 20ZM10 7H14C14.2833 7 14.5208 7.09583 14.7125 7.2875C14.9042 7.47917 15 7.71667 15 8C15 8.28333 14.9042 8.52083 14.7125 8.7125C14.5208 8.90417 14.2833 9 14 9H10C9.71667 9 9.47917 8.90417 9.2875 8.7125C9.09583 8.52083 9 8.28333 9 8C9 7.71667 9.09583 7.47917 9.2875 7.2875C9.47917 7.09583 9.71667 7 10 7ZM10 10H14C14.2833 10 14.5208 10.0958 14.7125 10.2875C14.9042 10.4792 15 10.7167 15 11C15 11.2833 14.9042 11.5208 14.7125 11.7125C14.5208 11.9042 14.2833 12 14 12H10C9.71667 12 9.47917 11.9042 9.2875 11.7125C9.09583 11.5208 9 11.2833 9 11C9 10.7167 9.09583 10.4792 9.2875 10.2875C9.47917 10.0958 9.71667 10 10 10ZM17 9C16.7167 9 16.4792 8.90417 16.2875 8.7125C16.0958 8.52083 16 8.28333 16 8C16 7.71667 16.0958 7.47917 16.2875 7.2875C16.4792 7.09583 16.7167 7 17 7C17.2833 7 17.5208 7.09583 17.7125 7.2875C17.9042 7.47917 18 7.71667 18 8C18 8.28333 17.9042 8.52083 17.7125 8.7125C17.5208 8.90417 17.2833 9 17 9ZM17 12C16.7167 12 16.4792 11.9042 16.2875 11.7125C16.0958 11.5208 16 11.2833 16 11C16 10.7167 16.0958 10.4792 16.2875 10.2875C16.4792 10.0958 16.7167 10 17 10C17.2833 10 17.5208 10.0958 17.7125 10.2875C17.9042 10.4792 18 10.7167 18 11C18 11.2833 17.9042 11.5208 17.7125 11.7125C17.5208 11.9042 17.2833 12 17 12ZM6 20H15V18H5V19C5 19.2833 5.09583 19.5208 5.2875 19.7125C5.47917 19.9042 5.71667 20 6 20Z" fill="currentColor"/>
+    </svg>
+  );
+}
+
 // Figma Home: Bottom Navigation — Início, Metas, Transações, Categorias
+// Icons: home (157:3), flag (157:66), receipt-long (157:59), account-balance-wallet (157:61)
 const NAV_ITEMS: BottomNavigationEntry[] = [
   {
     id: "home",
@@ -18,25 +37,26 @@ const NAV_ITEMS: BottomNavigationEntry[] = [
   {
     id: "metas",
     label: "Metas",
-    icon: <ProductIcon name="savings" className="w-6 h-6" />,
+    icon: <FlagIcon className="w-6 h-6" />,
     href: "/metas",
   },
   {
     id: "transacoes",
     label: "Transações",
-    icon: <ProductIcon name="account-balance-wallet" className="w-6 h-6" />,
+    icon: <ReceiptLongIcon className="w-6 h-6" />,
     href: "/transacoes",
   },
   {
     id: "categorias",
     label: "Categorias",
-    icon: <ProductIcon name="restaurant" className="w-6 h-6" />,
+    icon: <ProductIcon name="account-balance-wallet" className="w-6 h-6" />,
     href: "/categorias",
   },
 ];
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
 
   const items = NAV_ITEMS.map((item) => ({
     ...item,
@@ -58,9 +78,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             <FAB
               aria-label="Nova transação"
               icon={<AddIcon />}
-              onClick={() => {
-                // TODO: abrir fluxo de nova transacao
-              }}
+              onClick={() => router.push("/transacoes/nova")}
             />
           </div>
           <BottomNavigation label="Navegação principal" items={items} />

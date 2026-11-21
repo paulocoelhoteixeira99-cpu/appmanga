@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { HomeContent } from "./home-content";
+import { computeInsights } from "@/lib/insights/engine";
 
 type Goal = {
   id: string;
@@ -65,12 +66,30 @@ export default async function HomePage() {
   const goals = (goalsResult.data as Goal[]) ?? [];
   const categorySpending = (spendingResult.data as CategorySpending[]) ?? [];
 
+  const insights = computeInsights({
+    balance,
+    income: summary.income,
+    expense: summary.expense,
+    categories: categorySpending.map((c) => ({
+      name: c.category_name,
+      spent: c.spent,
+      limit: c.monthly_limit,
+    })),
+    goals: goals.map((g) => ({
+      name: g.name,
+      current_value: g.current_value,
+      target: g.target,
+      status: g.status,
+    })),
+  });
+
   return (
     <HomeContent
       firstName={profile.first_name ?? "Você"}
       balance={balance}
       income={summary.income}
       expense={summary.expense}
+      insights={insights}
       goals={goals.map((g) => ({
         id: g.id,
         title: g.name,

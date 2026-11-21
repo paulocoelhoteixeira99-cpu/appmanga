@@ -8,8 +8,10 @@ import { CategoryItem } from "@matsborges/manga-design-system/category-item";
 import { EmptyState } from "@matsborges/manga-design-system/empty-state";
 import { ProductIcon } from "@matsborges/manga-design-system/product";
 import { Button } from "@matsborges/manga-design-system/button";
+import { MangaInsights } from "@matsborges/manga-design-system/manga-insights";
 import { ArrowForwardIcon } from "@matsborges/manga-design-system/icons";
 import { formatCurrency } from "@/lib/utils/masks";
+import type { Insight } from "@/lib/insights/engine";
 import type { GoalIconName } from "@matsborges/manga-design-system/product";
 import type { GoalColor } from "@matsborges/manga-design-system/product";
 import type { ProductIconName } from "@matsborges/manga-design-system/product";
@@ -37,6 +39,7 @@ type HomeContentProps = {
   balance: number;
   income: number;
   expense: number;
+  insights: Insight[];
   goals: GoalData[];
   categorySpending: CategorySpendingData[];
 };
@@ -76,6 +79,7 @@ export function HomeContent({
   balance,
   income,
   expense,
+  insights,
   goals,
   categorySpending,
 }: HomeContentProps) {
@@ -124,7 +128,7 @@ export function HomeContent({
 
           {/* Settings button — Figma: 40x40, icon fill=rgb(241,240,243) */}
           <Link
-            href="/profile"
+            href="/configuracoes"
             className="flex items-center justify-center"
             style={{
               width: "40px",
@@ -163,6 +167,46 @@ export function HomeContent({
           >
             {getMonthLabel()}
           </p>
+
+          {/* Manga Insights — only shown if there are insights */}
+          {insights.length > 0 && (
+            <section>
+              <h2
+                className="text-manga-text-secondary font-semibold"
+                style={{
+                  fontSize: "14px",
+                  lineHeight: "21px",
+                  marginBottom: "12px",
+                }}
+              >
+                Manga Insights
+              </h2>
+              <div className="flex flex-col" style={{ gap: "8px" }}>
+                {insights.map((insight) => (
+                  <MangaInsights
+                    key={insight.id}
+                    title={insight.title}
+                    description={insight.description}
+                    used={insight.used}
+                    limit={insight.limit}
+                    showIndicator={
+                      !!insight.used && !!insight.limit
+                    }
+                    action={
+                      insight.action
+                        ? {
+                            label: insight.action.label,
+                            href: insight.action.href,
+                            showArrow: true,
+                          }
+                        : undefined
+                    }
+                    size="compact"
+                  />
+                ))}
+              </div>
+            </section>
+          )}
 
           {/* Suas Metas section — Figma: title + "Ver todas" */}
           <section>
